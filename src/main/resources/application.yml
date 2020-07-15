@@ -1,6 +1,6 @@
 spring:
-  profiles: local
-
+  profiles:
+    active: local
 
 ---
 spring:
