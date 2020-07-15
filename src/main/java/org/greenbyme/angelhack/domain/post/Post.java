@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.greenbyme.angelhack.domain.baseEntity.BaseEntity;
-import org.greenbyme.angelhack.domain.mission.Mission;
 import org.greenbyme.angelhack.domain.missionInfo.MissionInfo;
 import org.greenbyme.angelhack.domain.user.User;
 
@@ -34,11 +33,11 @@ public class Post extends BaseEntity {
     private String title;
     private String text;
 
-    private int thumbsUp;
+    private Integer thumbsUp;
     private Boolean open;
 
     @Builder
-    public Post(User user,String text, String title, String picture, Boolean open){
+    public Post(User user, String text, String title, String picture, Boolean open) {
         setUser(user);
         this.text = text;
         this.title = title;
@@ -48,7 +47,7 @@ public class Post extends BaseEntity {
     }
 
     @Builder
-    public Post(User user, MissionInfo missionInfo, String text, String title, String picture, Boolean open){
+    public Post(User user, MissionInfo missionInfo, String text, String title, String picture, Boolean open) {
         setUser(user);
         this.missionInfo = missionInfo;
         this.text = text;
