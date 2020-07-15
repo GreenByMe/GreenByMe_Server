@@ -17,7 +17,7 @@ public class SwaggerConfig {
                 .useDefaultResponseMessages(false)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("org.quickresponse.qr"))
-                .paths(PathSelectors.ant("/cfcqr/api/**"))
+                .paths(PathSelectors.ant("/ahs/api/**"))
                 .build();
     }
 }

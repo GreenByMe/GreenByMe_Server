@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><title>
+UserToRolesMapper
+</title><link rel="stylesheet" type="text/css" href="../../../stylesheet.css" />
+<script type="text/javascript" src="../../../animate.js"></script>
+</head><body onload="openLink();">
+<table class="content"><tr class="content"><td class="content"><div class="contentDiv">
+<h1>UserToRolesMapper</h1>
+A class that implement this interface can be used during authentication to
+ map external users to database roles.
+ <p>
+ <b>This feature is experimental and subject to change</b>
+ </p><br /><br />
+<table class="block"><tr onclick="return allDetails()"><th colspan="2">Methods</th></tr>
+<tr id="__0" onclick="return on(0)">
+<td class="return">Collection</td><td class="method">
+<a id="mapUserToRoles_AuthenticationInfo" href="#mapUserToRoles_AuthenticationInfo">mapUserToRoles</a>(AuthenticationInfo authenticationInfo)
+<div class="methodText">Map user identified by authentication info to a set of granted roles.</div>
+</td></tr>
+<tr onclick="return off(0)" class="detail" id="_0">
+<td class="return">Collection</td><td>
+<a id="mapUserToRoles_AuthenticationInfo" href="#mapUserToRoles_AuthenticationInfo">mapUserToRoles</a>(AuthenticationInfo authenticationInfo) throws AuthenticationException
+<div class="methodText">Map user identified by authentication info to a set of granted roles.</div>
+<div class="itemTitle">Parameters:</div>
+<div class="item">authenticationInfo - authentication information</div>
+<div class="itemTitle">Returns:</div>
+<div class="item">list of roles to be assigned to the user temporary</div>
+<div class="itemTitle">Throws:</div>
+<div class="item">AuthenticationException - on authentication exception</div>
+</td></tr>
+</table>
+</div></td></tr></table></body></html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><title>
+PreparedStatementBackwardsCompat
+</title><link rel="stylesheet" type="text/css" href="../../../stylesheet.css" />
+<script type="text/javascript" src="../../../animate.js"></script>
+</head><body onload="openLink();">
+<table class="content"><tr class="content"><td class="content"><div class="contentDiv">
+<h1>PreparedStatementBackwardsCompat</h1>
+Allows us to compile on older platforms, while still implementing the methods
+ from the newer JDBC API.<br /><br />
+<table class="block"><tr onclick="return allDetails()"><th colspan="2">Methods</th></tr>
+<tr id="__0" onclick="return on(0)">
+<td class="return">long</td><td class="method">
+<a id="executeLargeUpdate" href="#executeLargeUpdate">executeLargeUpdate</a>()
+<div class="methodText">Executes a statement (insert, update, delete, create, drop)
+ and returns the update count.</div>
+</td></tr>
+<tr onclick="return off(0)" class="detail" id="_0">
+<td class="return">long</td><td>
+<a id="executeLargeUpdate" href="#executeLargeUpdate">executeLargeUpdate</a>() throws SQLException
+<div class="methodText">Executes a statement (insert, update, delete, create, drop)
+ and returns the update count.
+ If another result set exists for this statement, this will be closed
+ (even if this statement fails).
+
+ If auto commit is on, this statement will be committed.
+ If the statement is a DDL statement (create, drop, alter) and does not
+ throw an exception, the current transaction (if any) is committed after
+ executing the statement.</div>
+<div class="itemTitle">Returns:</div>
+<div class="item">the update count (number of row affected by an insert, update or
+         delete, or 0 if no rows or the statement was a create, drop,
+         commit or rollback)</div>
+<div class="itemTitle">Throws:</div>
+<div class="item">SQLException - if this object is closed or invalid</div>
+</td></tr>
+</table>
+</div></td></tr></table></body></html>

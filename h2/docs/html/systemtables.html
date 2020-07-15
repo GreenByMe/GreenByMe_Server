@@ -1,0 +1,272 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!--
+Copyright 2004-2019 H2 Group. Multiple-Licensed under the MPL 2.0,
+and the EPL 1.0 (https://h2database.com/html/license.html).
+Initial Developer: H2 Group
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>
+System Tables
+</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" />
+<!-- [search] { -->
+<script type="text/javascript" src="navigation.js"></script>
+</head><body onload="highlight()" onscroll="scroll()">
+
+<table class="nav" onmousemove="return mouseMove(event)"><tr class="nav"><td class="nav" valign="top">
+<div id = "searchMenu" style="width: 180px; overflow: hidden;">
+<div class="menu" style="white-space:nowrap;">
+<img src="images/h2-logo-2.png"
+    alt="H2 database logo"
+    onclick="document.location='main.html'"
+    width="136" height="74"/>
+&nbsp;&nbsp;<span id = "goTop" onclick="window.scrollTo(0,0)" style="color: #fff; position:fixed; font-size: 20px; cursor: pointer;">&#x25b2;</span>
+</div>
+
+<form action="submit" onsubmit="return goFirst();">
+<table width="100%" class="search">
+    <tr class="search">
+        <td class="search" colspan="2">
+<!-- translate
+<a href="https://translate.google.com/translate?u=https%3A%2F%2Fh2database.com"
+    onclick="javascript:startTranslate();return false;">Translate</a>
+<div id = "translate" style="display:none"><div id = "google_translate_element"></div></div>
+translate -->
+        </td>
+    </tr>
+    <tr class="search">
+        <td class="search" colspan="2">
+        <b><label for="search">Search:</label></b>
+        </td>
+    </tr>
+    <tr class="search">
+        <td class="search" colspan="2">
+            <input id = "search" name="search" type="text" size="16" maxlength="100" onkeyup="listWords(this.value, '')" /><br />
+            <input type="reset" id = "clear" style="display:none;" value="Clear" onclick="listWords('', '');" />
+        </td>
+    </tr>
+    <tr class="search" style="display:none;" >
+        <td class="search" style="width: 1%; vertical-align: middle;">
+            <input id = "highlight" type="checkbox" checked="checked" onclick="highlightCurrent(this.checked, search.value)" />
+        </td>
+        <td class="search" style="width: 99%; padding: 0px; vertical-align: middle;">
+            <label for="highlight">Highlight keyword(s)</label>
+        </td>
+    </tr>
+    <tr class="search">
+        <td class="search" colspan="2">
+            <table id = "result" style="border: 0px;">
+                <tr style="display:none"><td></td></tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</form>
+<div class="menu">
+<b><a href="main.html">Home</a></b><br />
+<a href="download.html">Download</a><br />
+<a href="cheatSheet.html">Cheat Sheet</a><br />
+<br />
+<b>Documentation</b><br />
+<a href="quickstart.html">Quickstart</a><br />
+<a href="installation.html">Installation</a><br />
+<a href="tutorial.html">Tutorial</a><br />
+<a href="features.html">Features</a><br />
+<a href="performance.html">Performance</a><br />
+<a href="advanced.html">Advanced</a><br />
+<br />
+<b>Reference</b><br />
+<a href="commands.html">Commands</a><br />
+<a href="functions.html">Functions</a><br />
+&#8226;&nbsp;<a href="functions-aggregate.html">Aggregate</a>
+&#8226;&nbsp;<a href="functions-window.html">Window</a>
+<br /><br />
+<a href="datatypes.html">Data Types</a><br />
+<a href="grammar.html">SQL Grammar</a><br />
+<a href="systemtables.html">System Tables</a><br />
+<a href="../javadoc/index.html">Javadoc</a><br />
+<a href="../h2.pdf">PDF (1.5 MB)</a><br />
+<br />
+<b>Support</b><br />
+<a href="faq.html">FAQ</a><br />
+<a href="sourceError.html">Error Analyzer</a><br />
+<a href="https://groups.google.com/group/h2-database">Google Group (English)</a><br />
+<a href="https://groups.google.co.jp/group/h2-database-jp">Google Group (Japanese)</a><br />
+<a href="https://groups.google.com/group/h2-cn">Google Group (Chinese)</a><br />
+<br />
+<b>Appendix</b><br />
+<a href="history.html">History &amp; Roadmap</a><br />
+<a href="license.html">License</a><br />
+<a href="build.html">Build</a><br />
+<a href="links.html">Links</a><br />
+<a href="mvstore.html">MVStore</a><br />
+<a href="architecture.html">Architecture</a><br />
+<br />
+
+</div>
+</div>
+</td>
+
+<td class="nav" style="cursor: e-resize;" onmousedown="return mouseDown(event)" onmouseup="return mouseUp(event)">&nbsp;</td>
+<td class="nav"><div class="content">
+
+<!-- } -->
+
+<h1>System Tables</h1>
+
+<p class="notranslate">
+<a href="#information_schema">Information Schema</a><br />
+<a href="#range_table">Range Table</a><br />
+</p>
+
+<h2 id="information_schema" class="notranslate">Information Schema</h2>
+<p>
+The system tables in the schema <code>INFORMATION_SCHEMA</code> contain the meta data
+of all tables in the database as well as the current settings.
+</p>
+
+<h3 class="notranslate">CATALOGS</h3>
+<p class="notranslate">CATALOG_NAME</p>
+
+<h3 class="notranslate">COLLATIONS</h3>
+<p class="notranslate">NAME, KEY</p>
+
+<h3 class="notranslate">COLUMNS</h3>
+<p class="notranslate">TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME, ORDINAL_POSITION, DOMAIN_CATALOG, DOMAIN_SCHEMA, DOMAIN_NAME, COLUMN_DEFAULT, IS_NULLABLE, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH, CHARACTER_OCTET_LENGTH, NUMERIC_PRECISION, NUMERIC_PRECISION_RADIX, NUMERIC_SCALE, DATETIME_PRECISION, INTERVAL_TYPE, INTERVAL_PRECISION, CHARACTER_SET_NAME, COLLATION_NAME, TYPE_NAME, NULLABLE, IS_COMPUTED, SELECTIVITY, CHECK_CONSTRAINT, SEQUENCE_NAME, REMARKS, SOURCE_DATA_TYPE, COLUMN_TYPE, COLUMN_ON_UPDATE, IS_VISIBLE</p>
+
+<h3 class="notranslate">COLUMN_PRIVILEGES</h3>
+<p class="notranslate">GRANTOR, GRANTEE, TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME, PRIVILEGE_TYPE, IS_GRANTABLE</p>
+
+<h3 class="notranslate">CONSTANTS</h3>
+<p class="notranslate">CONSTANT_CATALOG, CONSTANT_SCHEMA, CONSTANT_NAME, DATA_TYPE, REMARKS, SQL, ID</p>
+
+<h3 class="notranslate">CONSTRAINTS</h3>
+<p class="notranslate">CONSTRAINT_CATALOG, CONSTRAINT_SCHEMA, CONSTRAINT_NAME, CONSTRAINT_TYPE, TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME, UNIQUE_INDEX_NAME, CHECK_EXPRESSION, COLUMN_LIST, REMARKS, SQL, ID</p>
+
+<h3 class="notranslate">CROSS_REFERENCES</h3>
+<p class="notranslate">PKTABLE_CATALOG, PKTABLE_SCHEMA, PKTABLE_NAME, PKCOLUMN_NAME, FKTABLE_CATALOG, FKTABLE_SCHEMA, FKTABLE_NAME, FKCOLUMN_NAME, ORDINAL_POSITION, UPDATE_RULE, DELETE_RULE, FK_NAME, PK_NAME, DEFERRABILITY</p>
+
+<h3 class="notranslate">DOMAINS</h3>
+<p class="notranslate">DOMAIN_CATALOG, DOMAIN_SCHEMA, DOMAIN_NAME, COLUMN_DEFAULT, IS_NULLABLE, DATA_TYPE, PRECISION, SCALE, TYPE_NAME, SELECTIVITY, CHECK_CONSTRAINT, REMARKS, SQL, ID</p>
+
+<h3 class="notranslate">FUNCTION_ALIASES</h3>
+<p class="notranslate">ALIAS_CATALOG, ALIAS_SCHEMA, ALIAS_NAME, JAVA_CLASS, JAVA_METHOD, DATA_TYPE, TYPE_NAME, COLUMN_COUNT, RETURNS_RESULT, REMARKS, ID, SOURCE</p>
+
+<h3 class="notranslate">FUNCTION_COLUMNS</h3>
+<p class="notranslate">ALIAS_CATALOG, ALIAS_SCHEMA, ALIAS_NAME, JAVA_CLASS, JAVA_METHOD, COLUMN_COUNT, POS, COLUMN_NAME, DATA_TYPE, TYPE_NAME, PRECISION, SCALE, RADIX, NULLABLE, COLUMN_TYPE, REMARKS, COLUMN_DEFAULT</p>
+
+<h3 class="notranslate">HELP</h3>
+<p class="notranslate">ID, SECTION, TOPIC, SYNTAX, TEXT</p>
+
+<h3 class="notranslate">INDEXES</h3>
+<p class="notranslate">TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME, NON_UNIQUE, INDEX_NAME, ORDINAL_POSITION, COLUMN_NAME, CARDINALITY, PRIMARY_KEY, INDEX_TYPE_NAME, IS_GENERATED, INDEX_TYPE, ASC_OR_DESC, PAGES, FILTER_CONDITION, REMARKS, SQL, ID, SORT_TYPE, CONSTRAINT_NAME, INDEX_CLASS, AFFINITY</p>
+
+<h3 class="notranslate">IN_DOUBT</h3>
+<p class="notranslate">TRANSACTION, STATE</p>
+
+<h3 class="notranslate">KEY_COLUMN_USAGE</h3>
+<p class="notranslate">CONSTRAINT_CATALOG, CONSTRAINT_SCHEMA, CONSTRAINT_NAME, TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME, ORDINAL_POSITION, POSITION_IN_UNIQUE_CONSTRAINT</p>
+
+<h3 class="notranslate">LOCKS</h3>
+<p class="notranslate">TABLE_SCHEMA, TABLE_NAME, SESSION_ID, LOCK_TYPE</p>
+
+<h3 class="notranslate">QUERY_STATISTICS</h3>
+<p class="notranslate">SQL_STATEMENT, EXECUTION_COUNT, MIN_EXECUTION_TIME, MAX_EXECUTION_TIME, CUMULATIVE_EXECUTION_TIME, AVERAGE_EXECUTION_TIME, STD_DEV_EXECUTION_TIME, MIN_ROW_COUNT, MAX_ROW_COUNT, CUMULATIVE_ROW_COUNT, AVERAGE_ROW_COUNT, STD_DEV_ROW_COUNT</p>
+
+<h3 class="notranslate">REFERENTIAL_CONSTRAINTS</h3>
+<p class="notranslate">CONSTRAINT_CATALOG, CONSTRAINT_SCHEMA, CONSTRAINT_NAME, UNIQUE_CONSTRAINT_CATALOG, UNIQUE_CONSTRAINT_SCHEMA, UNIQUE_CONSTRAINT_NAME, MATCH_OPTION, UPDATE_RULE, DELETE_RULE</p>
+
+<h3 class="notranslate">RIGHTS</h3>
+<p class="notranslate">GRANTEE, GRANTEETYPE, GRANTEDROLE, RIGHTS, TABLE_SCHEMA, TABLE_NAME, ID</p>
+
+<h3 class="notranslate">ROLES</h3>
+<p class="notranslate">NAME, REMARKS, ID</p>
+
+<h3 class="notranslate">SCHEMATA</h3>
+<p class="notranslate">CATALOG_NAME, SCHEMA_NAME, SCHEMA_OWNER, DEFAULT_CHARACTER_SET_NAME, DEFAULT_COLLATION_NAME, IS_DEFAULT, REMARKS, ID</p>
+
+<h3 class="notranslate">SEQUENCES</h3>
+<p class="notranslate">SEQUENCE_CATALOG, SEQUENCE_SCHEMA, SEQUENCE_NAME, CURRENT_VALUE, INCREMENT, IS_GENERATED, REMARKS, CACHE, MIN_VALUE, MAX_VALUE, IS_CYCLE, ID</p>
+
+<h3 class="notranslate">SESSIONS</h3>
+<p class="notranslate">ID, USER_NAME, SERVER, CLIENT_ADDR, CLIENT_INFO, SESSION_START, ISOLATION_LEVEL, STATEMENT, STATEMENT_START, CONTAINS_UNCOMMITTED, STATE, BLOCKER_ID</p>
+
+<h3 class="notranslate">SESSION_STATE</h3>
+<p class="notranslate">KEY, SQL</p>
+
+<h3 class="notranslate">SETTINGS</h3>
+<p class="notranslate">NAME, VALUE</p>
+
+<h3 class="notranslate">SYNONYMS</h3>
+<p class="notranslate">SYNONYM_CATALOG, SYNONYM_SCHEMA, SYNONYM_NAME, SYNONYM_FOR, SYNONYM_FOR_SCHEMA, TYPE_NAME, STATUS, REMARKS, ID</p>
+
+<h3 class="notranslate">TABLES</h3>
+<p class="notranslate">TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME, TABLE_TYPE, STORAGE_TYPE, SQL, REMARKS, LAST_MODIFICATION, ID, TYPE_NAME, TABLE_CLASS, ROW_COUNT_ESTIMATE</p>
+
+<h3 class="notranslate">TABLE_CONSTRAINTS</h3>
+<p class="notranslate">CONSTRAINT_CATALOG, CONSTRAINT_SCHEMA, CONSTRAINT_NAME, CONSTRAINT_TYPE, TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME, IS_DEFERRABLE, INITIALLY_DEFERRED</p>
+
+<h3 class="notranslate">TABLE_PRIVILEGES</h3>
+<p class="notranslate">GRANTOR, GRANTEE, TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME, PRIVILEGE_TYPE, IS_GRANTABLE</p>
+
+<h3 class="notranslate">TABLE_TYPES</h3>
+<p class="notranslate">TYPE</p>
+
+<h3 class="notranslate">TRIGGERS</h3>
+<p class="notranslate">TRIGGER_CATALOG, TRIGGER_SCHEMA, TRIGGER_NAME, TRIGGER_TYPE, TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME, BEFORE, JAVA_CLASS, QUEUE_SIZE, NO_WAIT, REMARKS, SQL, ID</p>
+
+<h3 class="notranslate">TYPE_INFO</h3>
+<p class="notranslate">TYPE_NAME, DATA_TYPE, PRECISION, PREFIX, SUFFIX, PARAMS, AUTO_INCREMENT, MINIMUM_SCALE, MAXIMUM_SCALE, RADIX, POS, CASE_SENSITIVE, NULLABLE, SEARCHABLE</p>
+
+<h3 class="notranslate">USERS</h3>
+<p class="notranslate">NAME, ADMIN, REMARKS, ID</p>
+
+<h3 class="notranslate">VIEWS</h3>
+<p class="notranslate">TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME, VIEW_DEFINITION, CHECK_OPTION, IS_UPDATABLE, STATUS, REMARKS, ID</p>
+
+<h2 id="range_table" class="notranslate">Range Table</h2>
+<p>
+The range table is a dynamic system table that contains all values from a start to an end value.
+Non-zero step value may be also specified, default is 1.
+Start value, end value, and optional step value are converted to BIGINT data type.
+The table contains one column called X.
+If start value is greater than end value and step is positive the result is empty.
+If start value is less than end value and step is negative the result is empty too.
+If start value is equal to end value the result contains only start value.
+Start value, start value plus step, start value plus step multiplied by two and so on are included in result.
+If step is positive the last value is less than or equal to the specified end value.
+If step in negative the last value is greater than or equal to the specified end value.
+The table is used as follows:
+</p>
+<p>Examples:</p>
+<pre>
+SELECT X FROM SYSTEM_RANGE(1, 10);
+-- 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+SELECT X FROM SYSTEM_RANGE(1, 10, 2);
+-- 1, 3, 5, 7, 9
+SELECT X FROM SYSTEM_RANGE(1, 10, -1);
+-- No rows
+SELECT X FROM SYSTEM_RANGE(10, 2, -2);
+-- 10, 8, 6, 4, 2
+</pre>
+
+<!-- [close] { -->
+</div></td></tr></table>
+<script type="text/javascript" src="index.js"></script>
+<script type="text/javascript" src="search.js"></script>
+<script type="text/javascript">
+function startTranslate() {
+    document.getElementById('translate').style.display='';
+    var script=document.createElement('script');
+    script.setAttribute("type","text/javascript");
+    script.setAttribute("src", "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit");
+    document.getElementsByTagName("head")[0].appendChild(script);
+}
+function googleTranslateElementInit() {
+    new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+}
+</script>
+
+<!-- } --><!-- analytics --></body></html>

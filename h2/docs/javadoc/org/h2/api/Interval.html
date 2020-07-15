@@ -1,0 +1,523 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><title>
+Interval
+</title><link rel="stylesheet" type="text/css" href="../../../stylesheet.css" />
+<script type="text/javascript" src="../../../animate.js"></script>
+</head><body onload="openLink();">
+<table class="content"><tr class="content"><td class="content"><div class="contentDiv">
+<h1>Interval</h1>
+INTERVAL representation for result sets.<br /><br />
+<table class="block"><tr onclick="return allDetails()"><th colspan="2">Methods</th></tr>
+<tr id="__0" onclick="return on(0)">
+<td class="return">static Interval</td><td class="method">
+<a id="ofDays_long" href="#ofDays_long">ofDays</a>(long days)
+<div class="methodText">Creates a new INTERVAL DAY.</div>
+</td></tr>
+<tr onclick="return off(0)" class="detail" id="_0">
+<td class="return">static Interval</td><td>
+<a id="ofDays_long" href="#ofDays_long">ofDays</a>(long days)
+<div class="methodText">Creates a new INTERVAL DAY.</div>
+<div class="itemTitle">Parameters:</div>
+<div class="item">days - days, |days|&lt;10<sup>18</sup></div>
+<div class="itemTitle">Returns:</div>
+<div class="item">INTERVAL DAY</div>
+</td></tr>
+<tr id="__1" onclick="return on(1)">
+<td class="return">static Interval</td><td class="method">
+<a id="ofDaysHours_long_int" href="#ofDaysHours_long_int">ofDaysHours</a>(long days, int hours)
+<div class="methodText">Creates a new INTERVAL DAY TO HOUR.</div>
+</td></tr>
+<tr onclick="return off(1)" class="detail" id="_1">
+<td class="return">static Interval</td><td>
+<a id="ofDaysHours_long_int" href="#ofDaysHours_long_int">ofDaysHours</a>(long days, int hours)
+<div class="methodText">Creates a new INTERVAL DAY TO HOUR.
+
+ <p>
+ If both arguments are not equal to zero they should have the same sign.
+ </p></div>
+<div class="itemTitle">Parameters:</div>
+<div class="item">days - days, |days|&lt;10<sup>18</sup></div>
+<div class="item">hours - hours, |hours|&lt;24</div>
+<div class="itemTitle">Returns:</div>
+<div class="item">INTERVAL DAY TO HOUR</div>
+</td></tr>
+<tr id="__2" onclick="return on(2)">
+<td class="return">static Interval</td><td class="method">
+<a id="ofDaysHoursMinutes_long_int_int" href="#ofDaysHoursMinutes_long_int_int">ofDaysHoursMinutes</a>(long days, int hours, int minutes)
+<div class="methodText">Creates a new INTERVAL DAY TO MINUTE.</div>
+</td></tr>
+<tr onclick="return off(2)" class="detail" id="_2">
+<td class="return">static Interval</td><td>
+<a id="ofDaysHoursMinutes_long_int_int" href="#ofDaysHoursMinutes_long_int_int">ofDaysHoursMinutes</a>(long days, int hours, int minutes)
+<div class="methodText">Creates a new INTERVAL DAY TO MINUTE.
+
+ <p>
+ Non-zero arguments should have the same sign.
+ </p></div>
+<div class="itemTitle">Parameters:</div>
+<div class="item">days - days, |days|&lt;10<sup>18</sup></div>
+<div class="item">hours - hours, |hours|&lt;24</div>
+<div class="item">minutes - minutes, |minutes|&lt;60</div>
+<div class="itemTitle">Returns:</div>
+<div class="item">INTERVAL DAY TO MINUTE</div>
+</td></tr>
+<tr id="__3" onclick="return on(3)">
+<td class="return">static Interval</td><td class="method">
+<a id="ofDaysHoursMinutesNanos_long_int_int_long" href="#ofDaysHoursMinutesNanos_long_int_int_long">ofDaysHoursMinutesNanos</a>(long days, int hours, int minutes, long nanos)
+<div class="methodText">Creates a new INTERVAL DAY TO SECOND.</div>
+</td></tr>
+<tr onclick="return off(3)" class="detail" id="_3">
+<td class="return">static Interval</td><td>
+<a id="ofDaysHoursMinutesNanos_long_int_int_long" href="#ofDaysHoursMinutesNanos_long_int_int_long">ofDaysHoursMinutesNanos</a>(long days, int hours, int minutes, long nanos)
+<div class="methodText">Creates a new INTERVAL DAY TO SECOND.
+
+ <p>
+ Non-zero arguments should have the same sign.
+ </p></div>
+<div class="itemTitle">Parameters:</div>
+<div class="item">days - days, |days|&lt;10<sup>18</sup></div>
+<div class="item">hours - hours, |hours|&lt;24</div>
+<div class="item">minutes - minutes, |minutes|&lt;60</div>
+<div class="item">nanos - nanoseconds, |nanos|&lt;60,000,000,000</div>
+<div class="itemTitle">Returns:</div>
+<div class="item">INTERVAL DAY TO SECOND</div>
+</td></tr>
+<tr id="__4" onclick="return on(4)">
+<td class="return">static Interval</td><td class="method">
+<a id="ofDaysHoursMinutesSeconds_long_int_int_int" href="#ofDaysHoursMinutesSeconds_long_int_int_int">ofDaysHoursMinutesSeconds</a>(long days, int hours, int minutes, int seconds)
+<div class="methodText">Creates a new INTERVAL DAY TO SECOND.</div>
+</td></tr>
+<tr onclick="return off(4)" class="detail" id="_4">
+<td class="return">static Interval</td><td>
+<a id="ofDaysHoursMinutesSeconds_long_int_int_int" href="#ofDaysHoursMinutesSeconds_long_int_int_int">ofDaysHoursMinutesSeconds</a>(long days, int hours, int minutes, int seconds)
+<div class="methodText">Creates a new INTERVAL DAY TO SECOND.
+
+ <p>
+ Non-zero arguments should have the same sign.
+ </p></div>
+<div class="itemTitle">Parameters:</div>
+<div class="item">days - days, |days|&lt;10<sup>18</sup></div>
+<div class="item">hours - hours, |hours|&lt;24</div>
+<div class="item">minutes - minutes, |minutes|&lt;60</div>
+<div class="item">seconds - seconds, |seconds|&lt;60</div>
+<div class="itemTitle">Returns:</div>
+<div class="item">INTERVAL DAY TO SECOND</div>
+</td></tr>
+<tr id="__5" onclick="return on(5)">
+<td class="return">static Interval</td><td class="method">
+<a id="ofHours_long" href="#ofHours_long">ofHours</a>(long hours)
+<div class="methodText">Creates a new INTERVAL HOUR.</div>
+</td></tr>
+<tr onclick="return off(5)" class="detail" id="_5">
+<td class="return">static Interval</td><td>
+<a id="ofHours_long" href="#ofHours_long">ofHours</a>(long hours)
+<div class="methodText">Creates a new INTERVAL HOUR.</div>
+<div class="itemTitle">Parameters:</div>
+<div class="item">hours - hours, |hours|&lt;10<sup>18</sup></div>
+<div class="itemTitle">Returns:</div>
+<div class="item">INTERVAL HOUR</div>
+</td></tr>
+<tr id="__6" onclick="return on(6)">
+<td class="return">static Interval</td><td class="method">
+<a id="ofHoursMinutes_long_int" href="#ofHoursMinutes_long_int">ofHoursMinutes</a>(long hours, int minutes)
+<div class="methodText">Creates a new INTERVAL HOUR TO MINUTE.</div>
+</td></tr>
+<tr onclick="return off(6)" class="detail" id="_6">
+<td class="return">static Interval</td><td>
+<a id="ofHoursMinutes_long_int" href="#ofHoursMinutes_long_int">ofHoursMinutes</a>(long hours, int minutes)
+<div class="methodText">Creates a new INTERVAL HOUR TO MINUTE.
+
+ <p>
+ If both arguments are not equal to zero they should have the same sign.
+ </p></div>
+<div class="itemTitle">Parameters:</div>
+<div class="item">hours - hours, |hours|&lt;10<sup>18</sup></div>
+<div class="item">minutes - minutes, |minutes|&lt;60</div>
+<div class="itemTitle">Returns:</div>
+<div class="item">INTERVAL HOUR TO MINUTE</div>
+</td></tr>
+<tr id="__7" onclick="return on(7)">
+<td class="return">static Interval</td><td class="method">
+<a id="ofHoursMinutesNanos_long_int_long" href="#ofHoursMinutesNanos_long_int_long">ofHoursMinutesNanos</a>(long hours, int minutes, long nanos)
+<div class="methodText">Creates a new INTERVAL HOUR TO SECOND.</div>
+</td></tr>
+<tr onclick="return off(7)" class="detail" id="_7">
+<td class="return">static Interval</td><td>
+<a id="ofHoursMinutesNanos_long_int_long" href="#ofHoursMinutesNanos_long_int_long">ofHoursMinutesNanos</a>(long hours, int minutes, long nanos)
+<div class="methodText">Creates a new INTERVAL HOUR TO SECOND.
+
+ <p>
+ Non-zero arguments should have the same sign.
+ </p></div>
+<div class="itemTitle">Parameters:</div>
+<div class="item">hours - hours, |hours|&lt;10<sup>18</sup></div>
+<div class="item">minutes - minutes, |minutes|&lt;60</div>
+<div class="item">nanos - nanoseconds, |seconds|&lt;60,000,000,000</div>
+<div class="itemTitle">Returns:</div>
+<div class="item">INTERVAL HOUR TO SECOND</div>
+</td></tr>
+<tr id="__8" onclick="return on(8)">
+<td class="return">static Interval</td><td class="method">
+<a id="ofHoursMinutesSeconds_long_int_int" href="#ofHoursMinutesSeconds_long_int_int">ofHoursMinutesSeconds</a>(long hours, int minutes, int seconds)
+<div class="methodText">Creates a new INTERVAL HOUR TO SECOND.</div>
+</td></tr>
+<tr onclick="return off(8)" class="detail" id="_8">
+<td class="return">static Interval</td><td>
+<a id="ofHoursMinutesSeconds_long_int_int" href="#ofHoursMinutesSeconds_long_int_int">ofHoursMinutesSeconds</a>(long hours, int minutes, int seconds)
+<div class="methodText">Creates a new INTERVAL HOUR TO SECOND.
+
+ <p>
+ Non-zero arguments should have the same sign.
+ </p></div>
+<div class="itemTitle">Parameters:</div>
+<div class="item">hours - hours, |hours|&lt;10<sup>18</sup></div>
+<div class="item">minutes - minutes, |minutes|&lt;60</div>
+<div class="item">seconds - seconds, |seconds|&lt;60</div>
+<div class="itemTitle">Returns:</div>
+<div class="item">INTERVAL HOUR TO SECOND</div>
+</td></tr>
+<tr id="__9" onclick="return on(9)">
+<td class="return">static Interval</td><td class="method">
+<a id="ofMinutes_long" href="#ofMinutes_long">ofMinutes</a>(long minutes)
+<div class="methodText">Creates a new INTERVAL MINUTE.</div>
+</td></tr>
+<tr onclick="return off(9)" class="detail" id="_9">
+<td class="return">static Interval</td><td>
+<a id="ofMinutes_long" href="#ofMinutes_long">ofMinutes</a>(long minutes)
+<div class="methodText">Creates a new INTERVAL MINUTE.</div>
+<div class="itemTitle">Parameters:</div>
+<div class="item">minutes - minutes, |minutes|&lt;10<sup>18</sup></div>
+<div class="itemTitle">Returns:</div>
+<div class="item">interval</div>
+</td></tr>
+<tr id="__10" onclick="return on(10)">
+<td class="return">static Interval</td><td class="method">
+<a id="ofMinutesNanos_long_long" href="#ofMinutesNanos_long_long">ofMinutesNanos</a>(long minutes, long nanos)
+<div class="methodText">Creates a new INTERVAL MINUTE TO SECOND.</div>
+</td></tr>
+<tr onclick="return off(10)" class="detail" id="_10">
+<td class="return">static Interval</td><td>
+<a id="ofMinutesNanos_long_long" href="#ofMinutesNanos_long_long">ofMinutesNanos</a>(long minutes, long nanos)
+<div class="methodText">Creates a new INTERVAL MINUTE TO SECOND.
+
+ <p>
+ If both arguments are not equal to zero they should have the same sign.
+ </p></div>
+<div class="itemTitle">Parameters:</div>
+<div class="item">minutes - minutes, |minutes|&lt;10<sup>18</sup></div>
+<div class="item">nanos - nanoseconds, |nanos|&lt;60,000,000,000</div>
+<div class="itemTitle">Returns:</div>
+<div class="item">INTERVAL MINUTE TO SECOND</div>
+</td></tr>
+<tr id="__11" onclick="return on(11)">
+<td class="return">static Interval</td><td class="method">
+<a id="ofMinutesSeconds_long_int" href="#ofMinutesSeconds_long_int">ofMinutesSeconds</a>(long minutes, int seconds)
+<div class="methodText">Creates a new INTERVAL MINUTE TO SECOND.</div>
+</td></tr>
+<tr onclick="return off(11)" class="detail" id="_11">
+<td class="return">static Interval</td><td>
+<a id="ofMinutesSeconds_long_int" href="#ofMinutesSeconds_long_int">ofMinutesSeconds</a>(long minutes, int seconds)
+<div class="methodText">Creates a new INTERVAL MINUTE TO SECOND.
+
+ <p>
+ If both arguments are not equal to zero they should have the same sign.
+ </p></div>
+<div class="itemTitle">Parameters:</div>
+<div class="item">minutes - minutes, |minutes|&lt;10<sup>18</sup></div>
+<div class="item">seconds - seconds, |seconds|&lt;60</div>
+<div class="itemTitle">Returns:</div>
+<div class="item">INTERVAL MINUTE TO SECOND</div>
+</td></tr>
+<tr id="__12" onclick="return on(12)">
+<td class="return">static Interval</td><td class="method">
+<a id="ofMonths_long" href="#ofMonths_long">ofMonths</a>(long months)
+<div class="methodText">Creates a new INTERVAL MONTH.</div>
+</td></tr>
+<tr onclick="return off(12)" class="detail" id="_12">
+<td class="return">static Interval</td><td>
+<a id="ofMonths_long" href="#ofMonths_long">ofMonths</a>(long months)
+<div class="methodText">Creates a new INTERVAL MONTH.</div>
+<div class="itemTitle">Parameters:</div>
+<div class="item">months - months, |months|&lt;10<sup>18</sup></div>
+<div class="itemTitle">Returns:</div>
+<div class="item">INTERVAL MONTH</div>
+</td></tr>
+<tr id="__13" onclick="return on(13)">
+<td class="return">static Interval</td><td class="method">
+<a id="ofNanos_long" href="#ofNanos_long">ofNanos</a>(long nanos)
+<div class="methodText">Creates a new INTERVAL SECOND.</div>
+</td></tr>
+<tr onclick="return off(13)" class="detail" id="_13">
+<td class="return">static Interval</td><td>
+<a id="ofNanos_long" href="#ofNanos_long">ofNanos</a>(long nanos)
+<div class="methodText">Creates a new INTERVAL SECOND.</div>
+<div class="itemTitle">Parameters:</div>
+<div class="item">nanos - nanoseconds (including seconds)</div>
+<div class="itemTitle">Returns:</div>
+<div class="item">INTERVAL SECOND</div>
+</td></tr>
+<tr id="__14" onclick="return on(14)">
+<td class="return">static Interval</td><td class="method">
+<a id="ofSeconds_long" href="#ofSeconds_long">ofSeconds</a>(long seconds)
+<div class="methodText">Creates a new INTERVAL SECOND.</div>
+</td></tr>
+<tr onclick="return off(14)" class="detail" id="_14">
+<td class="return">static Interval</td><td>
+<a id="ofSeconds_long" href="#ofSeconds_long">ofSeconds</a>(long seconds)
+<div class="methodText">Creates a new INTERVAL SECOND.</div>
+<div class="itemTitle">Parameters:</div>
+<div class="item">seconds - seconds, |seconds|&lt;10<sup>18</sup></div>
+<div class="itemTitle">Returns:</div>
+<div class="item">INTERVAL SECOND</div>
+</td></tr>
+<tr id="__15" onclick="return on(15)">
+<td class="return">static Interval</td><td class="method">
+<a id="ofSeconds_long_int" href="#ofSeconds_long_int">ofSeconds</a>(long seconds, int nanos)
+<div class="methodText">Creates a new INTERVAL SECOND.</div>
+</td></tr>
+<tr onclick="return off(15)" class="detail" id="_15">
+<td class="return">static Interval</td><td>
+<a id="ofSeconds_long_int" href="#ofSeconds_long_int">ofSeconds</a>(long seconds, int nanos)
+<div class="methodText">Creates a new INTERVAL SECOND.
+
+ <p>
+ If both arguments are not equal to zero they should have the same sign.
+ </p></div>
+<div class="itemTitle">Parameters:</div>
+<div class="item">seconds - seconds, |seconds|&lt;10<sup>18</sup></div>
+<div class="item">nanos - nanoseconds, |nanos|&lt;1,000,000,000</div>
+<div class="itemTitle">Returns:</div>
+<div class="item">INTERVAL SECOND</div>
+</td></tr>
+<tr id="__16" onclick="return on(16)">
+<td class="return">static Interval</td><td class="method">
+<a id="ofYears_long" href="#ofYears_long">ofYears</a>(long years)
+<div class="methodText">Creates a new INTERVAL YEAR.</div>
+</td></tr>
+<tr onclick="return off(16)" class="detail" id="_16">
+<td class="return">static Interval</td><td>
+<a id="ofYears_long" href="#ofYears_long">ofYears</a>(long years)
+<div class="methodText">Creates a new INTERVAL YEAR.</div>
+<div class="itemTitle">Parameters:</div>
+<div class="item">years - years, |years|&lt;10<sup>18</sup></div>
+<div class="itemTitle">Returns:</div>
+<div class="item">INTERVAL YEAR</div>
+</td></tr>
+<tr id="__17" onclick="return on(17)">
+<td class="return">static Interval</td><td class="method">
+<a id="ofYearsMonths_long_int" href="#ofYearsMonths_long_int">ofYearsMonths</a>(long years, int months)
+<div class="methodText">Creates a new INTERVAL YEAR TO MONTH.</div>
+</td></tr>
+<tr onclick="return off(17)" class="detail" id="_17">
+<td class="return">static Interval</td><td>
+<a id="ofYearsMonths_long_int" href="#ofYearsMonths_long_int">ofYearsMonths</a>(long years, int months)
+<div class="methodText">Creates a new INTERVAL YEAR TO MONTH.
+
+ <p>
+ If both arguments are not equal to zero they should have the same sign.
+ </p></div>
+<div class="itemTitle">Parameters:</div>
+<div class="item">years - years, |years|&lt;10<sup>18</sup></div>
+<div class="item">months - months, |months|&lt;12</div>
+<div class="itemTitle">Returns:</div>
+<div class="item">INTERVAL YEAR TO MONTH</div>
+</td></tr>
+<tr id="__18" onclick="return on(18)">
+<td class="return"></td><td class="method">
+<a id="Interval_IntervalQualifier_boolean_long_long" href="#Interval_IntervalQualifier_boolean_long_long">Interval</a>(IntervalQualifier qualifier, boolean negative, long leading, long remaining)
+<div class="methodText">Creates a new interval.</div>
+</td></tr>
+<tr onclick="return off(18)" class="detail" id="_18">
+<td class="return"></td><td>
+<a id="Interval_IntervalQualifier_boolean_long_long" href="#Interval_IntervalQualifier_boolean_long_long">Interval</a>(IntervalQualifier qualifier, boolean negative, long leading, long remaining)
+<div class="methodText">Creates a new interval. Do not use this constructor, use static methods
+ instead.</div>
+<div class="itemTitle">Parameters:</div>
+<div class="item">qualifier - qualifier</div>
+<div class="item">negative - whether interval is negative</div>
+<div class="item">leading - value of leading field</div>
+<div class="item">remaining - combined value of all remaining fields</div>
+</td></tr>
+<tr id="__19" onclick="return on(19)">
+<td class="return">boolean</td><td class="method">
+<a id="equals_Object" href="#equals_Object">equals</a>(Object obj)
+</td></tr>
+<tr onclick="return off(19)" class="detail" id="_19">
+<td class="return">boolean</td><td>
+<a id="equals_Object" href="#equals_Object">equals</a>(Object obj)
+<div class="methodText"></div>
+</td></tr>
+<tr id="__20" onclick="return on(20)">
+<td class="return">long</td><td class="method">
+<a id="getDays" href="#getDays">getDays</a>()
+<div class="methodText">Returns days value, if any.</div>
+</td></tr>
+<tr onclick="return off(20)" class="detail" id="_20">
+<td class="return">long</td><td>
+<a id="getDays" href="#getDays">getDays</a>()
+<div class="methodText">Returns days value, if any.</div>
+<div class="itemTitle">Returns:</div>
+<div class="item">days, or 0</div>
+</td></tr>
+<tr id="__21" onclick="return on(21)">
+<td class="return">long</td><td class="method">
+<a id="getHours" href="#getHours">getHours</a>()
+<div class="methodText">Returns hours value, if any.</div>
+</td></tr>
+<tr onclick="return off(21)" class="detail" id="_21">
+<td class="return">long</td><td>
+<a id="getHours" href="#getHours">getHours</a>()
+<div class="methodText">Returns hours value, if any.</div>
+<div class="itemTitle">Returns:</div>
+<div class="item">hours, or 0</div>
+</td></tr>
+<tr id="__22" onclick="return on(22)">
+<td class="return">long</td><td class="method">
+<a id="getLeading" href="#getLeading">getLeading</a>()
+<div class="methodText">Returns value of leading field of this interval.</div>
+</td></tr>
+<tr onclick="return off(22)" class="detail" id="_22">
+<td class="return">long</td><td>
+<a id="getLeading" href="#getLeading">getLeading</a>()
+<div class="methodText">Returns value of leading field of this interval. For {@code SECOND}
+ intervals returns integer part of seconds.</div>
+<div class="itemTitle">Returns:</div>
+<div class="item">value of leading field</div>
+</td></tr>
+<tr id="__23" onclick="return on(23)">
+<td class="return">long</td><td class="method">
+<a id="getMinutes" href="#getMinutes">getMinutes</a>()
+<div class="methodText">Returns minutes value, if any.</div>
+</td></tr>
+<tr onclick="return off(23)" class="detail" id="_23">
+<td class="return">long</td><td>
+<a id="getMinutes" href="#getMinutes">getMinutes</a>()
+<div class="methodText">Returns minutes value, if any.</div>
+<div class="itemTitle">Returns:</div>
+<div class="item">minutes, or 0</div>
+</td></tr>
+<tr id="__24" onclick="return on(24)">
+<td class="return">long</td><td class="method">
+<a id="getMonths" href="#getMonths">getMonths</a>()
+<div class="methodText">Returns months value, if any.</div>
+</td></tr>
+<tr onclick="return off(24)" class="detail" id="_24">
+<td class="return">long</td><td>
+<a id="getMonths" href="#getMonths">getMonths</a>()
+<div class="methodText">Returns months value, if any.</div>
+<div class="itemTitle">Returns:</div>
+<div class="item">months, or 0</div>
+</td></tr>
+<tr id="__25" onclick="return on(25)">
+<td class="return">long</td><td class="method">
+<a id="getNanosOfSecond" href="#getNanosOfSecond">getNanosOfSecond</a>()
+<div class="methodText">Returns value of fractional part of seconds (in nanoseconds), if any.</div>
+</td></tr>
+<tr onclick="return off(25)" class="detail" id="_25">
+<td class="return">long</td><td>
+<a id="getNanosOfSecond" href="#getNanosOfSecond">getNanosOfSecond</a>()
+<div class="methodText">Returns value of fractional part of seconds (in nanoseconds), if any.</div>
+<div class="itemTitle">Returns:</div>
+<div class="item">nanoseconds, or 0</div>
+</td></tr>
+<tr id="__26" onclick="return on(26)">
+<td class="return">IntervalQualifier</td><td class="method">
+<a id="getQualifier" href="#getQualifier">getQualifier</a>()
+<div class="methodText">Returns qualifier of this interval.</div>
+</td></tr>
+<tr onclick="return off(26)" class="detail" id="_26">
+<td class="return">IntervalQualifier</td><td>
+<a id="getQualifier" href="#getQualifier">getQualifier</a>()
+<div class="methodText">Returns qualifier of this interval.</div>
+<div class="itemTitle">Returns:</div>
+<div class="item">qualifier</div>
+</td></tr>
+<tr id="__27" onclick="return on(27)">
+<td class="return">long</td><td class="method">
+<a id="getRemaining" href="#getRemaining">getRemaining</a>()
+<div class="methodText">Returns combined value of remaining fields of this interval.</div>
+</td></tr>
+<tr onclick="return off(27)" class="detail" id="_27">
+<td class="return">long</td><td>
+<a id="getRemaining" href="#getRemaining">getRemaining</a>()
+<div class="methodText">Returns combined value of remaining fields of this interval. For
+ {@code SECOND} intervals returns nanoseconds.</div>
+<div class="itemTitle">Returns:</div>
+<div class="item">combined value of remaining fields</div>
+</td></tr>
+<tr id="__28" onclick="return on(28)">
+<td class="return">long</td><td class="method">
+<a id="getSeconds" href="#getSeconds">getSeconds</a>()
+<div class="methodText">Returns value of integer part of seconds, if any.</div>
+</td></tr>
+<tr onclick="return off(28)" class="detail" id="_28">
+<td class="return">long</td><td>
+<a id="getSeconds" href="#getSeconds">getSeconds</a>()
+<div class="methodText">Returns value of integer part of seconds, if any.</div>
+<div class="itemTitle">Returns:</div>
+<div class="item">seconds, or 0</div>
+</td></tr>
+<tr id="__29" onclick="return on(29)">
+<td class="return">long</td><td class="method">
+<a id="getSecondsAndNanos" href="#getSecondsAndNanos">getSecondsAndNanos</a>()
+<div class="methodText">Returns seconds value measured in nanoseconds, if any.</div>
+</td></tr>
+<tr onclick="return off(29)" class="detail" id="_29">
+<td class="return">long</td><td>
+<a id="getSecondsAndNanos" href="#getSecondsAndNanos">getSecondsAndNanos</a>()
+<div class="methodText">Returns seconds value measured in nanoseconds, if any.
+
+ <p>
+ This method returns a long value that cannot fit all possible values of
+ INTERVAL SECOND. For a very large intervals of this type use
+ {@link #getSeconds()} and {@link #getNanosOfSecond()} instead. This
+ method can be safely used for intervals of other day-time types.
+ </p></div>
+<div class="itemTitle">Returns:</div>
+<div class="item">nanoseconds (including seconds), or 0</div>
+</td></tr>
+<tr id="__30" onclick="return on(30)">
+<td class="return">long</td><td class="method">
+<a id="getYears" href="#getYears">getYears</a>()
+<div class="methodText">Returns years value, if any.</div>
+</td></tr>
+<tr onclick="return off(30)" class="detail" id="_30">
+<td class="return">long</td><td>
+<a id="getYears" href="#getYears">getYears</a>()
+<div class="methodText">Returns years value, if any.</div>
+<div class="itemTitle">Returns:</div>
+<div class="item">years, or 0</div>
+</td></tr>
+<tr id="__31" onclick="return on(31)">
+<td class="return">int</td><td class="method">
+<a id="hashCode" href="#hashCode">hashCode</a>()
+</td></tr>
+<tr onclick="return off(31)" class="detail" id="_31">
+<td class="return">int</td><td>
+<a id="hashCode" href="#hashCode">hashCode</a>()
+<div class="methodText"></div>
+</td></tr>
+<tr id="__32" onclick="return on(32)">
+<td class="return">boolean</td><td class="method">
+<a id="isNegative" href="#isNegative">isNegative</a>()
+<div class="methodText">Returns where the interval is negative.</div>
+</td></tr>
+<tr onclick="return off(32)" class="detail" id="_32">
+<td class="return">boolean</td><td>
+<a id="isNegative" href="#isNegative">isNegative</a>()
+<div class="methodText">Returns where the interval is negative.</div>
+<div class="itemTitle">Returns:</div>
+<div class="item">where the interval is negative</div>
+</td></tr>
+<tr id="__33" onclick="return on(33)">
+<td class="return">String</td><td class="method">
+<a id="toString" href="#toString">toString</a>()
+</td></tr>
+<tr onclick="return off(33)" class="detail" id="_33">
+<td class="return">String</td><td>
+<a id="toString" href="#toString">toString</a>()
+<div class="methodText"></div>
+</td></tr>
+</table>
+</div></td></tr></table></body></html>
