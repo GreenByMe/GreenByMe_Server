@@ -27,5 +27,4 @@ public class MissionInfo {
     private String type;
     private int max;
     private int current;
-
 }
