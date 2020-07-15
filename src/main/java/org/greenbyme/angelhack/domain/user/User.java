@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.greenbyme.angelhack.domain.mission.Mission;
 import org.greenbyme.angelhack.domain.missionInfo.MissionInfo;
 import org.greenbyme.angelhack.domain.post.Post;
 
@@ -17,7 +16,8 @@ import java.util.List;
 @Getter
 public class User {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "user_id")
     private Long id;
 
@@ -26,11 +26,10 @@ public class User {
     private String password;
     private String nickname;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<MissionInfo> missionInfoList = new ArrayList<>();
 
-    @OneToMany
-    @JoinColumn(name = "post_id")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
     private List<Post> postList = new ArrayList<>();
 
     @Builder
@@ -39,5 +38,9 @@ public class User {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
+    }
+
+    public void addPost(Post post) {
+        postList.add(post);
     }
 }

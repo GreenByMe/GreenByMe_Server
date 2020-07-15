@@ -3,6 +3,7 @@ package org.greenbyme.angelhack.domain.missionInfo;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.greenbyme.angelhack.domain.mission.Mission;
 import org.greenbyme.angelhack.domain.user.User;
 
 import javax.persistence.*;
@@ -20,7 +21,11 @@ public class MissionInfo {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OneToOne
+    private Mission mission;
+
+    private String type;
     private int max;
-    private int current=0;
+    private int current;
 
 }
