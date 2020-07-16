@@ -27,7 +27,7 @@ dependencies {
 
 	compileOnly 'org.projectlombok:lombok'
 	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
-
+	compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.h2database:h2'
 	annotationProcessor 'org.projectlombok:lombok'
