@@ -31,7 +31,7 @@ class UserRepositoryTest {
         System.out.println("userA = " + userA.getName());
     }
 
-    @DisplayName("create후 update에서 modifiedDate 변경 확인")
+/*    @DisplayName("create후 update에서 modifiedDate 변경 확인")
     @Ignore
     @Test
     public void userModifiedTest() throws InterruptedException {
@@ -47,6 +47,6 @@ class UserRepositoryTest {
 
         assertThat(userA.getCreatedDate()).isEqualTo(changedUser.getLastModifiedDate());
 
-    }
+    }*/
 
 }

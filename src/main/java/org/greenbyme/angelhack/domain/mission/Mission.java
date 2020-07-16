@@ -5,8 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.greenbyme.angelhack.domain.Category.Category;
+import org.greenbyme.angelhack.domain.Category.DayCategory;
 import org.greenbyme.angelhack.domain.baseEntity.BaseTimeEntity;
-import org.greenbyme.angelhack.domain.user.User;
 
 import javax.persistence.*;
 
@@ -23,14 +23,18 @@ public class Mission extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Category category;
 
+    @Enumerated(EnumType.STRING)
+    private DayCategory dayCategory;
+
     private String subject;
     private String description;
 
     @Builder
-    public Mission(Category category, String subject, String description){
+    public Mission(Category category, String subject, String description, DayCategory dayCategory){
         this.category = category;
         this.subject = subject;
         this.description = description;
+        this.dayCategory = dayCategory;
     }
 }
 

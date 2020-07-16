@@ -27,17 +27,21 @@ public class MissionInfo extends BaseTimeEntity {
     @JoinColumn(name = "mission_id")
     private Mission mission;
 
-    private String type;
     private int max;
     private int current;
+    private int remainPeriod;
 
     @Builder
-    public MissionInfo(User user, Mission mission, String type, int max){
+    public MissionInfo(User user, Mission mission){
         setUser(user);
         this.mission = mission;
-        this.type = type;
-        this.max=max;
-        this.current = 0;
+        this.max=mission.getDayCategory().getDay();
+        this.remainPeriod=mission.getDayCategory().getDay();
+        this.current = 1;
+    }
+
+    public void reduceRemainPeriod(){
+        this.remainPeriod--;
     }
 
     public void addCurrent(){
