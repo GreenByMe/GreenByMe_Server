@@ -21,3 +21,5 @@ logging:
   level:
     org.hibernate.SQL: debug
 ---
+spring.profiles: dev
+spring.profiles.include: real

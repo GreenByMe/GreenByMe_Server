@@ -25,15 +25,15 @@ public class MissionInfoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(missionInfoSaveResponseDto);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<MissionInfoDetailResponseDto> missionInfoDetail(@PathVariable("id") final Long id){
+    @GetMapping("/{missionInfo_id}")
+    public ResponseEntity<MissionInfoDetailResponseDto> missionInfoDetail(@PathVariable("missionInfo_id") final Long id){
         MissionInfoDetailResponseDto missionInfoDetailResponseDto = missionInfoService.findMissionInfoDetails(id);
 
         return ResponseEntity.status(HttpStatus.OK).body(missionInfoDetailResponseDto);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<MissionInfoDeleteResponseDto> missionInfoDelete(@PathVariable("id") final Long id){
+    @DeleteMapping("/{missionInfo_id}")
+    public ResponseEntity<MissionInfoDeleteResponseDto> missionInfoDelete(@PathVariable("missionInfo_id") final Long id){
         MissionInfoDeleteResponseDto missionInfoDeleteResponseDto = missionInfoService.missionInfoDelete(id);
 
         return ResponseEntity.status(HttpStatus.OK).body(missionInfoDeleteResponseDto);
