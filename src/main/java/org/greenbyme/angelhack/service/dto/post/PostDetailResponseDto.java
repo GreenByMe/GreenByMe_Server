@@ -1,9 +1,12 @@
 package org.greenbyme.angelhack.service.dto.post;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.greenbyme.angelhack.domain.post.Post;
 
-@NoArgsConstructor
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostDetailResponseDto {
 
     private Long postId;

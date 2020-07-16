@@ -1,10 +1,11 @@
 package org.greenbyme.angelhack.service.dto.post;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostSaveResponseDto {
 
     private Long missionId;

@@ -28,32 +28,32 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
-    @GetMapping("/mission/{missionId}")
-    public ResponseEntity<List<PostResponseDto>> getPostsByMission(@PathVariable final Long missionId) {
+    @GetMapping("/missions/{missionId}")
+    public ResponseEntity<List<PostResponseDto>> getPostsByMission(@PathVariable("missionId") final Long missionId) {
         List<PostResponseDto> responseDtos = postService.getPostsByMission(missionId);
         return ResponseEntity.status(HttpStatus.OK).body(responseDtos);
     }
 
     @GetMapping("/{postId}")
-    public ResponseEntity<PostDetailResponseDto> getPostDetail(@PathVariable final Long postId) {
+    public ResponseEntity<PostDetailResponseDto> getPostDetail(@PathVariable("postId") final Long postId) {
         PostDetailResponseDto responseDto = postService.getPostDetail(postId);
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<PostResponseDto>> getPostsByUser(@PathVariable final Long userId) {
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<List<PostResponseDto>> getPostsByUser(@PathVariable("userId") final Long userId) {
         List<PostResponseDto> responseDtos = postService.getPostsByUser(userId);
         return ResponseEntity.status(HttpStatus.OK).body(responseDtos);
     }
 
     @DeleteMapping("/{postId}")
-    public ResponseEntity<Void> deletePost(@PathVariable final Long postId) {
+    public ResponseEntity<Void> deletePost(@PathVariable("postId") final Long postId) {
         postService.deletePost(postId);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{postId}")
-    public ResponseEntity<PostSaveResponseDto> updatePost(@PathVariable final Long postId, @RequestBody PostUpdateRequestDto requestDto) {
+    public ResponseEntity<PostSaveResponseDto> updatePost( @PathVariable("postId") final Long postId, @RequestBody PostUpdateRequestDto requestDto) {
         PostSaveResponseDto responseDto = postService.updatePost(postId, requestDto);
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }

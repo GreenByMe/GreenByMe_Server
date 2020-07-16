@@ -2,8 +2,11 @@ package org.greenbyme.angelhack.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.greenbyme.angelhack.domain.missionInfo.MissionInfo;
+import org.greenbyme.angelhack.domain.missionInfo.MissionInfoRepository;
 import org.greenbyme.angelhack.domain.post.Post;
 import org.greenbyme.angelhack.domain.post.PostRepository;
+import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.domain.user.UserRepository;
 import org.greenbyme.angelhack.exception.AlreadyExistsPostException;
 import org.greenbyme.angelhack.service.dto.post.*;
@@ -16,18 +19,23 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final MissionInfoRepository missionInfoRepository;
 
     @Transactional
     public PostSaveResponseDto savePosts(final PostSaveRequestDto requestDto) {
-        if (postRepository.findByMissionInfo(requestDto.getMissionInfo()) != null) {
+        MissionInfo missionInfo = missionInfoRepository.findById(requestDto.getMissionInfoId()).get();
+        if (postRepository.findByMissionInfo(missionInfo) != null) {
             throw new AlreadyExistsPostException();
         }
-        Post savePost = postRepository.save(requestDto.toEntity());
+        User user = userRepository.findById(requestDto.getUserId()).get();
+        Post savePost = new Post(user, missionInfo, requestDto.getText(), requestDto.getTitle(), requestDto.getPicture(), requestDto.getOpen());
+        savePost = postRepository.save(savePost);
         PostSaveResponseDto responseDto = new PostSaveResponseDto(savePost.getId());
         return responseDto;
     }
@@ -60,6 +68,7 @@ public class PostService {
         postRepository.deleteById(postId);
     }
 
+    @Transactional
     public PostSaveResponseDto updatePost(Long postId, PostUpdateRequestDto requestDto) {
         Post post = postRepository.findById(postId).get();
         post.update(requestDto);
