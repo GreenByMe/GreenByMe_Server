@@ -2,6 +2,8 @@ package org.greenbyme.angelhack.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.greenbyme.angelhack.domain.mission.Mission;
+import org.greenbyme.angelhack.domain.mission.MissionRepository;
 import org.greenbyme.angelhack.domain.missionInfo.MissionInfo;
 import org.greenbyme.angelhack.domain.missionInfo.MissionInfoRepository;
 import org.greenbyme.angelhack.domain.post.Post;
@@ -26,6 +28,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final MissionInfoRepository missionInfoRepository;
+    private final MissionRepository missionRepository;
 
     @Transactional
     public PostSaveResponseDto savePosts(final PostSaveRequestDto requestDto) {
@@ -41,9 +44,10 @@ public class PostService {
     }
 
     public List<PostResponseDto> getPostsByMission(Long missionId) {
-        List<PostResponseDto> dto = postRepository.findAll()
+        Mission mission = missionRepository.findById(missionId).get();
+        List<PostResponseDto> dto = missionInfoRepository.findAllByMission(mission)
                 .stream()
-                .filter(p -> p.getMissionInfo().getMission().getId() == missionId)
+                .map(m -> postRepository.findByMissionInfo(m))
                 .map(p -> new PostResponseDto(p.getId(), p.getUser().getNickname(), p.getPicture(), p.getThumbsUp()))
                 .collect(Collectors.toList());
         return dto;
@@ -56,10 +60,10 @@ public class PostService {
     }
 
     public List<PostResponseDto> getPostsByUser(Long userId) {
-        List<PostResponseDto> dto = postRepository.findAll()
+        User user = userRepository.findById(userId).get();
+        List<PostResponseDto> dto = postRepository.findAllByUser(user)
                 .stream()
-                .filter(p -> p.getUser().getId() == userId)
-                .map(p -> new PostResponseDto(p.getId(), p.getUser().getNickname(), p.getPicture(), p.getThumbsUp()))
+                .map(p -> new PostResponseDto(p.getId(), user.getNickname(), p.getPicture(), p.getThumbsUp()))
                 .collect(Collectors.toList());
         return dto;
     }
