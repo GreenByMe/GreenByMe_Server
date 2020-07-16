@@ -18,6 +18,11 @@ spring:
         show_sql: true
         format_sql: true
         default_batch_fetch_size: 100
+security:
+  jwt:
+    token:
+      secret-key: 2020angelhackseoul
+      expire-length: 3600000
 #security:
 #  basic:
 #    enabled: false

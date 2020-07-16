@@ -4,18 +4,26 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.domain.user.UserRepository;
+import org.greenbyme.angelhack.exception.ErrorCode;
+import org.greenbyme.angelhack.exception.UserException;
 import org.greenbyme.angelhack.service.dto.user.UserDetailResponseDto;
+import org.greenbyme.angelhack.service.dto.user.UserLoginRequestDto;
 import org.greenbyme.angelhack.service.dto.user.UserResponseDto;
 import org.greenbyme.angelhack.service.dto.user.UserSaveRequestDto;
+import org.greenbyme.angelhack.util.JwtTokenProvider;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
+    @Transactional
     public UserResponseDto saveUser(UserSaveRequestDto requestDto) {
         User user = requestDto.toEntity();
         user = userRepository.save(user);
@@ -26,5 +34,20 @@ public class UserService {
         User user = userRepository.findById(userId).get();
         UserDetailResponseDto responseDto = new UserDetailResponseDto(user);
         return responseDto;
+    }
+
+    @Transactional
+    public String createToken(UserLoginRequestDto dto) {
+        String email = dto.getEmail();
+        User user = getUser(email);
+        if (!user.checkPassword(dto.getPassword())) {
+            throw new UserException("틀린 암호입니다", ErrorCode.WRONG_PASSWORD);
+        }
+        return jwtTokenProvider.createToken(dto.getEmail());
+    }
+
+    private User getUser(final String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserException(String.format("%s: 가입되지 않은 이메일입니다.", email), ErrorCode.UNSIGNED));
     }
 }
