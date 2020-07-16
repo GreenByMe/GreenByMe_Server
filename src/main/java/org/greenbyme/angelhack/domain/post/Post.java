@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.greenbyme.angelhack.domain.baseEntity.BaseEntity;
 import org.greenbyme.angelhack.domain.missionInfo.MissionInfo;
 import org.greenbyme.angelhack.domain.user.User;
+import org.greenbyme.angelhack.service.dto.post.PostUpdateRequestDto;
 
 import javax.persistence.*;
 
@@ -60,5 +61,16 @@ public class Post extends BaseEntity {
     private void setUser(User user) {
         this.user = user;
         user.getPostList().add(this);
+    }
+
+    public boolean isOpen() {
+        return this.open;
+    }
+
+    public void update(PostUpdateRequestDto requestDto) {
+        this.text = requestDto.getText();
+        this.picture = requestDto.getPicture();
+        this.open = requestDto.getOpen();
+        this.title = requestDto.getTitle();
     }
 }
