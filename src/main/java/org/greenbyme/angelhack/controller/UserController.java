@@ -26,7 +26,7 @@ public class UserController {
 
     @GetMapping("/detail/{userId}")
     public ResponseEntity<UserDetailResponseDto> getUserDetail(@PathVariable("userId") final Long userId) {
-        UserDetailResponseDto responseDto = userService.getUserDetail(userId);
-        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+//        UserDetailResponseDto responseDto = ;
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getUserDetail(userId));
     }
 }

@@ -14,6 +14,8 @@ import org.greenbyme.angelhack.util.JwtTokenProvider;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.NoResultException;
+
 @Slf4j
 @Service
 @Transactional(readOnly = true)
@@ -25,15 +27,18 @@ public class UserService {
 
     @Transactional
     public UserResponseDto saveUser(UserSaveRequestDto requestDto) {
+        if( userRepository.findByEmail(requestDto.getEmail()).isPresent()) {
+            throw new UserException("이미 가입된 메일입니다",ErrorCode.MEMBER_DUPLICATED_EMAIL);
+        }
         User user = requestDto.toEntity();
         user = userRepository.save(user);
         return new UserResponseDto(user.getId());
     }
 
     public UserDetailResponseDto getUserDetail(Long userId) {
-        User user = userRepository.findById(userId).get();
-        UserDetailResponseDto responseDto = new UserDetailResponseDto(user);
-        return responseDto;
+        User user = userRepository.findById(userId).
+                orElseThrow(() -> new NoResultException("없는 정보입니다"));
+        return new UserDetailResponseDto(user);
     }
 
     @Transactional
@@ -49,5 +54,9 @@ public class UserService {
     private User getUser(final String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserException(String.format("%s: 가입되지 않은 이메일입니다.", email), ErrorCode.UNSIGNED));
+    }
+
+    public Long getUserId(String email) {
+        return getUser(email).getId();
     }
 }

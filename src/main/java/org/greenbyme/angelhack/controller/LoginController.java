@@ -22,6 +22,6 @@ public class LoginController {
     public TokenResponse login(@RequestBody UserLoginRequestDto dto) {
         String token = userService.createToken(dto);
         Long userId = userService.getUserId(dto.getEmail());
-        return new TokenResponse(token, "bearer", userId);
+        return new TokenResponse(token, userId);
     }
 }

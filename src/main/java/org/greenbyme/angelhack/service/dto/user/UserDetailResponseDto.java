@@ -21,6 +21,10 @@ public class UserDetailResponseDto {
     private List<Post> posts = new ArrayList<>();
 
     public UserDetailResponseDto(User user) {
-
+        this.userId = user.getId();
+        this.email = user.getEmail();
+        this.nickName = user.getNickname();
+        this.missionInfoList = user.getMissionInfoList();
+        this.posts = user.getPostList();
     }
 }
