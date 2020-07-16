@@ -24,7 +24,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
-    @GetMapping("/detail/{userId}")
+    @GetMapping("/{userId}")
     public ResponseEntity<UserDetailResponseDto> getUserDetail(@PathVariable("userId") final Long userId) {
 //        UserDetailResponseDto responseDto = ;
         return ResponseEntity.status(HttpStatus.OK).body(userService.getUserDetail(userId));
