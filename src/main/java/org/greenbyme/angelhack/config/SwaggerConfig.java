@@ -16,8 +16,8 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .useDefaultResponseMessages(false)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("org.quickresponse.qr"))
-                .paths(PathSelectors.ant("/ahs/api/**"))
+                .apis(RequestHandlerSelectors.basePackage("org.greenbyme.angelhack"))
+                .paths(PathSelectors.ant("/api/**"))
                 .build();
     }
 }
