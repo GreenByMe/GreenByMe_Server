@@ -8,14 +8,15 @@ import org.greenbyme.angelhack.domain.missionInfo.MissionInfo;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MissionInfoSaveResponseDto {
+public class MissionInfoDeleteResponseDto {
 
-    private Long id;
+    private Long missionInfoId;
     private String message;
 
     @Builder
-    public MissionInfoSaveResponseDto(MissionInfo missionInfo) {
-        this.id = missionInfo.getId();
-        this.message = "사용자 미션 등록 완료";
+    public MissionInfoDeleteResponseDto(MissionInfo missionInfo){
+        missionInfoId = missionInfo.getId();
+        message = "사용자 미션 삭제 완료";
     }
+
 }

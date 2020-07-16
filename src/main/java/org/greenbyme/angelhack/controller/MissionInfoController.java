@@ -3,13 +3,12 @@ package org.greenbyme.angelhack.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.greenbyme.angelhack.service.MissionInfoService;
+import org.greenbyme.angelhack.service.dto.missionInfo.MissionInfoDeleteResponseDto;
+import org.greenbyme.angelhack.service.dto.missionInfo.MissionInfoDetailResponseDto;
 import org.greenbyme.angelhack.service.dto.missionInfo.MissionInfoSaveResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -26,4 +25,17 @@ public class MissionInfoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(missionInfoSaveResponseDto);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<MissionInfoDetailResponseDto> missionInfoDetail(@PathVariable("id") final Long id){
+        MissionInfoDetailResponseDto missionInfoDetailResponseDto = missionInfoService.findMissionInfoDetails(id);
+
+        return ResponseEntity.status(HttpStatus.OK).body(missionInfoDetailResponseDto);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<MissionInfoDeleteResponseDto> missionInfoDelete(@PathVariable("id") final Long id){
+        MissionInfoDeleteResponseDto missionInfoDeleteResponseDto = missionInfoService.missionInfoDelete(id);
+
+        return ResponseEntity.status(HttpStatus.OK).body(missionInfoDeleteResponseDto);
+    }
 }
