@@ -53,8 +53,14 @@ public class PostController {
     }
 
     @PutMapping("/{postId}")
-    public ResponseEntity<PostSaveResponseDto> updatePost( @PathVariable("postId") final Long postId, @RequestBody PostUpdateRequestDto requestDto) {
+    public ResponseEntity<PostSaveResponseDto> updatePost(@PathVariable("postId") final Long postId, @RequestBody PostUpdateRequestDto requestDto) {
         PostSaveResponseDto responseDto = postService.updatePost(postId, requestDto);
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+    }
+
+    @PutMapping("/{postId}/thumbsup")
+    public ResponseEntity<Void> thumbsup(@PathVariable("postId") final Long postId) {
+        postService.thumbsUp(postId);
+        return ResponseEntity.ok().build();
     }
 }

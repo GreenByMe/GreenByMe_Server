@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostSaveResponseDto {
 
-    private Long missionId;
+    private Long postId;
     private String message;
 
-    public PostSaveResponseDto(Long missionId) {
-        this.missionId = missionId;
+    public PostSaveResponseDto(Long postId) {
+        this.postId = postId;
         this.message = "success";
     }
 }
