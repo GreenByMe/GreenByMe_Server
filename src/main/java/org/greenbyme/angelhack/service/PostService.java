@@ -30,22 +30,22 @@ public class PostService {
     private final MissionRepository missionRepository;
 
     @Transactional
-    public PostSaveResponseDto savePosts(final PostSaveRequestDto requestDto) {
+    public PostSaveResponseDto savePosts(final PostSaveRequestDto requestDto, String fileUrl) {
         MissionInfo missionInfo = missionInfoRepository.findById(requestDto.getMissionInfoId())
-                .orElseThrow(()-> new MissionException(ErrorCode.INVALID_MISSIONINFO));
+                .orElseThrow(() -> new MissionException(ErrorCode.INVALID_MISSIONINFO));
         if (postRepository.findByMissionInfo(missionInfo) != null) {
             throw new AlreadyExistsPostException();
         }
         User user = userRepository.findById(requestDto.getUserId())
-                .orElseThrow(()-> new UserException(ErrorCode.UNSIGNED_USER));
-        Post savePost = new Post(user, missionInfo, requestDto.getText(), requestDto.getTitle(), requestDto.getPicture(), requestDto.getOpen());
+                .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
+        Post savePost = new Post(user, missionInfo, requestDto.getText(), requestDto.getTitle(), fileUrl, requestDto.getOpen());
         savePost = postRepository.save(savePost);
         return new PostSaveResponseDto(savePost.getId());
     }
 
     public List<PostResponseDto> getPostsByMission(Long missionId) {
         Mission mission = missionRepository.findById(missionId)
-                .orElseThrow(()-> new MissionException(ErrorCode.INVALID_MISSION));
+                .orElseThrow(() -> new MissionException(ErrorCode.INVALID_MISSION));
         return missionInfoRepository.findAllByMission(mission)
                 .stream()
                 .map(postRepository::findByMissionInfo)
@@ -55,13 +55,13 @@ public class PostService {
 
     public PostDetailResponseDto getPostDetail(Long postId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(()->new PostException(ErrorCode.INVALID_POST));
+                .orElseThrow(() -> new PostException(ErrorCode.INVALID_POST));
         return new PostDetailResponseDto(post);
     }
 
     public List<PostResponseDto> getPostsByUser(Long userId) {
         User user = userRepository.findById(userId)
-                        .orElseThrow(()-> new UserException(ErrorCode.UNSIGNED_USER));
+                .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
         return postRepository.findAllByUser(user)
                 .stream()
                 .map(p -> new PostResponseDto(p.getId(), user.getNickname(), p.getPicture(), p.getThumbsUp()))
@@ -76,7 +76,7 @@ public class PostService {
     @Transactional
     public PostSaveResponseDto updatePost(Long postId, PostUpdateRequestDto requestDto) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(()->new PostException(ErrorCode.INVALID_POST));
+                .orElseThrow(() -> new PostException(ErrorCode.INVALID_POST));
         post.update(requestDto);
         return new PostSaveResponseDto(postId);
     }
@@ -84,7 +84,7 @@ public class PostService {
     @Transactional
     public void thumbsUp(Long postId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(()->new PostException(ErrorCode.INVALID_POST));
+                .orElseThrow(() -> new PostException(ErrorCode.INVALID_POST));
         post.thumbsUp();
     }
 }

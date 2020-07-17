@@ -14,6 +14,5 @@ public class PostUpdateRequestDto {
     private MissionInfo missionInfo;
     private String title;
     private String text;
-    private String picture;
     private Boolean open;
 }

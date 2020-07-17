@@ -16,6 +16,5 @@ public class PostSaveRequestDto {
     private Long missionInfoId;
     private String title;
     private String text;
-    private String picture;
     private Boolean open;
 }

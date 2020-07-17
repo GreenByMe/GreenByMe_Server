@@ -8,10 +8,13 @@ import org.greenbyme.angelhack.service.dto.post.PostDetailResponseDto;
 import org.greenbyme.angelhack.service.dto.post.PostResponseDto;
 import org.greenbyme.angelhack.service.dto.post.PostSaveRequestDto;
 import org.greenbyme.angelhack.service.dto.post.PostSaveResponseDto;
+import org.greenbyme.angelhack.util.S3Uploader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -21,12 +24,23 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
+    private final S3Uploader s3Uploader;
 
     @PostMapping
-    public ResponseEntity<PostSaveResponseDto> savePost(@RequestBody final PostSaveRequestDto requestDto) {
-        PostSaveResponseDto responseDto = postService.savePosts(requestDto);
+    public ResponseEntity<PostSaveResponseDto> savePost(@RequestParam("data") MultipartFile multipartFile,
+                                                        @RequestBody final PostSaveRequestDto requestDto
+                                                        ) throws IOException {
+        String FileUrl = s3Uploader.upload(multipartFile, "static");
+        System.out.println("FileUrl = " + FileUrl);
+        PostSaveResponseDto responseDto = postService.savePosts(requestDto,FileUrl);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
+
+/*    @PostMapping("/upload")
+    @ResponseBody
+    public String upload(@RequestParam("data") MultipartFile multipartFile) throws IOException {
+        return s3Uploader.upload(multipartFile, "static");
+    }*/
 
     @GetMapping("/missions/{missionId}")
     public ResponseEntity<List<PostResponseDto>> getPostsByMission(@PathVariable("missionId") final Long missionId) {
