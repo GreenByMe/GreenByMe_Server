@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.greenbyme.angelhack.domain.Category.Category;
 import org.greenbyme.angelhack.domain.Category.DayCategory;
+import org.greenbyme.angelhack.domain.mission.MissionCertificateCount;
 import org.greenbyme.angelhack.service.MissionService;
 import org.greenbyme.angelhack.service.dto.mission.*;
 import org.springframework.data.domain.Page;
@@ -23,10 +24,19 @@ public class MissionController {
 
     private final MissionService missionService;
 
-    @PostMapping("")
-    public ResponseEntity<MissionSaveResponseDto> save(@RequestBody MissionSaveRequestDto missionSaveRequestDto){
-        MissionSaveResponseDto missionSaveResponseDto = missionService.save(missionSaveRequestDto);
+    @PostMapping("/categorys/{category}/dayCategory/{dayCategory}/missionCertificateCount/{missionCertificateCount}")
+    public ResponseEntity<MissionSaveResponseDto> save(@PathVariable("category") final Category category,
+                                                       @PathVariable("dayCategory") final DayCategory dayCategory,
+                                                       @PathVariable("missionCertificateCount") final MissionCertificateCount missionCertificateCount,
+                                                       @RequestBody MissionSaveRequestDto missionSaveRequestDto){
+        MissionSaveResponseDto missionSaveResponseDto = missionService.save(missionSaveRequestDto, category, dayCategory,missionCertificateCount);
         return ResponseEntity.status(HttpStatus.CREATED).body(missionSaveResponseDto);
+    }
+
+    @GetMapping("/{mission_id}")
+    public ResponseEntity<MissionDetailsDto> findOneDetail(@PathVariable("mission_id") final Long id ){
+        MissionDetailsDto missionDetailsDto = missionService.findById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(missionDetailsDto);
     }
 
     @GetMapping("")

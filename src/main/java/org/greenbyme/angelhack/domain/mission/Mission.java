@@ -9,6 +9,8 @@ import org.greenbyme.angelhack.domain.Category.DayCategory;
 import org.greenbyme.angelhack.domain.baseEntity.BaseTimeEntity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -26,15 +28,31 @@ public class Mission extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private DayCategory dayCategory;
 
+    @Embedded
+    private MissionCertificationMethod missionCertificationMethod;
+
     private String subject;
+
     private String description;
 
     @Builder
-    public Mission(Category category, String subject, String description, DayCategory dayCategory){
+    public Mission(Category category, String subject, String description, DayCategory dayCategory, MissionCertificationMethod missionCertificationMethod){
         this.category = category;
         this.subject = subject;
         this.description = description;
         this.dayCategory = dayCategory;
+        this.missionCertificationMethod = missionCertificationMethod;
     }
+
+    public void changeCategory(Category category){
+        this.category = category;
+    }
+    public void changeDayCategory(DayCategory dayCategory){
+        this.dayCategory = dayCategory;
+    }
+    public void changeMissionCertificationMethod(MissionCertificationMethod missionCertificationMethod){
+        this.missionCertificationMethod = missionCertificationMethod;
+    }
+
 }
 

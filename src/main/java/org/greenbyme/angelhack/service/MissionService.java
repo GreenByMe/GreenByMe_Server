@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.greenbyme.angelhack.domain.Category.Category;
 import org.greenbyme.angelhack.domain.Category.DayCategory;
 import org.greenbyme.angelhack.domain.mission.Mission;
+import org.greenbyme.angelhack.domain.mission.MissionCertificateCount;
+import org.greenbyme.angelhack.domain.mission.MissionCertificationMethod;
 import org.greenbyme.angelhack.domain.mission.MissionRepository;
 import org.greenbyme.angelhack.domain.missionInfo.MissionInfo;
 import org.greenbyme.angelhack.domain.missionInfo.MissionInfoRepository;
@@ -25,9 +27,21 @@ public class MissionService {
     private final MissionInfoRepository missionInfoRepository;
 
     @Transactional
-    public MissionSaveResponseDto save(MissionSaveRequestDto missionSaveRequestDto) {
+    public MissionSaveResponseDto save(MissionSaveRequestDto missionSaveRequestDto, Category category, DayCategory dayCategory, MissionCertificateCount missionCertificateCount) {
 
         Mission mission = missionSaveRequestDto.toEntity();
+        mission.changeCategory(category);
+        mission.changeDayCategory(dayCategory);
+
+        String title = missionSaveRequestDto.getMissionCertificationMethodRequestDto().getTitle();
+        String test = missionSaveRequestDto.getMissionCertificationMethodRequestDto().getTest();
+
+        mission.changeMissionCertificationMethod(MissionCertificationMethod.builder()
+                .title(title)
+                .text(test)
+                .missionCertificateCount(missionCertificateCount)
+                .build());
+
         missionRepository.save(mission);
 
         return new MissionSaveResponseDto(mission);
@@ -58,5 +72,10 @@ public class MissionService {
         missionRepository.delete(mission);
 
         return new MissionDeleteDto(mission);
+    }
+
+    public MissionDetailsDto findById(Long id) {
+        Mission mission = missionRepository.findById(id).orElseThrow(() -> new NoResultException("등록되지 않은 미션입니다."));
+        return new MissionDetailsDto(mission);
     }
 }
