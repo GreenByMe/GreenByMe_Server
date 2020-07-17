@@ -10,4 +10,5 @@ public interface MissionInfoRepository extends JpaRepository<MissionInfo, Long>,
 
     List<MissionInfo> findAllByMission(Mission mission);
 
+    List<MissionInfo> findByMission(Mission mission);
 }

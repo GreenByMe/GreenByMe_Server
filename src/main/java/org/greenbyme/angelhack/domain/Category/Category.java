@@ -4,6 +4,8 @@ public enum Category {
 
     NONE,
     ENERGY,
-    DISPOSABLE
-
+    DISPOSABLE,
+    TRAFFIC,
+    WATERWORKS,
+    CAMPAIGN
 }
