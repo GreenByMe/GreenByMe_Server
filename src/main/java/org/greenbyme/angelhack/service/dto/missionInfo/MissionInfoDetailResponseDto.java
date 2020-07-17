@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.greenbyme.angelhack.domain.missionInfo.MissionInfo;
-import org.greenbyme.angelhack.service.mission.MissionDetailsDto;
+import org.greenbyme.angelhack.service.dto.mission.MissionDetailsDto;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

@@ -1,7 +1,6 @@
-package org.greenbyme.angelhack.service.mission;
+package org.greenbyme.angelhack.service.dto.mission;
 
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.greenbyme.angelhack.domain.Category.Category;
@@ -10,15 +9,16 @@ import org.greenbyme.angelhack.domain.mission.Mission;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MissionDetailsDto {
+public class MissionFindAllByCategoryResponseDto {
 
+    private Long id;
     private Category category;
     private DayCategory dayCategory;
     private String subject;
     private String description;
 
-    @Builder
-    public MissionDetailsDto(Mission mission) {
+    public MissionFindAllByCategoryResponseDto(Mission mission) {
+        id = mission.getId();
         category = mission.getCategory();
         dayCategory = mission.getDayCategory();
         subject = mission.getSubject();
