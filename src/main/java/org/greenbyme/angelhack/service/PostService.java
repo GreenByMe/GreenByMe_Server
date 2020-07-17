@@ -40,14 +40,17 @@ public class PostService {
                 .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
         List<Post> posts = postRepository.findAllByUserAndMissionInfo(user, missionInfo);
         long postCount = posts.stream()
-                .filter(p->p.getCreatedDate().getDayOfYear() == requestDto.getCreatedDate().getDayOfYear())
+                .filter(p -> p.getCreatedDate().getDayOfYear() == requestDto.getCreatedDate().getDayOfYear())
                 .count();
-        if(postCount > 0) {
+        if (postCount > 0) {
             throw new PostException(ErrorCode.OVER_CERIFICATION);
         }
         Post savePost = new Post(user, missionInfo, requestDto.getText(), requestDto.getTitle(), requestDto.getPicture(), requestDto.getOpen());
         savePost = postRepository.save(savePost);
         missionInfo.addProgress();
+        if (missionInfo.isEnd()) {
+            missionInfo.getMission().addPassCandidates();
+        }
         return new PostSaveResponseDto(savePost.getId());
     }
 
