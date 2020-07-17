@@ -10,6 +10,7 @@ import org.greenbyme.angelhack.domain.mission.Mission;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MissionFindAllByCategoryResponseDto {
+
     private Category category;
     private DayCategory dayCategory;
     private String subject;

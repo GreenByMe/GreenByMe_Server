@@ -8,6 +8,7 @@ import org.greenbyme.angelhack.domain.mission.Mission;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MissionDeleteDto {
+
     private Long id;
     private String message;
 
