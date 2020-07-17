@@ -6,12 +6,21 @@ import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.domain.user.UserRepository;
 import org.greenbyme.angelhack.exception.ErrorCode;
 import org.greenbyme.angelhack.exception.UserException;
+
 import org.greenbyme.angelhack.service.dto.user.*;
+import org.greenbyme.angelhack.service.dto.missionInfo.MissionInfobyUserDto;
+import org.greenbyme.angelhack.service.dto.post.PostDetailResponseDto;
+import org.greenbyme.angelhack.service.dto.user.UserDetailResponseDto;
+import org.greenbyme.angelhack.service.dto.user.UserLoginRequestDto;
+import org.greenbyme.angelhack.service.dto.user.UserResponseDto;
+import org.greenbyme.angelhack.service.dto.user.UserSaveRequestDto;
 import org.greenbyme.angelhack.util.JwtTokenProvider;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -57,9 +66,27 @@ public class UserService {
         return getUser(email).getId();
     }
 
+
     public UserExpectTreeCo2ResponseDto getUserExpectTreeCo2(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new NoResultException("등록된 사용자가 없습니다."));
 
         return new UserExpectTreeCo2ResponseDto(user);
+    }
+    public List<MissionInfobyUserDto> getMissionInfoList(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
+        return user.getMissionInfoList().stream()
+                .map(MissionInfobyUserDto::new)
+                .collect(Collectors.toList());
+
+    }
+
+    public List<PostDetailResponseDto> getPostList(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
+        return user.getPostList().stream()
+                .map(PostDetailResponseDto::new)
+                .collect(Collectors.toList());
+
     }
 }
