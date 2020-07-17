@@ -12,6 +12,7 @@ import org.greenbyme.angelhack.domain.mission.Mission;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MissionDetailsDto {
 
+    private Long id;
     private Category category;
     private DayCategory dayCategory;
     private String subject;
@@ -19,6 +20,7 @@ public class MissionDetailsDto {
 
     @Builder
     public MissionDetailsDto(Mission mission) {
+        id = mission.getId();
         category = mission.getCategory();
         dayCategory = mission.getDayCategory();
         subject = mission.getSubject();
