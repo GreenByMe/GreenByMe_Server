@@ -32,3 +32,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+src/main/resources/real.yml
+src/main/resources/application-real.yml

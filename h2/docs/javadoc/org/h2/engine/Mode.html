@@ -1,0 +1,391 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><title>
+Mode
+</title><link rel="stylesheet" type="text/css" href="../../../stylesheet.css" />
+<script type="text/javascript" src="../../../animate.js"></script>
+</head><body onload="openLink();">
+<table class="content"><tr class="content"><td class="content"><div class="contentDiv">
+<h1>Mode</h1>
+The compatibility modes. There is a fixed set of modes (for example
+ PostgreSQL, MySQL). Each mode has different settings.<br /><br />
+<table class="block"><tr onclick="return allDetails()"><th colspan="2">Methods</th></tr>
+<tr id="__0" onclick="return on(0)">
+<td class="return">static Mode</td><td class="method">
+<a id="getInstance_String" href="#getInstance_String">getInstance</a>(String name)
+<div class="methodText">Get the mode with the given name.</div>
+</td></tr>
+<tr onclick="return off(0)" class="detail" id="_0">
+<td class="return">static Mode</td><td>
+<a id="getInstance_String" href="#getInstance_String">getInstance</a>(String name)
+<div class="methodText">Get the mode with the given name.</div>
+<div class="itemTitle">Parameters:</div>
+<div class="item">name - the name of the mode</div>
+<div class="itemTitle">Returns:</div>
+<div class="item">the mode object</div>
+</td></tr>
+<tr id="__1" onclick="return on(1)">
+<td class="return">static Mode</td><td class="method">
+<a id="getRegular" href="#getRegular">getRegular</a>()
+</td></tr>
+<tr onclick="return off(1)" class="detail" id="_1">
+<td class="return">static Mode</td><td>
+<a id="getRegular" href="#getRegular">getRegular</a>()
+<div class="methodText"></div>
+</td></tr>
+<tr id="__2" onclick="return on(2)">
+<td class="return">Mode.ModeEnum</td><td class="method">
+<a id="getEnum" href="#getEnum">getEnum</a>()
+</td></tr>
+<tr onclick="return off(2)" class="detail" id="_2">
+<td class="return">Mode.ModeEnum</td><td>
+<a id="getEnum" href="#getEnum">getEnum</a>()
+<div class="methodText"></div>
+</td></tr>
+<tr id="__3" onclick="return on(3)">
+<td class="return">String</td><td class="method">
+<a id="getName" href="#getName">getName</a>()
+</td></tr>
+<tr onclick="return off(3)" class="detail" id="_3">
+<td class="return">String</td><td>
+<a id="getName" href="#getName">getName</a>()
+<div class="methodText"></div>
+</td></tr>
+<tr id="__4" onclick="return on(4)">
+<td class="return">String</td><td class="method">
+<a id="toString" href="#toString">toString</a>()
+</td></tr>
+<tr onclick="return off(4)" class="detail" id="_4">
+<td class="return">String</td><td>
+<a id="toString" href="#toString">toString</a>()
+<div class="methodText"></div>
+</td></tr>
+</table>
+<br /><table><tr><th colspan="2">Fields</th></tr>
+<tr><td class="return">static boolean</td><td class="method">
+<a href="#aliascolumnname">aliasColumnName</a>
+</td></tr>
+<tr><td class="return">static boolean</td><td class="method">
+<a href="#allowaffinitykey">allowAffinityKey</a>
+</td></tr>
+<tr><td class="return">static boolean</td><td class="method">
+<a href="#allowdb2timestampformat">allowDB2TimestampFormat</a>
+</td></tr>
+<tr><td class="return">static boolean</td><td class="method">
+<a href="#allowemptyinpredicate">allowEmptyInPredicate</a>
+</td></tr>
+<tr><td class="return">static boolean</td><td class="method">
+<a href="#allowemptyschemavaluesasdefaultschema">allowEmptySchemaValuesAsDefaultSchema</a>
+</td></tr>
+<tr><td class="return">static boolean</td><td class="method">
+<a href="#allowplusforstringconcat">allowPlusForStringConcat</a>
+</td></tr>
+<tr><td class="return">static boolean</td><td class="method">
+<a href="#allowunrelatedorderbyexpressionsindistinctqueries">allowUnrelatedOrderByExpressionsInDistinctQueries</a>
+</td></tr>
+<tr><td class="return">static boolean</td><td class="method">
+<a href="#altertableextensionsmysql">alterTableExtensionsMySQL</a>
+</td></tr>
+<tr><td class="return">static boolean</td><td class="method">
+<a href="#altertablemodifycolumn">alterTableModifyColumn</a>
+</td></tr>
+<tr><td class="return">static boolean</td><td class="method">
+<a href="#chartobinaryinutf8">charToBinaryInUtf8</a>
+</td></tr>
+<tr><td class="return">static boolean</td><td class="method">
+<a href="#convertonlytosmallerscale">convertOnlyToSmallerScale</a>
+</td></tr>
+<tr><td class="return">static boolean</td><td class="method">
+<a href="#datetimevaluewithintransaction">dateTimeValueWithinTransaction</a>
+</td></tr>
+<tr><td class="return">static boolean</td><td class="method">
+<a href="#decimalsequences">decimalSequences</a>
+</td></tr>
+<tr><td class="return">static Set</td><td class="method">
+<a href="#disallowedtypes">disallowedTypes</a>
+</td></tr>
+<tr><td class="return">static boolean</td><td class="method">
+<a href="#discardwithtablehints">discardWithTableHints</a>
+</td></tr>
+<tr><td class="return">static boolean</td><td class="method">
+<a href="#INDEX(..)">indexDefinitionInCreateTable</a>
+</td></tr>
+<tr><td class="return">static boolean</td><td class="method">
+<a href="#insertonconflict">insertOnConflict</a>
+</td></tr>
+<tr><td class="return">static boolean</td><td class="method">
+<a href="#isolationlevelinselectorinsertstatement">isolationLevelInSelectOrInsertStatement</a>
+</td></tr>
+<tr><td class="return">static boolean</td><td class="method">
+<a href="#logislogbase10">logIsLogBase10</a>
+</td></tr>
+<tr><td class="return">static boolean</td><td class="method">
+<a href="#nullconcatisnull">nullConcatIsNull</a>
+</td></tr>
+<tr><td class="return">static boolean</td><td class="method">
+<a href="#onduplicatekeyupdate">onDuplicateKeyUpdate</a>
+</td></tr>
+<tr><td class="return">static boolean</td><td class="method">
+<a href="#padfixedlengthstrings">padFixedLengthStrings</a>
+</td></tr>
+<tr><td class="return">static boolean</td><td class="method">
+<a href="#regexpreplacebackslashreferences">regexpReplaceBackslashReferences</a>
+</td></tr>
+<tr><td class="return">static boolean</td><td class="method">
+<a href="#replaceinto">replaceInto</a>
+</td></tr>
+<tr><td class="return">static boolean</td><td class="method">
+<a href="#serialcolumnisnotpk">serialColumnIsNotPK</a>
+</td></tr>
+<tr><td class="return">static boolean</td><td class="method">
+<a href="#squarebracketquotednames">squareBracketQuotedNames</a>
+</td></tr>
+<tr><td class="return">static boolean</td><td class="method">
+<a href="#supportpoundsymbolforcolumnnames">supportPoundSymbolForColumnNames</a>
+</td></tr>
+<tr><td class="return">static Pattern</td><td class="method">
+<a href="#supportedclientinfopropertiesregex">supportedClientInfoPropertiesRegEx</a>
+</td></tr>
+<tr><td class="return">static boolean</td><td class="method">
+<a href="#swapconvertfunctionparameters">swapConvertFunctionParameters</a>
+</td></tr>
+<tr><td class="return">static boolean</td><td class="method">
+<a href="#swaplogfunctionparameters">swapLogFunctionParameters</a>
+</td></tr>
+<tr><td class="return">static boolean</td><td class="method">
+<a href="#sysdummy1">sysDummy1</a>
+</td></tr>
+<tr><td class="return">static boolean</td><td class="method">
+<a href="#systemcolumns">systemColumns</a>
+</td></tr>
+<tr><td class="return">static boolean</td><td class="method">
+<a href="#treatemptystringsasnull">treatEmptyStringsAsNull</a>
+</td></tr>
+<tr><td class="return">static boolean</td><td class="method">
+<a href="#truncatetablerestartidentity">truncateTableRestartIdentity</a>
+</td></tr>
+<tr><td class="return">static HashMap</td><td class="method">
+<a href="#typebynamemap">typeByNameMap</a>
+</td></tr>
+<tr><td class="return">static Mode.UniqueIndexNullsHandling</td><td class="method">
+<a href="#uniqueindexnullshandling">uniqueIndexNullsHandling</a>
+</td></tr>
+<tr><td class="return">static boolean</td><td class="method">
+<a href="#useidentityasautoincrement">useIdentityAsAutoIncrement</a>
+</td></tr>
+<tr><td class="return">static boolean</td><td class="method">
+<a href="#zeroexliteralsarebinarystrings">zeroExLiteralsAreBinaryStrings</a>
+</td></tr>
+</table>
+<h4 id="aliascolumnname"><span class="methodName">aliasColumnName
+
+</span></h4>
+<div class="item">When enabled, aliased columns (as in SELECT ID AS I FROM TEST) return the
+ alias (I in this case) in ResultSetMetaData.getColumnName() and 'null' in
+ getTableName(). If disabled, the real column name (ID in this case) and
+ table name is returned.</div>
+<hr />
+<h4 id="allowaffinitykey"><span class="methodName">allowAffinityKey
+
+</span></h4>
+<div class="item">Whether AFFINITY KEY keywords are supported.</div>
+<hr />
+<h4 id="allowdb2timestampformat"><span class="methodName">allowDB2TimestampFormat
+
+</span></h4>
+<div class="item">Whether DB2 TIMESTAMP formats are allowed.</div>
+<hr />
+<h4 id="allowemptyinpredicate"><span class="methodName">allowEmptyInPredicate
+
+</span></h4>
+<div class="item">Whether IN predicate may have an empty value list.</div>
+<hr />
+<h4 id="allowemptyschemavaluesasdefaultschema"><span class="methodName">allowEmptySchemaValuesAsDefaultSchema
+
+</span></h4>
+<div class="item">If {@code true} constructs like 'CREATE TABLE CATALOG..TABLE_NAME' are allowed,
+ the default schema is used.</div>
+<hr />
+<h4 id="allowplusforstringconcat"><span class="methodName">allowPlusForStringConcat
+
+</span></h4>
+<div class="item">Text can be concatenated using '+'.</div>
+<hr />
+<h4 id="allowunrelatedorderbyexpressionsindistinctqueries"><span class="methodName">allowUnrelatedOrderByExpressionsInDistinctQueries
+
+</span></h4>
+<div class="item">If {@code true} unrelated ORDER BY expression are allowed in DISTINCT
+ queries, if {@code false} they are disallowed.</div>
+<hr />
+<h4 id="altertableextensionsmysql"><span class="methodName">alterTableExtensionsMySQL
+
+</span></h4>
+<div class="item">If {@code true} some additional non-standard ALTER TABLE commands are allowed.</div>
+<hr />
+<h4 id="altertablemodifycolumn"><span class="methodName">alterTableModifyColumn
+
+</span></h4>
+<div class="item">If {@code true} non-standard ALTER TABLE MODIFY COLUMN is allowed.</div>
+<hr />
+<h4 id="chartobinaryinutf8"><span class="methodName">charToBinaryInUtf8
+
+</span></h4>
+<div class="item">Convert (VAR)CHAR to VAR(BINARY) and vice versa with UTF-8 encoding instead of HEX.</div>
+<hr />
+<h4 id="convertonlytosmallerscale"><span class="methodName">convertOnlyToSmallerScale
+
+</span></h4>
+<div class="item">When converting the scale of decimal data, the number is only converted
+ if the new scale is smaller than the current scale. Usually, the scale is
+ converted and 0s are added if required.</div>
+<hr />
+<h4 id="datetimevaluewithintransaction"><span class="methodName">dateTimeValueWithinTransaction
+
+</span></h4>
+<div class="item">If {@code true}, datetime value function return the same value within a
+ transaction, if {@code false} datetime value functions return the same
+ value within a command.</div>
+<hr />
+<h4 id="decimalsequences"><span class="methodName">decimalSequences
+
+</span></h4>
+<div class="item">If {@code true} NEXT VALUE FOR SEQUENCE, CURRENT VALUE FOR SEQUENCE,
+ SEQUENCE.NEXTVAL, and SEQUENCE.CURRVAL return values with DECIMAL/NUMERIC
+ data type instead of BIGINT.</div>
+<hr />
+<h4 id="disallowedtypes"><span class="methodName">disallowedTypes
+
+</span></h4>
+<div class="item">An optional Set of hidden/disallowed column types.
+ Certain DBMSs don't support all column types provided by H2, such as
+ "NUMBER" when using PostgreSQL mode.</div>
+<hr />
+<h4 id="discardwithtablehints"><span class="methodName">discardWithTableHints
+
+</span></h4>
+<div class="item">Discard SQLServer table hints (e.g. "SELECT * FROM table WITH (NOLOCK)")</div>
+<hr />
+<h4 id="INDEX(..)"><span class="methodName">indexDefinitionInCreateTable
+
+</span></h4>
+<div class="item">Creating indexes in the CREATE TABLE statement is allowed using
+ <code>INDEX(..)</code> or <code>KEY(..)</code>.
+ Example: <code>create table test(id int primary key, name varchar(255),
+ key idx_name(name));</code></div>
+<hr />
+<h4 id="insertonconflict"><span class="methodName">insertOnConflict
+
+</span></h4>
+<div class="item">PostgreSQL style INSERT ... ON CONFLICT DO NOTHING.</div>
+<hr />
+<h4 id="isolationlevelinselectorinsertstatement"><span class="methodName">isolationLevelInSelectOrInsertStatement
+
+</span></h4>
+<div class="item">can set the isolation level using WITH {RR|RS|CS|UR}</div>
+<hr />
+<h4 id="logislogbase10"><span class="methodName">logIsLogBase10
+
+</span></h4>
+<div class="item">The single-argument function LOG() uses base 10 instead of E.</div>
+<hr />
+<h4 id="nullconcatisnull"><span class="methodName">nullConcatIsNull
+
+</span></h4>
+<div class="item">Concatenation with NULL results in NULL. Usually, NULL is treated as an
+ empty string if only one of the operands is NULL, and NULL is only
+ returned if both operands are NULL.</div>
+<hr />
+<h4 id="onduplicatekeyupdate"><span class="methodName">onDuplicateKeyUpdate
+
+</span></h4>
+<div class="item">MySQL style INSERT ... ON DUPLICATE KEY UPDATE ... and INSERT IGNORE.</div>
+<hr />
+<h4 id="padfixedlengthstrings"><span class="methodName">padFixedLengthStrings
+
+</span></h4>
+<div class="item">Whether to right-pad fixed strings with spaces.</div>
+<hr />
+<h4 id="regexpreplacebackslashreferences"><span class="methodName">regexpReplaceBackslashReferences
+
+</span></h4>
+<div class="item">The function REGEXP_REPLACE() uses \ for back-references.</div>
+<hr />
+<h4 id="replaceinto"><span class="methodName">replaceInto
+
+</span></h4>
+<div class="item">MySQL style REPLACE INTO.</div>
+<hr />
+<h4 id="serialcolumnisnotpk"><span class="methodName">serialColumnIsNotPK
+
+</span></h4>
+<div class="item">SERIAL and BIGSERIAL columns are not automatically primary keys.</div>
+<hr />
+<h4 id="squarebracketquotednames"><span class="methodName">squareBracketQuotedNames
+
+</span></h4>
+<div class="item">Identifiers may be quoted using square brackets as in [Test].</div>
+<hr />
+<h4 id="supportpoundsymbolforcolumnnames"><span class="methodName">supportPoundSymbolForColumnNames
+
+</span></h4>
+<div class="item">Support the # for column names</div>
+<hr />
+<h4 id="supportedclientinfopropertiesregex"><span class="methodName">supportedClientInfoPropertiesRegEx
+
+</span></h4>
+<div class="item">Pattern describing the keys the java.sql.Connection.setClientInfo()
+ method accepts.</div>
+<hr />
+<h4 id="swapconvertfunctionparameters"><span class="methodName">swapConvertFunctionParameters
+
+</span></h4>
+<div class="item">Swap the parameters of the CONVERT function.</div>
+<hr />
+<h4 id="swaplogfunctionparameters"><span class="methodName">swapLogFunctionParameters
+
+</span></h4>
+<div class="item">Swap the parameters of LOG() function.</div>
+<hr />
+<h4 id="sysdummy1"><span class="methodName">sysDummy1
+
+</span></h4>
+<div class="item">Support the pseudo-table SYSIBM.SYSDUMMY1.</div>
+<hr />
+<h4 id="systemcolumns"><span class="methodName">systemColumns
+
+</span></h4>
+<div class="item">The system columns 'CTID' and 'OID' are supported.</div>
+<hr />
+<h4 id="treatemptystringsasnull"><span class="methodName">treatEmptyStringsAsNull
+
+</span></h4>
+<div class="item">Empty strings are treated like NULL values. Useful for Oracle emulation.</div>
+<hr />
+<h4 id="truncatetablerestartidentity"><span class="methodName">truncateTableRestartIdentity
+
+</span></h4>
+<div class="item">If {@code true} TRUNCATE TABLE uses RESTART IDENTITY by default.</div>
+<hr />
+<h4 id="typebynamemap"><span class="methodName">typeByNameMap
+
+</span></h4>
+<div class="item">Custom mappings from type names to data types.</div>
+<hr />
+<h4 id="uniqueindexnullshandling"><span class="methodName">uniqueIndexNullsHandling
+
+</span></h4>
+<div class="item">Determines how rows with {@code NULL} values in indexed columns are handled
+ in unique indexes.</div>
+<hr />
+<h4 id="useidentityasautoincrement"><span class="methodName">useIdentityAsAutoIncrement
+
+</span></h4>
+<div class="item">Use "IDENTITY" as an alias for "auto_increment" (SQLServer style)</div>
+<hr />
+<h4 id="zeroexliteralsarebinarystrings"><span class="methodName">zeroExLiteralsAreBinaryStrings
+
+</span></h4>
+<div class="item">If {@code true} {@code 0x}-prefixed numbers are parsed as binary string
+ literals, if {@code false} they are parsed as hexadecimal numeric values.</div>
+<hr />
+</div></td></tr></table></body></html>
