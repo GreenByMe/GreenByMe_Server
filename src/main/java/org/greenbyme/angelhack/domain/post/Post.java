@@ -73,4 +73,8 @@ public class Post extends BaseEntity {
         this.open = requestDto.getOpen();
         this.title = requestDto.getTitle();
     }
+
+    public void thumbsUp() {
+        this.thumbsUp += 1;
+    }
 }

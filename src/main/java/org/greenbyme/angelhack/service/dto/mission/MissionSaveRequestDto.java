@@ -12,7 +12,6 @@ import org.greenbyme.angelhack.domain.mission.MissionCertificationMethod;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MissionSaveRequestDto {
 
-
     private String subject;
     private String description;
     private double expectCo2;
@@ -25,5 +24,4 @@ public class MissionSaveRequestDto {
                 .expectCo2(expectCo2)
                 .build();
     }
-
 }
