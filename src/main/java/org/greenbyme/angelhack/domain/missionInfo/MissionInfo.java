@@ -27,25 +27,34 @@ public class MissionInfo extends BaseTimeEntity {
     @JoinColumn(name = "mission_id")
     private Mission mission;
 
-    private int max;
-    private int current;
+
+    @Enumerated
+    private MissionInfoStatus missionInfoStatus;
+
+    private int finishCount;
+    private int progress;
     private int remainPeriod;
 
     @Builder
     public MissionInfo(User user, Mission mission){
         setUser(user);
         this.mission = mission;
-        this.max=mission.getDayCategory().getDay();
+        this.finishCount =mission.getMissionCertificationMethod().getMissionCertificateCount().getCount();
         this.remainPeriod=mission.getDayCategory().getDay();
-        this.current = 1;
+        this.progress = 0;
+        this.missionInfoStatus = MissionInfoStatus.IN_PROGRESS;
     }
 
     public void reduceRemainPeriod(){
         this.remainPeriod--;
     }
 
+    public void changeToFinishStatus(){
+        this.missionInfoStatus = MissionInfoStatus.FINISH;
+    }
+
     public void addCurrent(){
-        this.current++;
+        this.progress++;
     }
 
     private void setUser(User user) {
