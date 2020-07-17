@@ -40,7 +40,7 @@ public class MissionController {
     }
 
     @GetMapping("")
-    public ResponseEntity<Page<MissionFindAllResponseDto>> findAllMission(@PageableDefault(size=5, sort = "category") Pageable pageable){
+    public ResponseEntity<Page<MissionFindAllResponseDto>> findAllMission(@PageableDefault(size=5, sort = {"category","id"} , direction = Sort.Direction.DESC) Pageable pageable){
         Page<MissionFindAllResponseDto> allMission = missionService.findAllMission(pageable);
         return ResponseEntity.status(HttpStatus.OK).body(allMission);
     }
