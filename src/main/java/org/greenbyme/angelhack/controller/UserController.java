@@ -3,12 +3,15 @@ package org.greenbyme.angelhack.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.greenbyme.angelhack.service.UserService;
+import org.greenbyme.angelhack.service.dto.missionInfo.MissionInfobyUserDto;
 import org.greenbyme.angelhack.service.dto.user.UserDetailResponseDto;
 import org.greenbyme.angelhack.service.dto.user.UserResponseDto;
 import org.greenbyme.angelhack.service.dto.user.UserSaveRequestDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -28,5 +31,11 @@ public class UserController {
     public ResponseEntity<UserDetailResponseDto> getUserDetail(@PathVariable("userId") final Long userId) {
 //        UserDetailResponseDto responseDto = ;
         return ResponseEntity.status(HttpStatus.OK).body(userService.getUserDetail(userId));
+    }
+
+    @GetMapping("/{userId}/missions")
+    public ResponseEntity<List<MissionInfobyUserDto>> getUserMissionInfoList(@PathVariable("userId") final Long userId) {
+        List<MissionInfobyUserDto> dto = userService.getMissionInfoList(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 }
