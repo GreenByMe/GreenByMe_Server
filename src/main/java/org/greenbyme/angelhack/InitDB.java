@@ -41,6 +41,7 @@ public class InitDB {
                     .email("aaa@aaa.aaa")
                     .password("aaa")
                     .build();
+            user1.addExpectCo2(20);
             em.persist(user1);
 
             User user2 = User.builder()
@@ -64,6 +65,7 @@ public class InitDB {
                     .description("이번주는 자전거로 이동해보는 것 어떨까요?")
                     .dayCategory(DayCategory.WEEK)
                     .missionCertificationMethod(missionCertificationMethod1)
+                    .expectCo2(3.7)
                     .build();
             em.persist(mission2);
 

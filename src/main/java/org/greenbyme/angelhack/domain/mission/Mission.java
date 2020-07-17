@@ -32,16 +32,22 @@ public class Mission extends BaseTimeEntity {
     private MissionCertificationMethod missionCertificationMethod;
 
     private String subject;
-
     private String description;
 
+    private double expectTree;
+    private double expectCo2;
+
+
     @Builder
-    public Mission(Category category, String subject, String description, DayCategory dayCategory, MissionCertificationMethod missionCertificationMethod){
+    public Mission(Category category, String subject, String description, DayCategory dayCategory,
+                   MissionCertificationMethod missionCertificationMethod, double expectCo2){
         this.category = category;
         this.subject = subject;
         this.description = description;
         this.dayCategory = dayCategory;
         this.missionCertificationMethod = missionCertificationMethod;
+        this.expectCo2 = expectCo2;
+        this.expectTree = expectCo2/3.71;
     }
 
     public void changeCategory(Category category){

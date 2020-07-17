@@ -18,6 +18,8 @@ public class MissionDetailsDto {
     private DayCategory dayCategory;
     private String subject;
     private String description;
+    private double expectTree;
+    private double expectCo2;
     private MissionCertificationMethod missionCertificationMethod;
 
     @Builder
@@ -27,6 +29,8 @@ public class MissionDetailsDto {
         dayCategory = mission.getDayCategory();
         subject = mission.getSubject();
         description = mission.getDescription();
+        expectTree = mission.getExpectTree();
+        expectCo2 = mission.getExpectCo2();
         missionCertificationMethod = mission.getMissionCertificationMethod();
     }
 }

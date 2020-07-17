@@ -6,6 +6,8 @@ import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.domain.user.UserRepository;
 import org.greenbyme.angelhack.exception.ErrorCode;
 import org.greenbyme.angelhack.exception.UserException;
+
+import org.greenbyme.angelhack.service.dto.user.*;
 import org.greenbyme.angelhack.service.dto.missionInfo.MissionInfobyUserDto;
 import org.greenbyme.angelhack.service.dto.post.PostDetailResponseDto;
 import org.greenbyme.angelhack.service.dto.user.UserDetailResponseDto;
@@ -64,6 +66,12 @@ public class UserService {
         return getUser(email).getId();
     }
 
+
+    public UserExpectTreeCo2ResponseDto getUserExpectTreeCo2(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new NoResultException("등록된 사용자가 없습니다."));
+
+        return new UserExpectTreeCo2ResponseDto(user);
+    }
     public List<MissionInfobyUserDto> getMissionInfoList(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
@@ -79,5 +87,6 @@ public class UserService {
         return user.getPostList().stream()
                 .map(PostDetailResponseDto::new)
                 .collect(Collectors.toList());
+
     }
 }

@@ -31,7 +31,7 @@ public class MissionInfoDetailResponseDto {
         this.progress = missionInfo.getProgress();
         this.remainPeriod = missionInfo.getRemainPeriod();
         this.startDate = missionInfo.getCreatedDate();
-        this.endDate = missionInfo.getCreatedDate().plusDays(7);
+        this.endDate = missionInfo.getCreatedDate().plusDays(missionInfo.getMission().getDayCategory().getDay());
         this.missionInfoStatus = missionInfo.getMissionInfoStatus();
     }
 }
