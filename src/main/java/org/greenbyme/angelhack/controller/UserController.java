@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.greenbyme.angelhack.service.UserService;
 import org.greenbyme.angelhack.service.dto.user.UserDetailResponseDto;
+import org.greenbyme.angelhack.service.dto.user.UserExpectTreeCo2ResponseDto;
 import org.greenbyme.angelhack.service.dto.user.UserResponseDto;
 import org.greenbyme.angelhack.service.dto.user.UserSaveRequestDto;
 import org.springframework.http.HttpStatus;
@@ -28,5 +29,12 @@ public class UserController {
     public ResponseEntity<UserDetailResponseDto> getUserDetail(@PathVariable("userId") final Long userId) {
 //        UserDetailResponseDto responseDto = ;
         return ResponseEntity.status(HttpStatus.OK).body(userService.getUserDetail(userId));
+    }
+
+    @GetMapping("/{userId}/expectTreeCo2")
+    public ResponseEntity<UserExpectTreeCo2ResponseDto> getUserExpectTreeCo2(@PathVariable("userId") Long id){
+        UserExpectTreeCo2ResponseDto userExpectTreeCo2 = userService.getUserExpectTreeCo2(id);
+
+        return ResponseEntity.status(HttpStatus.OK).body(userExpectTreeCo2);
     }
 }

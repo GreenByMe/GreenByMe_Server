@@ -6,10 +6,7 @@ import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.domain.user.UserRepository;
 import org.greenbyme.angelhack.exception.ErrorCode;
 import org.greenbyme.angelhack.exception.UserException;
-import org.greenbyme.angelhack.service.dto.user.UserDetailResponseDto;
-import org.greenbyme.angelhack.service.dto.user.UserLoginRequestDto;
-import org.greenbyme.angelhack.service.dto.user.UserResponseDto;
-import org.greenbyme.angelhack.service.dto.user.UserSaveRequestDto;
+import org.greenbyme.angelhack.service.dto.user.*;
 import org.greenbyme.angelhack.util.JwtTokenProvider;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,5 +55,11 @@ public class UserService {
 
     public Long getUserId(String email) {
         return getUser(email).getId();
+    }
+
+    public UserExpectTreeCo2ResponseDto getUserExpectTreeCo2(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new NoResultException("등록된 사용자가 없습니다."));
+
+        return new UserExpectTreeCo2ResponseDto(user);
     }
 }
