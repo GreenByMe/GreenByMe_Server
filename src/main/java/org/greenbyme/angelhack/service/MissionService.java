@@ -34,11 +34,11 @@ public class MissionService {
         mission.changeDayCategory(dayCategory);
 
         String title = missionSaveRequestDto.getMissionCertificationMethodRequestDto().getTitle();
-        String test = missionSaveRequestDto.getMissionCertificationMethodRequestDto().getTest();
+        String text = missionSaveRequestDto.getMissionCertificationMethodRequestDto().getText();
 
         mission.changeMissionCertificationMethod(MissionCertificationMethod.builder()
                 .title(title)
-                .text(test)
+                .text(text)
                 .missionCertificateCount(missionCertificateCount)
                 .build());
 
