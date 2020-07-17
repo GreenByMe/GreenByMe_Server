@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.greenbyme.angelhack.service.UserService;
 import org.greenbyme.angelhack.service.dto.missionInfo.MissionInfobyUserDto;
+import org.greenbyme.angelhack.service.dto.post.PostDetailResponseDto;
 import org.greenbyme.angelhack.service.dto.user.UserDetailResponseDto;
 import org.greenbyme.angelhack.service.dto.user.UserResponseDto;
 import org.greenbyme.angelhack.service.dto.user.UserSaveRequestDto;
@@ -36,6 +37,12 @@ public class UserController {
     @GetMapping("/{userId}/missions")
     public ResponseEntity<List<MissionInfobyUserDto>> getUserMissionInfoList(@PathVariable("userId") final Long userId) {
         List<MissionInfobyUserDto> dto = userService.getMissionInfoList(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
+    }
+
+    @GetMapping("/{userId}/posts")
+    public ResponseEntity<List<PostDetailResponseDto>> getUserPostList(@PathVariable("userId") final Long userId) {
+        List<PostDetailResponseDto> dto = userService.getPostList(userId);
         return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 }
