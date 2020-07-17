@@ -13,8 +13,6 @@ public enum MissionCertificateCount {
     THREE_TIMES_A_WEEK_MONTH(12),
     ALL_TIMES_A_WEEK_MONTH(28);
 
-
-
     private int count;
 
     MissionCertificateCount(int count){

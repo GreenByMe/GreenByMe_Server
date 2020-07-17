@@ -70,7 +70,6 @@ public class UserService {
         return user.getMissionInfoList().stream()
                 .map(MissionInfobyUserDto::new)
                 .collect(Collectors.toList());
-
     }
 
     public List<PostDetailResponseDto> getPostList(Long userId) {

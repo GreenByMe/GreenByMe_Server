@@ -49,7 +49,6 @@ public class MissionService {
 
     public Page<MissionFindAllResponseDto> findAllMission(Pageable pageable) {
         return missionRepository.findAll(pageable).map(MissionFindAllResponseDto::new);
-
     }
 
     public Page<MissionFindAllByCategoryAndDayCategoryResponseDto> findAllByCategoryAndDayCategory(Category category, DayCategory dayCategory, Pageable pageable) {
@@ -64,13 +63,10 @@ public class MissionService {
     public MissionDeleteDto delete(Long id) {
         Mission mission = missionRepository.findById(id).orElseThrow(() -> new NoResultException("등록되지 않은 미션입니다."));
         List<MissionInfo> missionInfosByMission = missionInfoRepository.findByMission(mission);
-
         for (MissionInfo missionInfo : missionInfosByMission) {
             missionInfoRepository.delete(missionInfo);
         }
-
         missionRepository.delete(mission);
-
         return new MissionDeleteDto(mission);
     }
 

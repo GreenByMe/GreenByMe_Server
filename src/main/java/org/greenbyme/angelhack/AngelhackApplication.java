@@ -28,5 +28,4 @@ public class AngelhackApplication {
 	void started() {
 		TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
 	}
-
 }

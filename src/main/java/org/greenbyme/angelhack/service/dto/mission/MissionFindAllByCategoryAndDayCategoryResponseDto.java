@@ -25,5 +25,4 @@ public class MissionFindAllByCategoryAndDayCategoryResponseDto {
         subject = mission.getSubject();
         description = mission.getDescription();
     }
-
 }

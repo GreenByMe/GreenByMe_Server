@@ -53,6 +53,5 @@ public class Mission extends BaseTimeEntity {
     public void changeMissionCertificationMethod(MissionCertificationMethod missionCertificationMethod){
         this.missionCertificationMethod = missionCertificationMethod;
     }
-
 }
 
