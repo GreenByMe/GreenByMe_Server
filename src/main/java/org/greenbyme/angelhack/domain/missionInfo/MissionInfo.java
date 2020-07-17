@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.greenbyme.angelhack.domain.baseEntity.BaseTimeEntity;
 import org.greenbyme.angelhack.domain.mission.Mission;
 import org.greenbyme.angelhack.domain.user.User;
+import org.greenbyme.angelhack.exception.ErrorCode;
+import org.greenbyme.angelhack.exception.MissionException;
 
 import javax.persistence.*;
 
@@ -26,7 +28,6 @@ public class MissionInfo extends BaseTimeEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mission_id")
     private Mission mission;
-
 
     @Enumerated
     private MissionInfoStatus missionInfoStatus;
@@ -53,7 +54,10 @@ public class MissionInfo extends BaseTimeEntity {
         this.missionInfoStatus = MissionInfoStatus.FINISH;
     }
 
-    public void addCurrent(){
+    public void addProgress(){
+        if( this.progress >= finishCount) {
+            throw new MissionException(ErrorCode.OVER_PROGRESS);
+        }
         this.progress++;
     }
 

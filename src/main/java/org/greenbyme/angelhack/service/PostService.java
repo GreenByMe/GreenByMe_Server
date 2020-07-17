@@ -32,20 +32,28 @@ public class PostService {
     @Transactional
     public PostSaveResponseDto savePosts(final PostSaveRequestDto requestDto) {
         MissionInfo missionInfo = missionInfoRepository.findById(requestDto.getMissionInfoId())
-                .orElseThrow(()-> new MissionException(ErrorCode.INVALID_MISSIONINFO));
+                .orElseThrow(() -> new MissionException(ErrorCode.INVALID_MISSIONINFO));
         if (postRepository.findByMissionInfo(missionInfo) != null) {
             throw new AlreadyExistsPostException();
         }
         User user = userRepository.findById(requestDto.getUserId())
-                .orElseThrow(()-> new UserException(ErrorCode.UNSIGNED_USER));
+                .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
+        List<Post> posts = postRepository.findAllByUserAndMissionInfo(user, missionInfo);
+        long postCount = posts.stream()
+                .filter(p->p.getCreatedDate().getDayOfYear() == requestDto.getCreatedDate().getDayOfYear())
+                .count();
+        if(postCount > 0) {
+            throw new PostException(ErrorCode.OVER_CERIFICATION);
+        }
         Post savePost = new Post(user, missionInfo, requestDto.getText(), requestDto.getTitle(), requestDto.getPicture(), requestDto.getOpen());
         savePost = postRepository.save(savePost);
+        missionInfo.addProgress();
         return new PostSaveResponseDto(savePost.getId());
     }
 
     public List<PostResponseDto> getPostsByMission(Long missionId) {
         Mission mission = missionRepository.findById(missionId)
-                .orElseThrow(()-> new MissionException(ErrorCode.INVALID_MISSION));
+                .orElseThrow(() -> new MissionException(ErrorCode.INVALID_MISSION));
         return missionInfoRepository.findAllByMission(mission)
                 .stream()
                 .map(postRepository::findByMissionInfo)
@@ -55,13 +63,13 @@ public class PostService {
 
     public PostDetailResponseDto getPostDetail(Long postId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(()->new PostException(ErrorCode.INVALID_POST));
+                .orElseThrow(() -> new PostException(ErrorCode.INVALID_POST));
         return new PostDetailResponseDto(post);
     }
 
     public List<PostResponseDto> getPostsByUser(Long userId) {
         User user = userRepository.findById(userId)
-                        .orElseThrow(()-> new UserException(ErrorCode.UNSIGNED_USER));
+                .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
         return postRepository.findAllByUser(user)
                 .stream()
                 .map(p -> new PostResponseDto(p.getId(), user.getNickname(), p.getPicture(), p.getThumbsUp()))
@@ -76,7 +84,10 @@ public class PostService {
     @Transactional
     public PostSaveResponseDto updatePost(Long postId, PostUpdateRequestDto requestDto) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(()->new PostException(ErrorCode.INVALID_POST));
+                .orElseThrow(() -> new PostException(ErrorCode.INVALID_POST));
+        if (!post.getUser().getId().equals(requestDto.getUserId())) {
+            throw new IllegalArgumentException("올바르지 않은 사용자 ID");
+        }
         post.update(requestDto);
         return new PostSaveResponseDto(postId);
     }
@@ -84,7 +95,7 @@ public class PostService {
     @Transactional
     public void thumbsUp(Long postId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(()->new PostException(ErrorCode.INVALID_POST));
+                .orElseThrow(() -> new PostException(ErrorCode.INVALID_POST));
         post.thumbsUp();
     }
 }
