@@ -17,14 +17,12 @@ public class MissionPopularResponseDto {
     @Enumerated(EnumType.STRING)
     private Category category;
     private String subject;
-    private Long candidatesCount;
     private Long passCandidatesCount;
 
     public MissionPopularResponseDto(Mission mission) {
         this.missionId = mission.getId();
         this.category = mission.getCategory();
         this.subject = mission.getSubject();
-        this.candidatesCount = mission.getCandidatesCount();
         this.passCandidatesCount = mission.getPassCandidatesCount();
     }
 }
