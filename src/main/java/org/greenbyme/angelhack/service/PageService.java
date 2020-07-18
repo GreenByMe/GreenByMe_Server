@@ -46,6 +46,9 @@ public class PageService {
         long missionProgressCount = postRepository.findAllByUser(user).stream()
                 .filter(p -> p.getCreatedDate().getDayOfYear() == LocalDateTime.now().getDayOfYear())
                 .count();
+        if (missionCount == 0) {
+            throw new IllegalArgumentException("진행중인 미션이 없습니다.");
+        }
         long missionProgressRates = missionProgressCount / missionCount * 100;
         List<InProgressResponseDto> inProgressResponseDtos = missionInfoRepository.findAllByUser(user).stream()
                 .filter(m -> m.getMissionInfoStatus().equals(MissionInfoStatus.IN_PROGRESS))

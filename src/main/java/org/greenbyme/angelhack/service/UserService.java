@@ -69,11 +69,6 @@ public class UserService {
                 .orElseThrow(() -> new UserException(String.format("%s: 가입되지 않은 이메일입니다.", email), ErrorCode.UNSIGNED));
     }
 
-    public Long getUserId(String email) {
-        return getUser(email).getId();
-    }
-
-
     public UserExpectTreeCo2ResponseDto getUserExpectTreeCo2(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new NoResultException("등록된 사용자가 없습니다."));
         List<MissionInfo> res = missionInfoRepository.findAllByUser(user);
@@ -101,5 +96,27 @@ public class UserService {
         return user.getPostList().stream()
                 .map(PostDetailResponseDto::new)
                 .collect(Collectors.toList());
+    }
+
+    public UserResponseDto updateNickName(UserUpdateNicktDto dto) {
+        User user = userRepository.findById(dto.getUserId())
+                .orElseThrow(()->new UserException(ErrorCode.UNSIGNED_USER));
+        user.changeNickName(dto.getNickName());
+        return new UserResponseDto(user.getId());
+    }
+
+    public UserResponseDto updatePhotos(UserUpdatePhotoDto dto) {
+        User user = userRepository.findById(dto.getUserId())
+                .orElseThrow(()->new UserException(ErrorCode.UNSIGNED_USER));
+        user.changePhoto(dto.getPhoto());
+        return new UserResponseDto(user.getId());
+    }
+
+    public Long login(UserLoginRequestDto dto) {
+        User user = getUser(dto.getEmail());
+        if( !user.getPhoto().equals(dto.getPassword())) {
+            throw new UserException(ErrorCode.WRONG_PASSWORD);
+        }
+        return user.getId();
     }
 }

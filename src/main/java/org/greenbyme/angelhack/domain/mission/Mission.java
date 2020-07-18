@@ -38,10 +38,11 @@ public class Mission extends BaseTimeEntity {
     private double expectCo2;
 
     private Long passCandidatesCount;
+    private String pictureUrl;
 
     @Builder
     public Mission(Category category, String subject, String description, DayCategory dayCategory,
-                   MissionCertificationMethod missionCertificationMethod, double expectCo2) {
+                   MissionCertificationMethod missionCertificationMethod, double expectCo2, String pictureUrl) {
         this.category = category;
         this.subject = subject;
         this.description = description;
@@ -50,6 +51,7 @@ public class Mission extends BaseTimeEntity {
         this.expectCo2 = expectCo2;
         this.expectTree = expectCo2 / 3.71;
         this.passCandidatesCount = 0L;
+        this.pictureUrl = pictureUrl;
     }
 
     public void changeCategory(Category category) {
