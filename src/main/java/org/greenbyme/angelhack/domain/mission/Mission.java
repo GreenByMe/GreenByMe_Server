@@ -39,6 +39,7 @@ public class Mission extends BaseTimeEntity {
 
     private Long passCandidatesCount;
     private String pictureUrl;
+
     @Builder
     public Mission(Category category, String subject, String description, DayCategory dayCategory,
                    MissionCertificationMethod missionCertificationMethod, double expectCo2, String pictureUrl) {
