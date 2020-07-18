@@ -30,7 +30,7 @@ public class PostService {
     private final MissionRepository missionRepository;
 
     @Transactional
-    public PostSaveResponseDto savePosts(final PostSaveRequestDto requestDto, String fileUrl) {
+    public PostSaveResponseDto savePosts(final PostSaveRequestDto requestDto) {
         MissionInfo missionInfo = missionInfoRepository.findById(requestDto.getMissionInfoId())
                 .orElseThrow(() -> new MissionException(ErrorCode.INVALID_MISSIONINFO));
         if (postRepository.findByMissionInfo(missionInfo) != null) {
@@ -38,7 +38,7 @@ public class PostService {
         }
         User user = userRepository.findById(requestDto.getUserId())
                 .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
-        Post savePost = new Post(user, missionInfo, requestDto.getText(), requestDto.getTitle(), fileUrl, requestDto.getOpen());
+        Post savePost = new Post(user, missionInfo, requestDto.getText(), requestDto.getTitle(), requestDto.getPictureUrl(), requestDto.getOpen());
         savePost = postRepository.save(savePost);
         return new PostSaveResponseDto(savePost.getId());
     }

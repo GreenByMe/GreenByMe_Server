@@ -17,7 +17,7 @@ public class SwaggerConfig {
                 .useDefaultResponseMessages(false)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("org.greenbyme.angelhack"))
-               // .paths(PathSelectors.ant("/api/**"))
+                .paths(PathSelectors.ant("/api/**"))
                 .build();
     }
 }
