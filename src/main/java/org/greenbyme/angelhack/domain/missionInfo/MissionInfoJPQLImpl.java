@@ -24,7 +24,7 @@ public class MissionInfoJPQLImpl implements MissionInfoJPQL{
     @Override
     public Long findProgressByMissionId(Long missionId) {
         return em.createQuery("select count(mi) from MissionInfo  mi" +
-                " join fetch mi.mission m" +
+                " join mi.mission m" +
                 " where m.id =:id and mi.missionInfoStatus =:missionInfoStatus ", Long.class)
                 .setParameter("id", missionId)
                 .setParameter("missionInfoStatus", MissionInfoStatus.IN_PROGRESS)
