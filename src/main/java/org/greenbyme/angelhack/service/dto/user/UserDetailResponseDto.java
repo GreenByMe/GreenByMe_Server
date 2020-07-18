@@ -20,6 +20,7 @@ public class UserDetailResponseDto {
     private Long userId;
     private String email;
     private String nickName;
+    private String pictureUrl;
     private List<MissionInfoDetailDto> missionInfoList;
     private List<PostDetailResponseDto> posts;
 
@@ -33,5 +34,6 @@ public class UserDetailResponseDto {
         this.posts = user.getPostList().stream()
                 .map(PostDetailResponseDto::new)
                 .collect(Collectors.toList());
+        this.pictureUrl = user.getPhoto();
     }
 }
