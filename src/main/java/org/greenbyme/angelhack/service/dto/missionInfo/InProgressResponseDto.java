@@ -13,7 +13,6 @@ public class InProgressResponseDto {
     private String missionTitle;
     private int finishCount;
     private int progress;
-    private int remainPeriod;
     private Long manyPeople;
 
     public InProgressResponseDto(MissionInfo missionInfo, Long manyPeople) {
@@ -21,7 +20,6 @@ public class InProgressResponseDto {
         this.missionTitle = missionInfo.getMission().getSubject();
         this.finishCount = missionInfo.getFinishCount();
         this.progress = missionInfo.getProgress();
-        this.remainPeriod = missionInfo.getRemainPeriod();
         this.manyPeople = manyPeople;
     }
 }

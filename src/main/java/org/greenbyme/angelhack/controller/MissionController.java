@@ -66,7 +66,7 @@ public class MissionController {
     }
 
     @GetMapping("/populars")
-    public ResponseEntity<Page<MissionPopularResponseDto>> getPopularMission(@PageableDefault(size = 10) Pageable pageable) {
+    public ResponseEntity<Page<MissionPopularResponseDto>> getPopularMission(@PageableDefault(size = 10, sort = "passCandidatesCount", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<MissionPopularResponseDto> allByPopular = missionService.findAllByPopular(pageable);
         return ResponseEntity.status(HttpStatus.OK).body(allByPopular);
     }

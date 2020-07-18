@@ -37,7 +37,6 @@ public class Mission extends BaseTimeEntity {
     private double expectTree;
     private double expectCo2;
 
-    private Long candidatesCount;
     private Long passCandidatesCount;
 
     @Builder
@@ -50,7 +49,6 @@ public class Mission extends BaseTimeEntity {
         this.missionCertificationMethod = missionCertificationMethod;
         this.expectCo2 = expectCo2;
         this.expectTree = expectCo2 / 3.71;
-        this.candidatesCount = 0L;
         this.passCandidatesCount = 0L;
     }
 
@@ -64,10 +62,6 @@ public class Mission extends BaseTimeEntity {
 
     public void changeMissionCertificationMethod(MissionCertificationMethod missionCertificationMethod) {
         this.missionCertificationMethod = missionCertificationMethod;
-    }
-
-    public void addCandidates() {
-        this.candidatesCount += 1;
     }
 
     public void addPassCandidates() {

@@ -26,6 +26,7 @@ public class User extends BaseEntity {
     private String email;
     private String password;
     private String nickname;
+    private String photo;
     private double expectTree;
     private double expectCo2;
 
@@ -36,11 +37,12 @@ public class User extends BaseEntity {
     private List<Post> postList = new ArrayList<>();
 
     @Builder
-    public User(String name, String email, String password, String nickname) {
+    public User(String name, String email, String password, String nickname, String photo) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.nickname = nickname;
+        this.photo = photo;
         this.expectCo2 = 0;
         this.expectTree = 0;
     }
@@ -52,6 +54,7 @@ public class User extends BaseEntity {
     public void changePassword(String password){
        this.password = password;
     }
+
     public void addExpectCo2(double expectCo2){
        this.expectCo2 = expectCo2;
        this.expectTree = expectCo2/3.17;
@@ -59,5 +62,9 @@ public class User extends BaseEntity {
 
     public boolean checkPassword(String password) {
         return this.password.equals(password);
+    }
+
+    public void changePhoto(String photo) {
+        this.photo = photo;
     }
 }

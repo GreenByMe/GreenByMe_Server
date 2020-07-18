@@ -80,7 +80,6 @@ public class UserService {
         long missionCount = res.stream()
                 .filter(m -> m.getMissionInfoStatus().equals(MissionInfoStatus.IN_PROGRESS))
                 .count();
-        long totalCount = missionCount;
         long missionProgressCount = postRepository.findAllByUser(user).stream()
                 .filter(p->p.getCreatedDate().getDayOfYear() == LocalDateTime.now().getDayOfYear())
                 .count();

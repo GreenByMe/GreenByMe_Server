@@ -77,6 +77,6 @@ public class MissionService {
     }
 
     public Page<MissionPopularResponseDto> findAllByPopular(Pageable pageable) {
-        return missionRepository.findAllByCandidatesCount(pageable).map(MissionPopularResponseDto::new);
+        return missionRepository.findAll(pageable).map(MissionPopularResponseDto::new);
     }
 }
