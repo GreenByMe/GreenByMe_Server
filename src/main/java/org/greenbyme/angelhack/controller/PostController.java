@@ -4,11 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.greenbyme.angelhack.service.PostService;
 import org.greenbyme.angelhack.service.dto.post.*;
-import org.greenbyme.angelhack.util.S3Uploader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -20,7 +18,6 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
-    private final S3Uploader s3Uploader;
 
     @PostMapping
     public ResponseEntity<PostSaveResponseDto> savePost(@RequestBody PostSaveRequestDto requestDto) throws IOException {
@@ -28,11 +25,11 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
-    @PostMapping("/upload/image")
-    @ResponseBody
-    public String upload(@RequestParam("data") MultipartFile multipartFile) throws IOException {
-        return s3Uploader.upload(multipartFile, "static/user");
-    }
+//    @PostMapping("/upload/image")
+//    @ResponseBody
+//    public String upload(@RequestParam("data") MultipartFile multipartFile) throws IOException {
+//        return s3Uploader.upload(multipartFile, "static/user");
+//    }
 
     @GetMapping("/missions/{missionId}")
     public ResponseEntity<List<PostResponseDto>> getPostsByMission(@PathVariable("missionId") final Long missionId) {

@@ -7,7 +7,6 @@ import org.greenbyme.angelhack.domain.Category.DayCategory;
 import org.greenbyme.angelhack.domain.mission.MissionCertificateCount;
 import org.greenbyme.angelhack.service.MissionService;
 import org.greenbyme.angelhack.service.dto.mission.*;
-import org.greenbyme.angelhack.util.S3Uploader;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -26,7 +25,6 @@ import java.io.IOException;
 public class MissionController {
 
     private final MissionService missionService;
-    private final S3Uploader s3Uploader;
 
     @PostMapping("/categorys/{category}/dayCategory/{dayCategory}/missionCertificateCount/{missionCertificateCount}")
     public ResponseEntity<MissionSaveResponseDto> save(@PathVariable("category") final Category category,
@@ -37,11 +35,11 @@ public class MissionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(missionSaveResponseDto);
     }
 
-    @PostMapping("/upload/images")
-    @ResponseBody
-    public String upload(@RequestParam("data") MultipartFile multipartFile) throws IOException {
-        return s3Uploader.upload(multipartFile, "static/mission");
-    }
+//    @PostMapping("/upload/images")
+//    @ResponseBody
+//    public String upload(@RequestParam("data") MultipartFile multipartFile) throws IOException {
+//        return s3Uploader.upload(multipartFile, "static/mission");
+//    }
 
     @GetMapping("/{mission_id}")
     public ResponseEntity<MissionDetailsDto> findOneDetail(@PathVariable("mission_id") final Long id) {
