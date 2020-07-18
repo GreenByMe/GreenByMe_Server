@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.greenbyme.angelhack.domain.user.User;
 
-
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserExpectTreeCo2ResponseDto {
@@ -14,7 +13,6 @@ public class UserExpectTreeCo2ResponseDto {
     private String expectTree;
 
     private String expectCo2;
-
 
     public UserExpectTreeCo2ResponseDto(User user){
         nickName = "안녕하세요 "+user.getNickname()+"님";
