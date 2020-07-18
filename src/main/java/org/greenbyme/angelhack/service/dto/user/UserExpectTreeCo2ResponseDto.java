@@ -9,14 +9,20 @@ import org.greenbyme.angelhack.domain.user.User;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserExpectTreeCo2ResponseDto {
 
-    private String nickName;
-    private String expectTree;
+    private String nickNameSentence;
+    private String expectTreeSentence;
 
-    private String expectCo2;
-
-    public UserExpectTreeCo2ResponseDto(User user){
-        nickName = "안녕하세요 "+user.getNickname()+"님";
-        expectTree = "지금까지 "+"<p style=\"color:MediumSeaGreen;\">"+ (int)user.getExpectTree() +"개의 나무를 </p> <br>"+"심으셨군요!";
-        expectCo2 = "줄인 탄소양: " + user.getExpectCo2() +"Kg/CO<sub>2</sub>";
+    private double expectCo2;
+    private double expectTree;
+    private long progressMissions;
+    private long progressRates;
+  
+    public UserExpectTreeCo2ResponseDto(User user, long progressMissions, long progressRates) {
+        nickNameSentence = "안녕하세요 " + user.getNickname() + "님";
+        expectTreeSentence = "지금까지 " + "<p style=\"color:MediumSeaGreen;\">" + (int) Math.floor(user.getExpectTree()) + "개의 나무를 </p> <br>" + "심으셨군요!";
+        this.expectCo2 = user.getExpectCo2();
+        this.expectTree = user.getExpectTree();
+        this.progressMissions = progressMissions;
+        this.progressRates = progressRates;
     }
 }

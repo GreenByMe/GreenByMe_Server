@@ -38,6 +38,9 @@ public class PostService {
         }
         User user = userRepository.findById(requestDto.getUserId())
                 .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
+        if(!missionInfo.getUser().getId().equals(user.getId())) {
+            throw new PostException(ErrorCode.WRONG_ACCESS);
+        }
         List<Post> posts = postRepository.findAllByUserAndMissionInfo(user, missionInfo);
         long postCount = posts.stream()
                 .filter(p -> p.getCreatedDate().getDayOfYear() == requestDto.getCreatedDate().getDayOfYear())
