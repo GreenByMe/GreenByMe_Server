@@ -34,9 +34,7 @@ public class MissionInfoService {
                 .user(user)
                 .mission(mission)
                 .build();
-
         missionInfoRepository.save(missionInfo);
-
         return new MissionInfoSaveResponseDto(missionInfo);
     }
 
