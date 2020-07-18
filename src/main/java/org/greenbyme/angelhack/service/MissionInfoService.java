@@ -5,8 +5,12 @@ import org.greenbyme.angelhack.domain.mission.Mission;
 import org.greenbyme.angelhack.domain.mission.MissionRepository;
 import org.greenbyme.angelhack.domain.missionInfo.MissionInfo;
 import org.greenbyme.angelhack.domain.missionInfo.MissionInfoRepository;
+import org.greenbyme.angelhack.domain.missionInfo.MissionInfoStatus;
 import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.domain.user.UserRepository;
+import org.greenbyme.angelhack.exception.ErrorCode;
+import org.greenbyme.angelhack.exception.UserException;
+import org.greenbyme.angelhack.service.dto.missionInfo.InProgressResponseDto;
 import org.greenbyme.angelhack.service.dto.missionInfo.MissionInfoDeleteResponseDto;
 import org.greenbyme.angelhack.service.dto.missionInfo.MissionInfoDetailResponseDto;
 import org.greenbyme.angelhack.service.dto.missionInfo.MissionInfoSaveResponseDto;
@@ -14,7 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -48,5 +53,14 @@ public class MissionInfoService {
         MissionInfo missionInfo = missionInfoRepository.findById(id).orElseThrow(() -> new NoResultException("등록되지 않은 미션 정보입니다."));
         missionInfoRepository.deleteById(id);
         return new MissionInfoDeleteResponseDto(missionInfo);
+    }
+
+    public List<InProgressResponseDto> getMissionInfoInProgress(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
+        return missionInfoRepository.findAllByUser(user).stream()
+                .filter(m->m.getMissionInfoStatus().equals(MissionInfoStatus.IN_PROGRESS))
+                .map(InProgressResponseDto::new)
+                .collect(Collectors.toList());
     }
 }

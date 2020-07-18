@@ -17,7 +17,8 @@ import javax.persistence.*;
 @Getter
 public class MissionInfo extends BaseTimeEntity {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "missioninfo_id")
     private Long id;
 
