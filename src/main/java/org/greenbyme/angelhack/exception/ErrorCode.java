@@ -9,8 +9,10 @@ public enum ErrorCode {
     UNSIGNED_USER(1300, "등록되지 않은 유저 idx"),
     INVALID_MISSION(2000,"등록되지 않은 미션 id"),
     INVALID_MISSIONINFO(2100,"등록되지 않은 미션 정보 id"),
-    INVALID_POST(3000,"등록되지 않은 인증 id")
-    ;
+    OVER_PROGRESS(2200, "인증 횟수를 초과했습니다"),
+    INVALID_POST(3000,"등록되지 않은 인증 id"),
+    OVER_CERIFICATION(3100, "하루 인증 횟수를 초과했습니다"),
+    WRONG_ACCESS(3200, "잘못된 접근입니다");
 
     private final Integer code;
     private final String message;

@@ -52,6 +52,5 @@ public class UserController {
     public ResponseEntity<List<PostDetailResponseDto>> getUserPostList(@PathVariable("userId") final Long userId) {
         List<PostDetailResponseDto> dto = userService.getPostList(userId);
         return ResponseEntity.status(HttpStatus.OK).body(dto);
-
     }
 }

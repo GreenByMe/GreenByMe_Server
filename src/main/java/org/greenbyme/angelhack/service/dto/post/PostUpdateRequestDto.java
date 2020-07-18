@@ -10,8 +10,7 @@ import org.greenbyme.angelhack.domain.user.User;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostUpdateRequestDto {
 
-    private User user;
-    private MissionInfo missionInfo;
+    private Long userId;
     private String title;
     private String text;
     private Boolean open;

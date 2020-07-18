@@ -2,6 +2,10 @@ package org.greenbyme.angelhack.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.greenbyme.angelhack.domain.missionInfo.MissionInfo;
+import org.greenbyme.angelhack.domain.missionInfo.MissionInfoRepository;
+import org.greenbyme.angelhack.domain.missionInfo.MissionInfoStatus;
+import org.greenbyme.angelhack.domain.post.PostRepository;
 import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.domain.user.UserRepository;
 import org.greenbyme.angelhack.exception.ErrorCode;
@@ -19,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,12 +34,14 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final MissionInfoRepository missionInfoRepository;
+    private final PostRepository postRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
     public UserResponseDto saveUser(UserSaveRequestDto requestDto) {
-        if( userRepository.findByEmail(requestDto.getEmail()).isPresent()) {
-            throw new UserException("이미 가입된 메일입니다",ErrorCode.MEMBER_DUPLICATED_EMAIL);
+        if (userRepository.findByEmail(requestDto.getEmail()).isPresent()) {
+            throw new UserException("이미 가입된 메일입니다", ErrorCode.MEMBER_DUPLICATED_EMAIL);
         }
         User user = requestDto.toEntity();
         user = userRepository.save(user);
@@ -69,9 +76,18 @@ public class UserService {
 
     public UserExpectTreeCo2ResponseDto getUserExpectTreeCo2(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new NoResultException("등록된 사용자가 없습니다."));
-
-        return new UserExpectTreeCo2ResponseDto(user);
+        List<MissionInfo> res = missionInfoRepository.findAllByUser(user);
+        long missionCount = res.stream()
+                .filter(m -> m.getMissionInfoStatus().equals(MissionInfoStatus.IN_PROGRESS))
+                .count();
+        long totalCount = missionCount;
+        long missionProgressCount = postRepository.findAllByUser(user).stream()
+                .filter(p->p.getCreatedDate().getDayOfYear() == LocalDateTime.now().getDayOfYear())
+                .count();
+        long missionProgressRates = missionProgressCount / missionCount * 100;
+        return new UserExpectTreeCo2ResponseDto(user, missionCount, missionProgressRates);
     }
+
     public List<MissionInfobyUserDto> getMissionInfoList(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
@@ -86,6 +102,5 @@ public class UserService {
         return user.getPostList().stream()
                 .map(PostDetailResponseDto::new)
                 .collect(Collectors.toList());
-
     }
 }

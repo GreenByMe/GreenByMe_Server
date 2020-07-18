@@ -11,4 +11,6 @@ public interface MissionRepository  extends JpaRepository<Mission, Long>, Missio
     Page<Mission> findAllByCategoryAndDayCategory(Category category, DayCategory dayCategory, Pageable pageable);
 
     Page<Mission> findAllByCategory(Category category, Pageable pageable);
+
+    Page<Mission> findAllByCandidatesCount(Pageable pageable);
 }

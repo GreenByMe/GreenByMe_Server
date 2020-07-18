@@ -38,8 +38,22 @@ public class PostService {
         }
         User user = userRepository.findById(requestDto.getUserId())
                 .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
+        if(!missionInfo.getUser().getId().equals(user.getId())) {
+            throw new PostException(ErrorCode.WRONG_ACCESS);
+        }
+        List<Post> posts = postRepository.findAllByUserAndMissionInfo(user, missionInfo);
+        long postCount = posts.stream()
+                .filter(p -> p.getCreatedDate().getDayOfYear() == requestDto.getCreatedDate().getDayOfYear())
+                .count();
+        if (postCount > 0) {
+            throw new PostException(ErrorCode.OVER_CERIFICATION);
+        }
         Post savePost = new Post(user, missionInfo, requestDto.getText(), requestDto.getTitle(), requestDto.getPictureUrl(), requestDto.getOpen());
         savePost = postRepository.save(savePost);
+        missionInfo.addProgress();
+        if (missionInfo.isEnd()) {
+            missionInfo.getMission().addPassCandidates();
+        }
         return new PostSaveResponseDto(savePost.getId());
     }
 
@@ -77,6 +91,9 @@ public class PostService {
     public PostSaveResponseDto updatePost(Long postId, PostUpdateRequestDto requestDto) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostException(ErrorCode.INVALID_POST));
+        if (!post.getUser().getId().equals(requestDto.getUserId())) {
+            throw new IllegalArgumentException("올바르지 않은 사용자 ID");
+        }
         post.update(requestDto);
         return new PostSaveResponseDto(postId);
     }

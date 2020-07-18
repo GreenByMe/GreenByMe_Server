@@ -12,8 +12,8 @@ import org.greenbyme.angelhack.service.dto.post.PostUpdateRequestDto;
 import javax.persistence.*;
 
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Post extends BaseEntity {
 
     @Id
