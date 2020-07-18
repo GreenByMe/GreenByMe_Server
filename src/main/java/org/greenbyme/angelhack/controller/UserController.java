@@ -5,10 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.greenbyme.angelhack.service.UserService;
 import org.greenbyme.angelhack.service.dto.missionInfo.MissionInfobyUserDto;
 import org.greenbyme.angelhack.service.dto.post.PostDetailResponseDto;
-import org.greenbyme.angelhack.service.dto.user.UserDetailResponseDto;
-import org.greenbyme.angelhack.service.dto.user.UserExpectTreeCo2ResponseDto;
-import org.greenbyme.angelhack.service.dto.user.UserResponseDto;
-import org.greenbyme.angelhack.service.dto.user.UserSaveRequestDto;
+import org.greenbyme.angelhack.service.dto.user.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -51,5 +48,15 @@ public class UserController {
     public ResponseEntity<List<PostDetailResponseDto>> getUserPostList(@PathVariable("userId") final Long userId) {
         List<PostDetailResponseDto> dto = userService.getPostList(userId);
         return ResponseEntity.status(HttpStatus.OK).body(dto);
+    }
+
+    @PutMapping("/nickname")
+    public ResponseEntity<UserResponseDto> updateUserNickName(final UserUpdateNicktDto dto) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.updateNickName(dto));
+    }
+
+    @PutMapping("/photos")
+    public ResponseEntity<UserResponseDto> updateUserPhotos(final UserUpdatePhotoDto dto) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.updatePhotos(dto));
     }
 }

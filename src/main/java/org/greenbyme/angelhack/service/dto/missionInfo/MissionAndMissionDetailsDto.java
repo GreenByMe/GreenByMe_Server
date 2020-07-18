@@ -24,13 +24,13 @@ public class MissionAndMissionDetailsDto {
 
     @Builder
     public MissionAndMissionDetailsDto(Mission mission) {
-        id = mission.getId();
-        category = mission.getCategory();
-        dayCategory = mission.getDayCategory();
-        subject = mission.getSubject();
-        description = mission.getDescription();
-        expectTree = mission.getExpectTree();
-        expectCo2 = mission.getExpectCo2();
-        missionCertificationMethod = mission.getMissionCertificationMethod();
+        this.id = mission.getId();
+        this.category = mission.getCategory();
+        this.dayCategory = mission.getDayCategory();
+        this.subject = mission.getSubject();
+        this.description = mission.getDescription();
+        this.expectTree = mission.getExpectTree();
+        this.expectCo2 = mission.getExpectCo2();
+        this.missionCertificationMethod = mission.getMissionCertificationMethod();
     }
 }

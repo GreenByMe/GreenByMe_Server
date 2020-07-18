@@ -38,6 +38,7 @@ public class Mission extends BaseTimeEntity {
     private double expectCo2;
 
     private Long passCandidatesCount;
+    private String pictureUrl;
 
     private String pictureUrl;
 

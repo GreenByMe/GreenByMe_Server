@@ -40,7 +40,7 @@ public class MissionDetailsDto {
         missionCertificationMethod = mission.getMissionCertificationMethod();
         this.startDate = LocalDateTime.now();
         this.endDate = LocalDateTime.now().plusDays(mission.getDayCategory().getDay());
-        passCandidatesCount=mission.getPassCandidatesCount();
+        this.passCandidatesCount = mission.getPassCandidatesCount();
         this.progressByMissionId = progressByMissionId;
     }
 }

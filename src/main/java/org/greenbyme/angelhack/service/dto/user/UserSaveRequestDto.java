@@ -13,6 +13,7 @@ public class UserSaveRequestDto {
     private String email;
     private String password;
     private String nickname;
+    private String photo;
 
     public User toEntity() {
         return User.builder()
@@ -20,6 +21,7 @@ public class UserSaveRequestDto {
                 .email(email)
                 .password(password)
                 .nickname(nickname)
+                .photo(photo)
                 .build();
     }
 }

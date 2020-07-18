@@ -37,7 +37,6 @@ public class MissionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(missionSaveResponseDto);
     }
 
-    @PostMapping("/upload/image")
     @ResponseBody
     public String upload(@RequestParam("data") MultipartFile multipartFile) throws IOException {
         return s3Uploader.upload(multipartFile, "static/mission");

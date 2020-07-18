@@ -21,7 +21,7 @@ public class LoginController {
     @PostMapping("/users")
     public TokenResponse login(@RequestBody UserLoginRequestDto dto) {
         String token = userService.createToken(dto);
-        Long userId = userService.getUserId(dto.getEmail());
+        Long userId = userService.login(dto);
         return new TokenResponse(token, userId);
     }
 }
