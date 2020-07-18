@@ -60,8 +60,14 @@ public class MissionInfoService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
         return missionInfoRepository.findAllByUser(user).stream()
-                .filter(m->m.getMissionInfoStatus().equals(MissionInfoStatus.IN_PROGRESS))
-                .map(InProgressResponseDto::new)
+                .filter(m -> m.getMissionInfoStatus().equals(MissionInfoStatus.IN_PROGRESS))
+                .map(m -> new InProgressResponseDto(m, howManyPeopleInMission(m)))
                 .collect(Collectors.toList());
+    }
+
+    private Long howManyPeopleInMission(MissionInfo missionInfo) {
+        return missionInfoRepository.findAllByMission(missionInfo.getMission()).stream()
+                .filter(m->m.getMissionInfoStatus().equals(MissionInfoStatus.IN_PROGRESS))
+                .count();
     }
 }
