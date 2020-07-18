@@ -1,3 +1,4 @@
+/*
 package org.greenbyme.angelhack;
 
 import lombok.RequiredArgsConstructor;
@@ -69,7 +70,6 @@ public class InitDB {
                     .build();
             em.persist(mission2);
 
-/*
             Mission mission1 = Mission.builder()
                     .category(Category.DISPOSABLE)
                     .subject("일회용 젓가락 안쓰기")
@@ -85,7 +85,8 @@ public class InitDB {
                     .dayCategory(DayCategory.MONTH)
                     .build();
             em.persist(mission3);
-*/
+
+
 
             MissionInfo missionInfo1 = MissionInfo.builder()
                     .user(user1)
@@ -93,28 +94,30 @@ public class InitDB {
                     .build();
             em.persist(missionInfo1);
 
- /*           MissionInfo missionInfo2 = MissionInfo.builder()
+           MissionInfo missionInfo2 = MissionInfo.builder()
                     .user(user1)
                     .mission(mission3)
                     .build();
-            em.persist(missionInfo2);*/
+            em.persist(missionInfo2);
 
-/*
+
             MissionInfo missionInfo3 = MissionInfo.builder()
                     .user(user2)
                     .mission(mission2)
                     .build();
             em.persist(missionInfo3);
-*/
 
-/*
+
+
             MissionInfo missionInfo4 = MissionInfo.builder()
                     .user(user2)
                     .mission(mission3)
                     .build();
             em.persist(missionInfo4);
-*/
+
+
 
         }
     }
 }
+*/

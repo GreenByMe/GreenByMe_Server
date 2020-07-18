@@ -48,7 +48,7 @@ public class PostService {
         if (postCount > 0) {
             throw new PostException(ErrorCode.OVER_CERIFICATION);
         }
-        Post savePost = new Post(user, missionInfo, requestDto.getText(), requestDto.getTitle(), requestDto.getPicture(), requestDto.getOpen());
+        Post savePost = new Post(user, missionInfo, requestDto.getText(), requestDto.getTitle(), requestDto.getPictureUrl(), requestDto.getOpen());
         savePost = postRepository.save(savePost);
         missionInfo.addProgress();
         if (missionInfo.isEnd()) {
