@@ -56,14 +56,21 @@ public class MissionInfo extends BaseTimeEntity {
     }
 
     public void addProgress(){
-        if( this.progress >= finishCount) {
+        if (this.progress >= finishCount || this.missionInfoStatus.equals(MissionInfoStatus.FINISH)) {
             throw new MissionException(ErrorCode.OVER_PROGRESS);
         }
-        this.progress++;
+        if (this.progress + 1 == finishCount) {
+            this.missionInfoStatus = MissionInfoStatus.FINISH;
+        }
+        this.progress += 1;
     }
 
     private void setUser(User user) {
         this.user = user;
         user.getMissionInfoList().add(this);
+    }
+
+    public boolean isEnd() {
+        return this.missionInfoStatus.equals(MissionInfoStatus.FINISH);
     }
 }

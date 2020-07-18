@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -52,11 +53,11 @@ public class MissionService {
     }
 
     public Page<MissionFindAllByCategoryAndDayCategoryResponseDto> findAllByCategoryAndDayCategory(Category category, DayCategory dayCategory, Pageable pageable) {
-       return missionRepository.findAllByCategoryAndDayCategory(category, dayCategory, pageable).map(MissionFindAllByCategoryAndDayCategoryResponseDto::new);
+        return missionRepository.findAllByCategoryAndDayCategory(category, dayCategory, pageable).map(MissionFindAllByCategoryAndDayCategoryResponseDto::new);
     }
 
     public Page<MissionFindAllByCategoryResponseDto> findAllByCategory(Category category, Pageable pageable) {
-      return missionRepository.findAllByCategory(category, pageable).map(MissionFindAllByCategoryResponseDto::new);
+        return missionRepository.findAllByCategory(category, pageable).map(MissionFindAllByCategoryResponseDto::new);
     }
 
     @Transactional
@@ -73,5 +74,9 @@ public class MissionService {
     public MissionDetailsDto findById(Long id) {
         Mission mission = missionRepository.findById(id).orElseThrow(() -> new NoResultException("등록되지 않은 미션입니다."));
         return new MissionDetailsDto(mission);
+    }
+
+    public Page<MissionPopularResponseDto> findAllByPopular(Pageable pageable) {
+        return missionRepository.findAllByCandidatesCount(pageable).map(MissionPopularResponseDto::new);
     }
 }

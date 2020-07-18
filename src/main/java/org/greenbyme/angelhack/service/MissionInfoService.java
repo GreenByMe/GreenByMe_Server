@@ -40,6 +40,7 @@ public class MissionInfoService {
                 .mission(mission)
                 .build();
         missionInfoRepository.save(missionInfo);
+        mission.addCandidates();
         return new MissionInfoSaveResponseDto(missionInfo);
     }
 
