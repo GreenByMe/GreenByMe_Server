@@ -73,7 +73,8 @@ public class MissionService {
 
     public MissionDetailsDto findById(Long id) {
         Mission mission = missionRepository.findById(id).orElseThrow(() -> new NoResultException("등록되지 않은 미션입니다."));
-        return new MissionDetailsDto(mission);
+        Long progressByMissionId = missionInfoRepository.findProgressByMissionId(id);
+        return new MissionDetailsDto(mission, progressByMissionId);
     }
 
     public Page<MissionPopularResponseDto> findAllByPopular(Pageable pageable) {

@@ -7,6 +7,8 @@ import org.greenbyme.angelhack.domain.Category.Category;
 import org.greenbyme.angelhack.domain.Category.DayCategory;
 import org.greenbyme.angelhack.domain.mission.Mission;
 
+import java.time.LocalDateTime;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MissionFindAllResponseDto {
@@ -16,6 +18,9 @@ public class MissionFindAllResponseDto {
     private DayCategory dayCategory;
     private String subject;
     private String description;
+    private String pictureUrl;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
 
     public MissionFindAllResponseDto(Mission mission) {
         this.id = mission.getId();
@@ -23,5 +28,8 @@ public class MissionFindAllResponseDto {
         this.dayCategory = mission.getDayCategory();
         this.subject = mission.getSubject();
         this.description = mission.getDescription();
+        this.pictureUrl = mission.getPictureUrl();
+        this.startDate = LocalDateTime.now();
+        this.endDate = LocalDateTime.now().plusDays(mission.getDayCategory().getDay());
     }
 }

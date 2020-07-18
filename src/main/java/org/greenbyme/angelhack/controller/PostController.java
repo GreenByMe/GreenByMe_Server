@@ -31,7 +31,7 @@ public class PostController {
     @PostMapping("/upload/image")
     @ResponseBody
     public String upload(@RequestParam("data") MultipartFile multipartFile) throws IOException {
-        return s3Uploader.upload(multipartFile, "static");
+        return s3Uploader.upload(multipartFile, "static/user");
     }
 
     @GetMapping("/missions/{missionId}")

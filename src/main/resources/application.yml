@@ -34,6 +34,17 @@ logging:
     org:
       hibernate:
         type: trace
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIASIF6HADX54Q5SKIE
+      secretKey: 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
+    s3:
+      bucket: springboot2-build-book
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
 ---
 spring.profiles: dev
 spring.profiles.include: real
