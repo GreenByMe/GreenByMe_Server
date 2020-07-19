@@ -21,6 +21,7 @@ public class MissionFindAllByCategoryAndDayCategoryResponseDto {
     private String description;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    private Long passCandidates;
 
     public MissionFindAllByCategoryAndDayCategoryResponseDto(Mission mission) {
         this.id = mission.getId();
@@ -30,5 +31,6 @@ public class MissionFindAllByCategoryAndDayCategoryResponseDto {
         this.description = mission.getDescription();
         this.startDate = LocalDateTime.now();
         this.endDate = LocalDateTime.now().plusDays(mission.getDayCategory().getDay());
+        this.passCandidates = mission.getPassCandidatesCount();
     }
 }
