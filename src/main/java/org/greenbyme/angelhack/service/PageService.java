@@ -54,7 +54,7 @@ public class PageService {
         if (missionCount == 0 || missionProgressCount == 0) {
             return new HomePageDto(user, 0, inProgressResponseDtos, popularMissionResponseDtos);
         }
-        long missionProgressRates = missionProgressCount / missionCount * 100;
+        long missionProgressRates = (long)( (double)(missionProgressCount /missionCount) * 100);
         return new HomePageDto(user, missionProgressRates, inProgressResponseDtos, popularMissionResponseDtos);
     }
 
