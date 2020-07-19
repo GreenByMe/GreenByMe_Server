@@ -47,7 +47,7 @@ public class PageService {
         long missionProgressCount = postRepository.findAllByUser(user).stream()
                 .filter(p -> p.getCreatedDate().getDayOfYear() == LocalDateTime.now().getDayOfYear())
                 .count();
-        List<InProgressResponseDto> inProgressResponseDtos = missionInfoRepository.findAllByUser(user).stream()
+        List<InProgressResponseDto> inProgressResponseDtos = res.stream()
                 .filter(m -> m.getMissionInfoStatus().equals(MissionInfoStatus.IN_PROGRESS))
                 .map(m -> new InProgressResponseDto(m, howManyPeopleInMission(m)))
                 .collect(Collectors.toList());
