@@ -2,7 +2,7 @@
 
 
 
-## **Green by me, Green by earth(us)**
+ **Green by me, Green by earth(us)**
 
 "내가 그린"은 미션 기반 참여를 통해 사용자의 지속 가능한 소비와 생산을 유도하는 공간을 제공합니다.
 
@@ -47,10 +47,15 @@
 
 
 ## Backend
+- buil tool: Gradle 7.0
+- IDE: InteliJ  
+- springboot-framework 2.3.1
+- spring data jpa
+- aws ec2
+- aws RDS_MySQL 8.0.17
 
 
-
-## How to use? Show Wiki
+# How to use? Show Wiki!
    - [GreenByMe_Wiki](https://github.com/GreenByMe/GreenByMe_Server/wiki)
   
   
