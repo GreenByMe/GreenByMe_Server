@@ -15,6 +15,7 @@ public class PopularMissionResponseDto {
     private Long progressCount;
     private LocalDateTime ifStartDate;
     private LocalDateTime ifEndDate;
+    private String pictureUrl;
 
     public PopularMissionResponseDto(Mission mission, Long progressCount) {
         this.missionId = mission.getId();
@@ -22,5 +23,6 @@ public class PopularMissionResponseDto {
         this.progressCount = progressCount;
         this.ifStartDate = LocalDateTime.now();
         this.ifEndDate = LocalDateTime.now().plusDays(mission.getDayCategory().getDay());
+        this.pictureUrl = mission.getPictureUrl();
     }
 }
