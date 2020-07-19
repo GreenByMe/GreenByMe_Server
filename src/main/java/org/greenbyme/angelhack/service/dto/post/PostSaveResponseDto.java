@@ -13,6 +13,6 @@ public class PostSaveResponseDto {
 
     public PostSaveResponseDto(Long postId, double expectTree, int finishCount) {
         this.postId = postId;
-        this.message =  "축하합니다. <br> 인증 완료로 <font color=\"#26B679\">" + Math.round(expectTree/(double)finishCount*100)/100.0 +"개의 나무를</font><br>심으셨습니다!";
+        this.message =  "축하합니다. <br> 인증 완료로 <font color=\"#26B679\">" + Math.round(expectTree/(double)finishCount)*100.0 +"개의 나무를</font><br>심으셨습니다!";
     }
 }
