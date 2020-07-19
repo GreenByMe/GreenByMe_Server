@@ -1,10 +1,10 @@
 package org.greenbyme.angelhack.util;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
- 
-@ConfigurationProperties(prefix="file")
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
 public class FileUploadProperties {
-    private String uploadDir;
+    private String uploadDir = "./uploads";
  
     public String getUploadDir() {
         return uploadDir;

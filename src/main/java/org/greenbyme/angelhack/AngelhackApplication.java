@@ -15,9 +15,6 @@ import java.util.UUID;
 
 @EnableJpaAuditing
 @SpringBootApplication
-@EnableConfigurationProperties({
-		FileUploadProperties.class
-})
 public class AngelhackApplication {
 
 	public static void main(String[] args) {

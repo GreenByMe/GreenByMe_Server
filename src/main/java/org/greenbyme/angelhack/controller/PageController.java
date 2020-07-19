@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.greenbyme.angelhack.service.*;
 import org.greenbyme.angelhack.service.dto.page.CertPageDto;
 import org.greenbyme.angelhack.service.dto.page.HomePageDto;
+import org.greenbyme.angelhack.service.dto.page.MyPageDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -31,5 +32,10 @@ public class PageController {
     @GetMapping("/cert/users/{userId}")
     public ResponseEntity<CertPageDto> getCertPage(@PathVariable("userId") final Long userId) {
         return ResponseEntity.status(HttpStatus.OK).body(pageService.getCertPage(userId));
+    }
+
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<MyPageDto> getMyPage(@PathVariable("userId") final Long userId) {
+        return ResponseEntity.status(HttpStatus.OK).body(pageService.getMyPage(userId));
     }
 }

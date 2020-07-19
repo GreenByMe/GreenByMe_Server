@@ -15,6 +15,7 @@ import org.greenbyme.angelhack.exception.UserException;
 import org.greenbyme.angelhack.service.dto.missionInfo.InProgressResponseDto;
 import org.greenbyme.angelhack.service.dto.page.CertPageDto;
 import org.greenbyme.angelhack.service.dto.page.HomePageDto;
+import org.greenbyme.angelhack.service.dto.page.MyPageDto;
 import org.greenbyme.angelhack.service.dto.page.PopularMissionResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -75,5 +76,14 @@ public class PageService {
                 .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
         List<MissionInfo> missionInfos = missionInfoRepository.findAllByUser(user);
         return new CertPageDto(userId, missionInfos);
+    }
+
+    public MyPageDto getMyPage(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
+        long passMissionCount = missionInfoRepository.findAllByUser(user).stream()
+                .filter(m->m.getMissionInfoStatus().equals(MissionInfoStatus.FINISH))
+                .count();
+        return new MyPageDto(user, passMissionCount);
     }
 }

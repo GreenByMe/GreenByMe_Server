@@ -114,7 +114,7 @@ public class UserService {
 
     public Long login(UserLoginRequestDto dto) {
         User user = getUser(dto.getEmail());
-        if( !user.getPhoto().equals(dto.getPassword())) {
+        if( !user.getPassword().equals(dto.getPassword())) {
             throw new UserException(ErrorCode.WRONG_PASSWORD);
         }
         return user.getId();
