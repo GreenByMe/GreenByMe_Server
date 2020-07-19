@@ -13,11 +13,11 @@ import java.util.stream.Collectors;
 public class CertPageDto {
 
     private Long userId;
-    private List<ProgressMissionInfoDto> missionList;
+    private List<ProgressMissionInfoDto> missionInfoList;
 
     public CertPageDto(Long userId, List<MissionInfo> missionInfos) {
         this.userId = userId;
-        this.missionList = missionInfos.stream()
+        this.missionInfoList = missionInfos.stream()
                 .map(ProgressMissionInfoDto::new)
                 .collect(Collectors.toList());
     }
