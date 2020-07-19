@@ -20,6 +20,7 @@ public class MissionFindAllByCategoryResponseDto {
     private String description;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    private String pictureUrl;
     private Long passCandidates;
 
     public MissionFindAllByCategoryResponseDto(Mission mission) {
@@ -30,6 +31,7 @@ public class MissionFindAllByCategoryResponseDto {
         this.description = mission.getDescription();
         this.startDate = LocalDateTime.now();
         this.endDate = LocalDateTime.now().plusDays(mission.getDayCategory().getDay());
+        this.pictureUrl = mission.getPictureUrl();
         this.passCandidates = mission.getPassCandidatesCount();
     }
 }

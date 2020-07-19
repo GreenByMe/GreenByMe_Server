@@ -22,6 +22,7 @@ public class MissionDetailsDto {
     private String description;
     private double expectTree;
     private double expectCo2;
+    private String pictureUrl;
     private MissionCertificationMethod missionCertificationMethod;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
@@ -38,6 +39,7 @@ public class MissionDetailsDto {
         expectTree = mission.getExpectTree();
         expectCo2 = mission.getExpectCo2();
         missionCertificationMethod = mission.getMissionCertificationMethod();
+        this.pictureUrl= mission.getPictureUrl();
         this.startDate = LocalDateTime.now();
         this.endDate = LocalDateTime.now().plusDays(mission.getDayCategory().getDay());
         this.passCandidatesCount = mission.getPassCandidatesCount();

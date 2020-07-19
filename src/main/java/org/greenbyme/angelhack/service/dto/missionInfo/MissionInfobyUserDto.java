@@ -12,6 +12,7 @@ public class MissionInfobyUserDto {
 
     private Long missionInfoId;
     private Long missionId;
+    private String missionPictureUrl;
     private MissionInfoStatus missionInfoStatus;
 
     private int finishCount;
@@ -21,6 +22,7 @@ public class MissionInfobyUserDto {
     public MissionInfobyUserDto(MissionInfo missionInfo) {
         this.missionInfoId = missionInfo.getId();
         this.missionId = missionInfo.getMission().getId();
+        this.missionPictureUrl = missionInfo.getMission().getPictureUrl();
         this.missionInfoStatus = missionInfo.getMissionInfoStatus();
         this.finishCount = missionInfo.getFinishCount();
         this.progress = missionInfo.getProgress();

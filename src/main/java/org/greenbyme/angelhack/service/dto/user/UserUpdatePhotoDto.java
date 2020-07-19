@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 public class UserUpdatePhotoDto {
 
     private Long userId;
-    private String photo;
+    private String photoUrl;
 }
