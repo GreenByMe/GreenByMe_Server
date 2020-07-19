@@ -18,6 +18,7 @@ public class InProgressResponseDto {
     private Long manyPeople;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    private String pictureUrl;
 
     public InProgressResponseDto(MissionInfo missionInfo, Long manyPeople) {
         this.missionInfoId = missionInfo.getId();
@@ -27,5 +28,6 @@ public class InProgressResponseDto {
         this.manyPeople = manyPeople;
         this.startDate = missionInfo.getCreatedDate();
         this.endDate = missionInfo.getCreatedDate().plusDays(missionInfo.getMission().getDayCategory().getDay());
+        this.pictureUrl = missionInfo.getMission().getPictureUrl();
     }
 }
