@@ -108,7 +108,7 @@ public class UserService {
     public UserResponseDto updatePhotos(UserUpdatePhotoDto dto) {
         User user = userRepository.findById(dto.getUserId())
                 .orElseThrow(()->new UserException(ErrorCode.UNSIGNED_USER));
-        user.changePhoto(dto.getPhoto());
+        user.changePhoto(dto.getPhotoUrl());
         return new UserResponseDto(user.getId());
     }
 
