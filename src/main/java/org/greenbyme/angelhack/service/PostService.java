@@ -34,9 +34,6 @@ public class PostService {
     public PostSaveResponseDto savePosts(final PostSaveRequestDto requestDto) {
         MissionInfo missionInfo = missionInfoRepository.findById(requestDto.getMissionInfoId())
                 .orElseThrow(() -> new MissionException(ErrorCode.INVALID_MISSIONINFO));
-        if (postRepository.findByMissionInfo(missionInfo) != null) {
-            throw new AlreadyExistsPostException();
-        }
         User user = userRepository.findById(requestDto.getUserId())
                 .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
         if(!missionInfo.getUser().getId().equals(user.getId())) {
@@ -55,7 +52,9 @@ public class PostService {
         if (missionInfo.isEnd()) {
             missionInfo.getMission().addPassCandidates();
         }
-        return new PostSaveResponseDto(savePost.getId());
+        double expectTree = missionInfo.getMission().getExpectTree();
+        int finishCount = missionInfo.getFinishCount();
+        return new PostSaveResponseDto(savePost.getId(), expectTree, finishCount);
     }
 
     public List<PostResponseDto> getPostsByMission(Long missionId) {
@@ -80,6 +79,7 @@ public class PostService {
         return postRepository.findAllByUser(user)
                 .stream()
                 .map(p -> new PostResponseDto(p.getId(), user.getNickname(), p.getPicture(), p.getThumbsUp()))
+                .sorted((a,b) -> a.compareTo(b))
                 .collect(Collectors.toList());
     }
 
@@ -89,14 +89,14 @@ public class PostService {
     }
 
     @Transactional
-    public PostSaveResponseDto updatePost(Long postId, PostUpdateRequestDto requestDto) {
+    public PostUpdateResponseDto updatePost(Long postId, PostUpdateRequestDto requestDto) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostException(ErrorCode.INVALID_POST));
         if (!post.getUser().getId().equals(requestDto.getUserId())) {
             throw new IllegalArgumentException("올바르지 않은 사용자 ID");
         }
         post.update(requestDto);
-        return new PostSaveResponseDto(postId);
+        return new PostUpdateResponseDto(post);
     }
 
     @Transactional

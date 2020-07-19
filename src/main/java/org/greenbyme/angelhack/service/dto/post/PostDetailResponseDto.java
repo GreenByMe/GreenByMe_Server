@@ -15,12 +15,14 @@ public class PostDetailResponseDto {
     private String nickName;
     private String picture;
     private Integer thumbsUp;
+    private String title;
     private String text;
     private LocalDateTime createDate;
     private LocalDateTime lastModifiedDate;
 
     public PostDetailResponseDto(Post post) {
         this.postId = post.getId();
+        this.title = post.getTitle();
         this.nickName = post.getUser().getNickname();
         this.picture = post.getPicture();
         this.thumbsUp = post.getThumbsUp();

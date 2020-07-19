@@ -76,4 +76,5 @@ public class Post extends BaseEntity {
     public void thumbsUp() {
         this.thumbsUp += 1;
     }
+
 }
