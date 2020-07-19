@@ -101,8 +101,8 @@ public class PostController {
     }
 
     @PutMapping("/{postId}")
-    public ResponseEntity<PostSaveResponseDto> updatePost(@PathVariable("postId") final Long postId, @RequestBody PostUpdateRequestDto requestDto) {
-        PostSaveResponseDto responseDto = postService.updatePost(postId, requestDto);
+    public ResponseEntity<PostUpdateResponseDto> updatePost(@PathVariable("postId") final Long postId, @RequestBody PostUpdateRequestDto requestDto) {
+        PostUpdateResponseDto responseDto = postService.updatePost(postId, requestDto);
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 

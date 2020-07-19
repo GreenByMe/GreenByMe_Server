@@ -47,15 +47,15 @@ public class PageService {
         long missionProgressCount = postRepository.findAllByUser(user).stream()
                 .filter(p -> p.getCreatedDate().getDayOfYear() == LocalDateTime.now().getDayOfYear())
                 .count();
-        if (missionCount == 0) {
-            throw new IllegalArgumentException("진행중인 미션이 없습니다.");
-        }
-        long missionProgressRates = missionProgressCount / missionCount * 100;
         List<InProgressResponseDto> inProgressResponseDtos = missionInfoRepository.findAllByUser(user).stream()
                 .filter(m -> m.getMissionInfoStatus().equals(MissionInfoStatus.IN_PROGRESS))
                 .map(m -> new InProgressResponseDto(m, howManyPeopleInMission(m)))
                 .collect(Collectors.toList());
         Page<PopularMissionResponseDto> popularMissionResponseDtos = missionRepository.findAll(pageable).map(m -> new PopularMissionResponseDto(m, howManyPeopleInMission(m)));
+        if (missionCount == 0 || missionProgressCount == 0) {
+            return new HomePageDto(user, 0, inProgressResponseDtos, popularMissionResponseDtos);
+        }
+        long missionProgressRates = (long)( (double)(missionProgressCount /missionCount) * 100);
         return new HomePageDto(user, missionProgressRates, inProgressResponseDtos, popularMissionResponseDtos);
     }
 

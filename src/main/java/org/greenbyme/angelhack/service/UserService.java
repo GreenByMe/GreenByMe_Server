@@ -10,14 +10,9 @@ import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.domain.user.UserRepository;
 import org.greenbyme.angelhack.exception.ErrorCode;
 import org.greenbyme.angelhack.exception.UserException;
-
-import org.greenbyme.angelhack.service.dto.user.*;
 import org.greenbyme.angelhack.service.dto.missionInfo.MissionInfobyUserDto;
 import org.greenbyme.angelhack.service.dto.post.PostDetailResponseDto;
-import org.greenbyme.angelhack.service.dto.user.UserDetailResponseDto;
-import org.greenbyme.angelhack.service.dto.user.UserLoginRequestDto;
-import org.greenbyme.angelhack.service.dto.user.UserResponseDto;
-import org.greenbyme.angelhack.service.dto.user.UserSaveRequestDto;
+import org.greenbyme.angelhack.service.dto.user.*;
 import org.greenbyme.angelhack.util.JwtTokenProvider;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,14 +66,24 @@ public class UserService {
 
     public UserExpectTreeCo2ResponseDto getUserExpectTreeCo2(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new NoResultException("등록된 사용자가 없습니다."));
+        long missionProgressRates = 0L;
         List<MissionInfo> res = missionInfoRepository.findAllByUser(user);
         long missionCount = res.stream()
                 .filter(m -> m.getMissionInfoStatus().equals(MissionInfoStatus.IN_PROGRESS))
                 .count();
         long missionProgressCount = postRepository.findAllByUser(user).stream()
-                .filter(p->p.getCreatedDate().getDayOfYear() == LocalDateTime.now().getDayOfYear())
+                .filter(p -> p.getCreatedDate().getDayOfYear() == LocalDateTime.now().getDayOfYear())
                 .count();
-        long missionProgressRates = missionProgressCount / missionCount * 100;
+
+        if (missionProgressCount == 0) {
+            missionProgressRates = 0L;
+        }
+        if (missionCount == 0) {
+            missionCount = 0;
+        } else {
+            missionProgressRates = (long)( (double)(missionProgressCount /missionCount) * 100);
+        }
+
         return new UserExpectTreeCo2ResponseDto(user, missionCount, missionProgressRates);
     }
 

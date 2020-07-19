@@ -91,7 +91,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userExpectTreeCo2);
     }
 
-    @GetMapping("/{userId}/missions")
+    @GetMapping("/{userId}/missionInfos")
     public ResponseEntity<List<MissionInfobyUserDto>> getUserMissionInfoList(@PathVariable("userId") final Long userId) {
         List<MissionInfobyUserDto> dto = userService.getMissionInfoList(userId);
         return ResponseEntity.status(HttpStatus.OK).body(dto);
@@ -108,7 +108,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.updateNickName(dto));
     }
 
-    @PutMapping("/photos")
+    @PutMapping("/image")
     public ResponseEntity<UserResponseDto> updateUserPhotos(final UserUpdatePhotoDto dto) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.updatePhotos(dto));
     }
