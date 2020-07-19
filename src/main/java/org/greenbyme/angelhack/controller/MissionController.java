@@ -93,14 +93,14 @@ public class MissionController {
     }
 
     @GetMapping("")
-    public ResponseEntity<Page<MissionFindAllResponseDto>> findAllMission(@PageableDefault(size = 5, sort = {"category", "id"}, direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity<Page<MissionFindAllResponseDto>> findAllMission(@PageableDefault(size = 10, sort = {"category", "id"}, direction = Sort.Direction.DESC) Pageable pageable) {
         Page<MissionFindAllResponseDto> allMission = missionService.findAllMission(pageable);
         return ResponseEntity.status(HttpStatus.OK).body(allMission);
     }
 
     @GetMapping("/categorys/{category}")
     public ResponseEntity<Page<MissionFindAllByCategoryResponseDto>> findAllByCategory(@PathVariable("category") final Category category,
-                                                                                       @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+                                                                                       @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<MissionFindAllByCategoryResponseDto> allByCategory = missionService.findAllByCategory(category, pageable);
         return ResponseEntity.status(HttpStatus.OK).body(allByCategory);
     }
@@ -108,7 +108,7 @@ public class MissionController {
     @GetMapping("/categorys/{category}/daycategory/{datCategory}")
     public ResponseEntity<Page<MissionFindAllByCategoryAndDayCategoryResponseDto>> findAllByCategoryAndDayCategory(@PathVariable("category") final Category category,
                                                                                                                    @PathVariable("datCategory") final DayCategory dayCategory,
-                                                                                                                   @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+                                                                                                                   @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<MissionFindAllByCategoryAndDayCategoryResponseDto> allByCategoryAndDayCategory = missionService.findAllByCategoryAndDayCategory(category, dayCategory, pageable);
         return ResponseEntity.status(HttpStatus.OK).body(allByCategoryAndDayCategory);
     }
