@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import org.greenbyme.angelhack.domain.missionInfo.MissionInfo;
 import org.greenbyme.angelhack.domain.missionInfo.MissionInfoStatus;
 
+import java.time.LocalDateTime;
+
 @Getter
 @NoArgsConstructor
 public class MissionInfoDetailDto {
@@ -17,6 +19,9 @@ public class MissionInfoDetailDto {
     private int finishCount;
     private int progress;
     private int remainPeriod;
+    private String missionPictureUrl;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
 
     public MissionInfoDetailDto(MissionInfo missionInfo) {
         this.missionInfoId = missionInfo.getId();
@@ -26,5 +31,8 @@ public class MissionInfoDetailDto {
         this.finishCount = missionInfo.getFinishCount();
         this.progress = missionInfo.getProgress();
         this.remainPeriod = missionInfo.getRemainPeriod();
+        this.missionPictureUrl = missionInfo.getMission().getPictureUrl();
+        this.startDate = missionInfo.getCreatedDate();
+        this.endDate = missionInfo.getCreatedDate().plusDays(missionInfo.getMission().getDayCategory().getDay());
     }
 }

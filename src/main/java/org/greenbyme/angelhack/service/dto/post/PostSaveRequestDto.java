@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PostSaveRequestDto extends BaseEntity {
+public class PostSaveRequestDto {
 
     private Long userId;
     private Long missionInfoId;

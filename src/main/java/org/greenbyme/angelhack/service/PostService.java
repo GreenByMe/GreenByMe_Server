@@ -15,6 +15,7 @@ import org.greenbyme.angelhack.service.dto.post.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,7 +44,7 @@ public class PostService {
         }
         List<Post> posts = postRepository.findAllByUserAndMissionInfo(user, missionInfo);
         long postCount = posts.stream()
-                .filter(p -> p.getCreatedDate().getDayOfYear() == requestDto.getCreatedDate().getDayOfYear())
+                .filter(p -> p.getCreatedDate().getDayOfYear() == LocalDateTime.now().getDayOfYear())
                 .count();
         if (postCount > 0) {
             throw new PostException(ErrorCode.OVER_CERIFICATION);

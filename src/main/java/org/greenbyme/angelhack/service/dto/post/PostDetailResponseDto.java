@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.greenbyme.angelhack.domain.post.Post;
 
+import java.time.LocalDateTime;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostDetailResponseDto {
@@ -14,6 +16,8 @@ public class PostDetailResponseDto {
     private String picture;
     private Integer thumbsUp;
     private String text;
+    private LocalDateTime createDate;
+    private LocalDateTime lastModifiedDate;
 
     public PostDetailResponseDto(Post post) {
         this.postId = post.getId();
@@ -21,5 +25,7 @@ public class PostDetailResponseDto {
         this.picture = post.getPicture();
         this.thumbsUp = post.getThumbsUp();
         this.text = post.getText();
+        this.createDate = post.getCreatedDate();
+        this.lastModifiedDate = post.getLastModifiedDate();
     }
 }
