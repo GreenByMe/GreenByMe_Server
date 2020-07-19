@@ -8,6 +8,8 @@ import org.greenbyme.angelhack.domain.Category.Category;
 import org.greenbyme.angelhack.domain.Category.DayCategory;
 import org.greenbyme.angelhack.domain.mission.Mission;
 
+import java.time.LocalDateTime;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MissionFindAllByCategoryAndDayCategoryResponseDto {
@@ -17,13 +19,20 @@ public class MissionFindAllByCategoryAndDayCategoryResponseDto {
     private DayCategory dayCategory;
     private String subject;
     private String description;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
+    private String pictureUrl;
+    private Long passCandidates;
 
     public MissionFindAllByCategoryAndDayCategoryResponseDto(Mission mission) {
-        id = mission.getId();
-        category = mission.getCategory();
-        dayCategory = mission.getDayCategory();
-        subject = mission.getSubject();
-        description = mission.getDescription();
+        this.id = mission.getId();
+        this.category = mission.getCategory();
+        this.dayCategory = mission.getDayCategory();
+        this.subject = mission.getSubject();
+        this.description = mission.getDescription();
+        this.startDate = LocalDateTime.now();
+        this.endDate = LocalDateTime.now().plusDays(mission.getDayCategory().getDay());
+        this.pictureUrl= mission.getPictureUrl();
+        this.passCandidates = mission.getPassCandidatesCount();
     }
-
 }

@@ -1,7 +1,6 @@
 package org.greenbyme.angelhack.util;
 
 import io.jsonwebtoken.*;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Base64;
@@ -13,9 +12,9 @@ public class JwtTokenProvider {
     private String secretKey;
     private long validityInMilliseconds;
 
-    public JwtTokenProvider(@Value("${security.jwt.token.secret-key}") String secretKey, @Value("${security.jwt.token.expire-length}") long validityInMilliseconds) {
-        this.secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
-        this.validityInMilliseconds = validityInMilliseconds;
+    public JwtTokenProvider() {
+        this.secretKey = Base64.getEncoder().encodeToString("2020angelhackseoul".getBytes());
+        this.validityInMilliseconds = 3_600_000;
     }
 
     public String createToken(String subject) {

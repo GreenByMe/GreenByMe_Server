@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -49,33 +50,34 @@ public class MissionService {
 
     public Page<MissionFindAllResponseDto> findAllMission(Pageable pageable) {
         return missionRepository.findAll(pageable).map(MissionFindAllResponseDto::new);
-
     }
 
     public Page<MissionFindAllByCategoryAndDayCategoryResponseDto> findAllByCategoryAndDayCategory(Category category, DayCategory dayCategory, Pageable pageable) {
-       return missionRepository.findAllByCategoryAndDayCategory(category, dayCategory, pageable).map(MissionFindAllByCategoryAndDayCategoryResponseDto::new);
+        return missionRepository.findAllByCategoryAndDayCategory(category, dayCategory, pageable).map(MissionFindAllByCategoryAndDayCategoryResponseDto::new);
     }
 
     public Page<MissionFindAllByCategoryResponseDto> findAllByCategory(Category category, Pageable pageable) {
-      return missionRepository.findAllByCategory(category, pageable).map(MissionFindAllByCategoryResponseDto::new);
+        return missionRepository.findAllByCategory(category, pageable).map(MissionFindAllByCategoryResponseDto::new);
     }
 
     @Transactional
     public MissionDeleteDto delete(Long id) {
         Mission mission = missionRepository.findById(id).orElseThrow(() -> new NoResultException("등록되지 않은 미션입니다."));
         List<MissionInfo> missionInfosByMission = missionInfoRepository.findByMission(mission);
-
         for (MissionInfo missionInfo : missionInfosByMission) {
             missionInfoRepository.delete(missionInfo);
         }
-
         missionRepository.delete(mission);
-
         return new MissionDeleteDto(mission);
     }
 
     public MissionDetailsDto findById(Long id) {
         Mission mission = missionRepository.findById(id).orElseThrow(() -> new NoResultException("등록되지 않은 미션입니다."));
-        return new MissionDetailsDto(mission);
+        Long progressByMissionId = missionInfoRepository.findProgressByMissionId(id);
+        return new MissionDetailsDto(mission, progressByMissionId);
+    }
+
+    public Page<MissionPopularResponseDto> findAllByPopular(Pageable pageable) {
+        return missionRepository.findAll(pageable).map(MissionPopularResponseDto::new);
     }
 }

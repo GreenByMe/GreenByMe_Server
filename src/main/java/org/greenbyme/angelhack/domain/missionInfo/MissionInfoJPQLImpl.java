@@ -20,4 +20,14 @@ public class MissionInfoJPQLImpl implements MissionInfoJPQL{
                 .getResultStream()
                 .findFirst();
     }
+
+    @Override
+    public Long findProgressByMissionId(Long missionId) {
+        return em.createQuery("select count(mi) from MissionInfo  mi" +
+                " join mi.mission m" +
+                " where m.id =:id and mi.missionInfoStatus =:missionInfoStatus ", Long.class)
+                .setParameter("id", missionId)
+                .setParameter("missionInfoStatus", MissionInfoStatus.IN_PROGRESS)
+                .getSingleResult();
+    }
 }

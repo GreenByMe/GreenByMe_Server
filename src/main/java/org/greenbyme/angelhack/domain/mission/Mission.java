@@ -32,27 +32,42 @@ public class Mission extends BaseTimeEntity {
     private MissionCertificationMethod missionCertificationMethod;
 
     private String subject;
-
     private String description;
 
+    private double expectTree;
+    private double expectCo2;
+
+    private Long passCandidatesCount;
+    private String pictureUrl;
+
     @Builder
-    public Mission(Category category, String subject, String description, DayCategory dayCategory, MissionCertificationMethod missionCertificationMethod){
+    public Mission(Category category, String subject, String description, DayCategory dayCategory,
+                   MissionCertificationMethod missionCertificationMethod, double expectCo2, String pictureUrl) {
         this.category = category;
         this.subject = subject;
         this.description = description;
         this.dayCategory = dayCategory;
         this.missionCertificationMethod = missionCertificationMethod;
+        this.expectCo2 = expectCo2;
+        this.expectTree = expectCo2 / 3.71;
+        this.passCandidatesCount = 0L;
+        this.pictureUrl = pictureUrl;
     }
 
-    public void changeCategory(Category category){
+    public void changeCategory(Category category) {
         this.category = category;
     }
-    public void changeDayCategory(DayCategory dayCategory){
+
+    public void changeDayCategory(DayCategory dayCategory) {
         this.dayCategory = dayCategory;
     }
-    public void changeMissionCertificationMethod(MissionCertificationMethod missionCertificationMethod){
+
+    public void changeMissionCertificationMethod(MissionCertificationMethod missionCertificationMethod) {
         this.missionCertificationMethod = missionCertificationMethod;
     }
 
+    public void addPassCandidates() {
+        this.passCandidatesCount += 1;
+    }
 }
 

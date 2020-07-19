@@ -10,4 +10,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     Post findByMissionInfo(MissionInfo missionInfo);
     List<Post> findAllByUser(User user);
+    List<Post> findAllByUserAndMissionInfo(User user, MissionInfo missionInfo);
 }

@@ -18,5 +18,4 @@ public class MissionInfoDeleteResponseDto {
         missionInfoId = missionInfo.getId();
         message = "사용자 미션 삭제 완료";
     }
-
 }

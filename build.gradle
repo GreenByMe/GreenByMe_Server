@@ -16,6 +16,7 @@ configurations {
 
 repositories {
 	mavenCentral()
+	maven { url 'https://repo.spring.io/libs-milestone'}
 }
 
 dependencies {
@@ -35,8 +36,7 @@ dependencies {
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
-
-	//testImplementation 'org.springframework.security:spring-security-test'
+	runtimeOnly 'mysql:mysql-connector-java'
 }
 
 test {

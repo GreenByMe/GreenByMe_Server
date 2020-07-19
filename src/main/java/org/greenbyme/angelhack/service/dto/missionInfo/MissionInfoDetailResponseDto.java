@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class MissionInfoDetailResponseDto {
 
     private String userNickName;
-    private MissionDetailsDto missionDetailsDto;
+    private MissionAndMissionDetailsDto missionDetailsDto;
     private int finishCount;
     private int progress;
     private int remainPeriod;
@@ -26,12 +26,12 @@ public class MissionInfoDetailResponseDto {
     @Builder
     public MissionInfoDetailResponseDto(MissionInfo missionInfo) {
         this.userNickName = missionInfo.getUser().getNickname();
-        this.missionDetailsDto = new MissionDetailsDto(missionInfo.getMission());
+        this.missionDetailsDto = new MissionAndMissionDetailsDto(missionInfo.getMission());
         this.finishCount = missionInfo.getFinishCount();
         this.progress = missionInfo.getProgress();
         this.remainPeriod = missionInfo.getRemainPeriod();
         this.startDate = missionInfo.getCreatedDate();
-        this.endDate = missionInfo.getCreatedDate().plusDays(7);
+        this.endDate = missionInfo.getCreatedDate().plusDays(missionInfo.getMission().getDayCategory().getDay());
         this.missionInfoStatus = missionInfo.getMissionInfoStatus();
     }
 }
