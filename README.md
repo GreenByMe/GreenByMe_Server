@@ -1,6 +1,6 @@
 ## 내가 그린(Green By Me)
 
----
+
 
 Green by me, Green by earth(us)
 
@@ -10,7 +10,6 @@ Green by me, Green by earth(us)
 
 ## 소개
 
----
 
 ### Eco-Friendly
 
@@ -25,7 +24,7 @@ Green by me, Green by earth(us)
 
 * 내 행동의 결과를 시각적으로 꾸며 제공해, 다른 사람들에게 공유 할 수 있어요.
 
----
+
 
 ## 주요 기능
 
@@ -45,7 +44,7 @@ Green by me, Green by earth(us)
 * 카테고리별, 기간별 미션 정보를 제공합니다.
 * 기업의 후원으로 진행되는 특별 캠페인 정보를 우선적으로 제공합니다.
 
----
+
 
 ## Backend
 
