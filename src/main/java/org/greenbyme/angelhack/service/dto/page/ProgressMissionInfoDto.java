@@ -23,6 +23,7 @@ public class ProgressMissionInfoDto {
     private int finishCount;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    private String pictureUrl;
 
     public ProgressMissionInfoDto(MissionInfo missionInfo) {
         this.missionInfoId = missionInfo.getId();
@@ -33,7 +34,7 @@ public class ProgressMissionInfoDto {
         this.endDate = missionInfo.getCreatedDate().plusDays(missionInfo.getMission().getDayCategory().getDay());
         this.current = missionInfo.getProgress();
         this.finishCount = missionInfo.getFinishCount();
-        this.progressRates = (int) current / finishCount * 100;
-
+        this.progressRates = current / finishCount * 100;
+        this.pictureUrl = missionInfo.getMission().getPictureUrl();
     }
 }
