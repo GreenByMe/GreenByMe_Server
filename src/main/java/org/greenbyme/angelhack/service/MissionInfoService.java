@@ -9,6 +9,7 @@ import org.greenbyme.angelhack.domain.missionInfo.MissionInfoStatus;
 import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.domain.user.UserRepository;
 import org.greenbyme.angelhack.exception.ErrorCode;
+import org.greenbyme.angelhack.exception.MissionInfoException;
 import org.greenbyme.angelhack.exception.UserException;
 import org.greenbyme.angelhack.service.dto.missionInfo.InProgressResponseDto;
 import org.greenbyme.angelhack.service.dto.missionInfo.MissionInfoDeleteResponseDto;
@@ -34,6 +35,16 @@ public class MissionInfoService {
     public MissionInfoSaveResponseDto save(Long userId, Long missionId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new NoResultException("존재하지 않는 사용자입니다."));
         Mission mission = missionRepository.findById(missionId).orElseThrow(() -> new NoResultException("존재하지 않는 미션입니다."));
+
+        List<MissionInfo> missionInfoByUserIdAndMissionId = missionInfoRepository.findMissionInfoByUserIdAndMissionId(userId, missionId);
+        for (MissionInfo missionInfo : missionInfoByUserIdAndMissionId) {
+            if(missionInfo.getMissionInfoStatus()==MissionInfoStatus.IN_PROGRESS){
+                throw new MissionInfoException(ErrorCode.ALREADY_EXISTS_MISSION);
+            }
+        }
+
+        user.getMissionInfoList()
+
 
         MissionInfo missionInfo = MissionInfo.builder()
                 .user(user)
