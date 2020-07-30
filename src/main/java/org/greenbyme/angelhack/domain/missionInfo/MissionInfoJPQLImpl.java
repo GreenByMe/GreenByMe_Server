@@ -3,6 +3,7 @@ package org.greenbyme.angelhack.domain.missionInfo;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -29,5 +30,17 @@ public class MissionInfoJPQLImpl implements MissionInfoJPQL{
                 .setParameter("id", missionId)
                 .setParameter("missionInfoStatus", MissionInfoStatus.IN_PROGRESS)
                 .getSingleResult();
+    }
+
+    @Override
+    public List<MissionInfo> findMissionInfoByUserIdAndWhereInProgress(Long userId) {
+        return em.createQuery("select mi from MissionInfo mi"+
+                " join fetch mi.user u"+
+                " where u.id =: id and mi.missionInfoStatus =: missionInfoStatus order by mi.id", MissionInfo.class)
+                .setParameter("id", userId)
+                .setParameter("missionInfoStatus", MissionInfoStatus.IN_PROGRESS)
+                .setFirstResult(0)
+                .setMaxResults(10)
+                .getResultList();
     }
 }

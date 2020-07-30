@@ -4,25 +4,32 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.greenbyme.angelhack.domain.Category.Category;
+import org.greenbyme.angelhack.domain.Category.DayCategory;
 import org.greenbyme.angelhack.domain.mission.Mission;
-
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MissionPopularResponseDto {
 
     private Long missionId;
-    @Enumerated(EnumType.STRING)
     private Category category;
     private String subject;
+    private String description;
+    private String missionPictureUrl;
+    private DayCategory dayCategory;
+    private double expectTree;
+    private double expectCo2;
     private Long passCandidatesCount;
 
     public MissionPopularResponseDto(Mission mission) {
         this.missionId = mission.getId();
         this.category = mission.getCategory();
         this.subject = mission.getSubject();
+        this.description = mission.getDescription();
+        this.missionPictureUrl = mission.getPictureUrl();
+        this.dayCategory = mission.getDayCategory();
+        this.expectTree = mission.getExpectTree();
+        this.expectCo2 = mission.getExpectCo2();
         this.passCandidatesCount = mission.getPassCandidatesCount();
     }
 }
