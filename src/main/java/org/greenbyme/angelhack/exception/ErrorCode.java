@@ -12,7 +12,9 @@ public enum ErrorCode {
     OVER_PROGRESS(2200, "인증 횟수를 초과했습니다"),
     INVALID_POST(3000,"등록되지 않은 인증 id"),
     OVER_CERIFICATION(3100, "하루 인증 횟수를 초과했습니다"),
-    WRONG_ACCESS(3200, "잘못된 접근입니다");
+    WRONG_ACCESS(3200, "잘못된 접근입니다"),
+    ALREADY_EXISTS_MISSION(3300 , "이미 진행중인 미션입니다"),
+    ALREADY_EXISTS_SAME_DAY_MISSION(3300 , "이미 동일한 기간의 미션을 진행중 입니다");
 
     private final Integer code;
     private final String message;
