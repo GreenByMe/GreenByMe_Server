@@ -42,9 +42,13 @@ public class MissionInfoService {
                 throw new MissionInfoException(ErrorCode.ALREADY_EXISTS_MISSION);
             }
         }
+        List<MissionInfo> missionInfoByUserIdAndWhereInProgress = missionInfoRepository.findMissionInfoByUserIdAndWhereInProgress(userId);
 
-        user.getMissionInfoList()
-
+        for (MissionInfo infoByUserIdAndWhereInProgress : missionInfoByUserIdAndWhereInProgress) {
+            if(infoByUserIdAndWhereInProgress.getMission().getDayCategory()==mission.getDayCategory()){
+                throw new MissionInfoException(ErrorCode.ALREADY_EXISTS_SAME_DAY_MISSION);
+            }
+        }
 
         MissionInfo missionInfo = MissionInfo.builder()
                 .user(user)
