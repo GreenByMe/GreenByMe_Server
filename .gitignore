@@ -4,6 +4,9 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+.DS_store
+**.jks
+**.yml
 
 ### STS ###
 .apt_generated
@@ -32,6 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
-
+src/main/resources/**.yml
 src/main/resources/real.yml
 src/main/resources/application-real.yml
+*.p12
