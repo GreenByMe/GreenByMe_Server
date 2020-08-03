@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.greenbyme.angelhack.domain.missionInfo.MissionInfo;
 import org.greenbyme.angelhack.domain.missionInfo.MissionInfoStatus;
-import org.greenbyme.angelhack.service.dto.mission.MissionDetailsDto;
 
 import java.time.LocalDateTime;
 

@@ -6,8 +6,6 @@ import lombok.NoArgsConstructor;
 import org.greenbyme.angelhack.domain.Category.Category;
 import org.greenbyme.angelhack.domain.missionInfo.MissionInfo;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import java.time.LocalDateTime;
 
 @Getter
