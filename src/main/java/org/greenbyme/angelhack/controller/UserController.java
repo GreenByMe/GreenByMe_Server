@@ -1,13 +1,16 @@
 package org.greenbyme.angelhack.controller;
 
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.service.FileUploadDownloadService;
 import org.greenbyme.angelhack.service.UserService;
 import org.greenbyme.angelhack.service.dto.FileUploadResponse;
 import org.greenbyme.angelhack.service.dto.missionInfo.MissionInfobyUserDto;
 import org.greenbyme.angelhack.service.dto.post.PostDetailResponseDto;
 import org.greenbyme.angelhack.service.dto.user.*;
+import org.greenbyme.angelhack.util.JwtTokenProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +33,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService userService;
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
+    private final UserService userService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Autowired
     private FileUploadDownloadService service;
@@ -40,6 +45,13 @@ public class UserController {
     public ResponseEntity<UserResponseDto> saveUser(@RequestBody final UserSaveRequestDto requestDto) {
         UserResponseDto responseDto = userService.saveUser(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+    }
+
+    @ApiOperation(value = "이메일, 패스워드를 받아서 로그인하여 토큰을 반환한다")
+    @PostMapping("/signin")
+    public ResponseEntity<String> signIn(@RequestBody final UserLoginRequestDto userLoginRequestDto) {
+        User user = userService.login(userLoginRequestDto);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(jwtTokenProvider.createToken(user.getId(), user.getRoles()));
     }
 
     @PostMapping("/images")

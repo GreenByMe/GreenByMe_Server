@@ -14,6 +14,7 @@ import org.greenbyme.angelhack.service.dto.missionInfo.MissionInfobyUserDto;
 import org.greenbyme.angelhack.service.dto.post.PostDetailResponseDto;
 import org.greenbyme.angelhack.service.dto.user.*;
 import org.greenbyme.angelhack.util.JwtTokenProvider;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,13 +33,16 @@ public class UserService {
     private final MissionInfoRepository missionInfoRepository;
     private final PostRepository postRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public UserResponseDto saveUser(UserSaveRequestDto requestDto) {
         if (userRepository.findByEmail(requestDto.getEmail()).isPresent()) {
             throw new UserException("이미 가입된 메일입니다", ErrorCode.MEMBER_DUPLICATED_EMAIL);
         }
+        String encodePassword = passwordEncoder.encode(requestDto.getPassword());
         User user = requestDto.toEntity();
+        user.changePassword(encodePassword);
         user = userRepository.save(user);
         return new UserResponseDto(user.getId());
     }
@@ -47,16 +51,6 @@ public class UserService {
         User user = userRepository.findById(userId).
                 orElseThrow(() -> new NoResultException("없는 정보입니다"));
         return new UserDetailResponseDto(user);
-    }
-
-    @Transactional
-    public String createToken(UserLoginRequestDto dto) {
-        String email = dto.getEmail();
-        User user = getUser(email);
-        if (!user.checkPassword(dto.getPassword())) {
-            throw new UserException("틀린 암호입니다", ErrorCode.WRONG_PASSWORD);
-        }
-        return jwtTokenProvider.createToken(dto.getEmail());
     }
 
     private User getUser(final String email) {
@@ -117,11 +111,13 @@ public class UserService {
         return new UserResponseDto(user.getId());
     }
 
-    public Long login(UserLoginRequestDto dto) {
+    public User login(UserLoginRequestDto dto) {
         User user = getUser(dto.getEmail());
-        if( !user.getPassword().equals(dto.getPassword())) {
-            throw new UserException(ErrorCode.WRONG_PASSWORD);
+        String encodePassword = user.getPassword();
+        String rawPassword = dto.getPassword();
+        if (!passwordEncoder.matches(rawPassword, encodePassword)) {
+            throw new UserException("잘못된 비밀번호입니다.", ErrorCode.WRONG_PASSWORD);
         }
-        return user.getId();
+        return user;
     }
 }
