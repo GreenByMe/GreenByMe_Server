@@ -40,25 +40,10 @@ public class MissionController {
     @Autowired
     private FileUploadDownloadService service;
 
-    @PostMapping("/categorys/{category}/dayCategory/{dayCategory}/missionCertificateCount/{missionCertificateCount}")
-    public ResponseEntity<MissionSaveResponseDto> save(@PathVariable("category") final Category category,
-                                                       @PathVariable("dayCategory") final DayCategory dayCategory,
-                                                       @PathVariable("missionCertificateCount") final MissionCertificateCount missionCertificateCount,
-                                                       @RequestBody MissionSaveRequestDto missionSaveRequestDto) {
-        MissionSaveResponseDto missionSaveResponseDto = missionService.save(missionSaveRequestDto, category, dayCategory, missionCertificateCount);
+    @PostMapping
+    public ResponseEntity<MissionSaveResponseDto> save(MissionSaveRequestDto missionSaveRequestDto, @RequestParam("file") MultipartFile file) {
+        MissionSaveResponseDto missionSaveResponseDto = missionService.save(missionSaveRequestDto, file);
         return ResponseEntity.status(HttpStatus.CREATED).body(missionSaveResponseDto);
-    }
-
-    @PostMapping("/images")
-    public FileUploadResponse uploadFile(@RequestParam("file") MultipartFile file) {
-        String fileName = service.storeFile(file);
-
-        String filedUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/missions/images/")
-                .path(fileName)
-                .toUriString();
-
-        return new FileUploadResponse(fileName, filedUrl, file.getContentType(), file.getSize());
     }
 
     @GetMapping("/images/{fileName:.+}")

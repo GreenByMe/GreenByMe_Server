@@ -42,18 +42,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
-    @PostMapping("/images")
-    public FileUploadResponse uploadFile(@RequestParam("file") MultipartFile file) {
-        String fileName = service.storeFile(file);
-
-        String filedUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/users/images/")
-                .path(fileName)
-                .toUriString();
-
-        return new FileUploadResponse(fileName, filedUrl, file.getContentType(), file.getSize());
-    }
-
     @GetMapping("/images/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request){
         // Load file as Resource
@@ -109,7 +97,7 @@ public class UserController {
     }
 
     @PutMapping("/image")
-    public ResponseEntity<UserResponseDto> updateUserPhotos(final UserUpdatePhotoDto dto) {
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.updatePhotos(dto));
+    public ResponseEntity<UserResponseDto> updateUserPhotos(final UserUpdatePhotoDto dto, @RequestParam("file") MultipartFile file) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.updatePhotos(dto, file));
     }
 }
