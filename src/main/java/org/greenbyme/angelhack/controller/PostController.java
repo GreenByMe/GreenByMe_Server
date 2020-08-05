@@ -35,21 +35,9 @@ public class PostController {
     private FileUploadDownloadService service;
 
     @PostMapping
-    public ResponseEntity<PostSaveResponseDto> savePost(@RequestBody PostSaveRequestDto requestDto) throws IOException {
-        PostSaveResponseDto responseDto = postService.savePosts(requestDto);
+    public ResponseEntity<PostSaveResponseDto> savePost(PostSaveRequestDto requestDto, @RequestParam("file") MultipartFile file) throws IOException {
+        PostSaveResponseDto responseDto = postService.savePosts(requestDto, file);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
-    }
-
-    @PostMapping("/images")
-    public FileUploadResponse uploadFile(@RequestParam("file") MultipartFile file) {
-        String fileName = service.storeFile(file);
-
-        String filedUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/posts/images/")
-                .path(fileName)
-                .toUriString();
-
-        return new FileUploadResponse(fileName, filedUrl, file.getContentType(), file.getSize());
     }
 
     @GetMapping("/images/{fileName:.+}")

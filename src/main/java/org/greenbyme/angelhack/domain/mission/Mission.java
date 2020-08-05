@@ -66,6 +66,10 @@ public class Mission extends BaseTimeEntity {
         this.missionCertificationMethod = missionCertificationMethod;
     }
 
+    public void changePictureUrl(String pictureUrl){
+        this.pictureUrl = pictureUrl;
+    }
+
     public void addPassCandidates() {
         this.passCandidatesCount += 1;
     }

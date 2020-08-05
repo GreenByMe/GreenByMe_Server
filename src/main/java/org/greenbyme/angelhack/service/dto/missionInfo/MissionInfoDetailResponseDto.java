@@ -6,8 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.greenbyme.angelhack.domain.missionInfo.MissionInfo;
 import org.greenbyme.angelhack.domain.missionInfo.MissionInfoStatus;
+import org.greenbyme.angelhack.domain.missionInfo.RemainPeriod;
 import org.greenbyme.angelhack.service.dto.mission.MissionDetailsDto;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Getter
@@ -18,7 +20,7 @@ public class MissionInfoDetailResponseDto {
     private MissionAndMissionDetailsDto missionDetailsDto;
     private int finishCount;
     private int progress;
-    private int remainPeriod;
+    private RemainPeriod remainPeriod;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private MissionInfoStatus missionInfoStatus;

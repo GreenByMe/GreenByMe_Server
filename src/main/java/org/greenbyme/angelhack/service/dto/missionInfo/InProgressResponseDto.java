@@ -4,7 +4,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.greenbyme.angelhack.domain.missionInfo.MissionInfo;
+import org.greenbyme.angelhack.domain.missionInfo.RemainPeriod;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Getter
@@ -18,6 +20,7 @@ public class InProgressResponseDto {
     private Long manyPeople;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    private RemainPeriod remainPeriod;
     private String pictureUrl;
 
     public InProgressResponseDto(MissionInfo missionInfo, Long manyPeople) {
@@ -28,6 +31,8 @@ public class InProgressResponseDto {
         this.manyPeople = manyPeople;
         this.startDate = missionInfo.getCreatedDate();
         this.endDate = missionInfo.getCreatedDate().plusDays(missionInfo.getMission().getDayCategory().getDay());
+        this.remainPeriod = missionInfo.getRemainPeriod();
         this.pictureUrl = missionInfo.getMission().getPictureUrl();
+
     }
 }

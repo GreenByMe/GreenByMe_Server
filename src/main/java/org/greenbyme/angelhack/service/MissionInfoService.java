@@ -84,4 +84,12 @@ public class MissionInfoService {
                 .filter(m->m.getMissionInfoStatus().equals(MissionInfoStatus.IN_PROGRESS))
                 .count();
     }
+
+    @Transactional
+    public void changeRemainPeriod(){
+        List<MissionInfo> byMissionInfoStatusEquals = missionInfoRepository.findByMissionInfoStatusEquals(MissionInfoStatus.IN_PROGRESS);
+        for (MissionInfo missionInfo : byMissionInfoStatusEquals) {
+            missionInfo.changeRemainPeriod();
+        }
+    }
 }
