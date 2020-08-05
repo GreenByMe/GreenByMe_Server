@@ -12,8 +12,11 @@ import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.domain.user.UserRepository;
 import org.greenbyme.angelhack.exception.*;
 import org.greenbyme.angelhack.service.dto.post.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,8 +33,12 @@ public class PostService {
     private final MissionInfoRepository missionInfoRepository;
     private final MissionRepository missionRepository;
 
+    @Autowired
+    private FileUploadDownloadService service;
+
     @Transactional
-    public PostSaveResponseDto savePosts(final PostSaveRequestDto requestDto) {
+    public PostSaveResponseDto savePosts(final PostSaveRequestDto requestDto, MultipartFile file) {
+        System.out.println("requestDto.getUserId() = " + requestDto.getUserId());
         MissionInfo missionInfo = missionInfoRepository.findById(requestDto.getMissionInfoId())
                 .orElseThrow(() -> new MissionException(ErrorCode.INVALID_MISSIONINFO));
         User user = userRepository.findById(requestDto.getUserId())
@@ -46,7 +53,20 @@ public class PostService {
         if (postCount > 0) {
             throw new PostException(ErrorCode.OVER_CERIFICATION);
         }
-        Post savePost = new Post(user, missionInfo, requestDto.getText(), requestDto.getTitle(), requestDto.getPictureUrl(), requestDto.getOpen());
+
+        String fileName = service.storeFile(file);
+        String filedUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api/posts/images/")
+                .path(fileName)
+                .toUriString();
+
+        Post savePost = Post.builder()
+                .user(user)
+                .missionInfo(missionInfo)
+                .text(requestDto.getText())
+                .title(requestDto.getTitle())
+                .picture(filedUrl)
+                .open(requestDto.getOpen()).build();
         savePost = postRepository.save(savePost);
         missionInfo.addProgress();
         if (missionInfo.isEnd()) {
