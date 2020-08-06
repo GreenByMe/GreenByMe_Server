@@ -53,43 +53,24 @@ public class UserController {
         User user = userService.login(userLoginRequestDto);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(jwtTokenProvider.createToken(user.getId(), user.getRoles()));
     }
-
-    @PostMapping("/images")
-    public FileUploadResponse uploadFile(@RequestParam("file") MultipartFile file) {
-        String fileName = service.storeFile(file);
-
-        String filedUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/users/images/")
-                .path(fileName)
-                .toUriString();
-
-        return new FileUploadResponse(fileName, filedUrl, file.getContentType(), file.getSize());
-    }
-
+  
     @GetMapping("/images/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request){
-        // Load file as Resource
         Resource resource = service.loadFileAsResource(fileName);
-
-        // Try to determine file's content type
         String contentType = null;
         try {
             contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
         } catch (IOException ex) {
             logger.info("Could not determine file type.");
         }
-
-        // Fallback to the default content type if type could not be determined
         if(contentType == null) {
             contentType = "application/octet-stream";
         }
-
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
     }
-
 
     @GetMapping("/{userId}")
     public ResponseEntity<UserDetailResponseDto> getUserDetail(@PathVariable("userId") final Long userId) {
@@ -121,7 +102,7 @@ public class UserController {
     }
 
     @PutMapping("/image")
-    public ResponseEntity<UserResponseDto> updateUserPhotos(final UserUpdatePhotoDto dto) {
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.updatePhotos(dto));
+    public ResponseEntity<UserResponseDto> updateUserPhotos(final UserUpdatePhotoDto dto, @RequestParam("file") MultipartFile file) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.updatePhotos(dto, file));
     }
 }

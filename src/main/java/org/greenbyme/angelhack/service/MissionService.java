@@ -10,10 +10,13 @@ import org.greenbyme.angelhack.domain.mission.MissionRepository;
 import org.greenbyme.angelhack.domain.missionInfo.MissionInfo;
 import org.greenbyme.angelhack.domain.missionInfo.MissionInfoRepository;
 import org.greenbyme.angelhack.service.dto.mission.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.persistence.NoResultException;
 import java.util.List;
@@ -26,24 +29,34 @@ public class MissionService {
     private final MissionRepository missionRepository;
     private final MissionInfoRepository missionInfoRepository;
 
+    @Autowired
+    private FileUploadDownloadService service;
+
     @Transactional
-    public MissionSaveResponseDto save(MissionSaveRequestDto missionSaveRequestDto, Category category, DayCategory dayCategory, MissionCertificateCount missionCertificateCount) {
+    public MissionSaveResponseDto save(MissionSaveRequestDto missionSaveRequestDto, MultipartFile file) {
 
-        Mission mission = missionSaveRequestDto.toEntity();
-        mission.changeCategory(category);
-        mission.changeDayCategory(dayCategory);
+        String fileName = service.storeFile(file);
+        String filedUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api/missions/images/")
+                .path(fileName)
+                .toUriString();
+        MissionCertificationMethod missionCertificationMethod = MissionCertificationMethod.builder()
+                .text(missionSaveRequestDto.getMissionCertificationText())
+                .title(missionSaveRequestDto.getMissionCertificationTitle())
+                .missionCertificateCount(missionSaveRequestDto.getMissionCertificateCount())
+                .build();
 
-        String title = missionSaveRequestDto.getMissionCertificationMethodRequestDto().getTitle();
-        String text = missionSaveRequestDto.getMissionCertificationMethodRequestDto().getText();
-
-        mission.changeMissionCertificationMethod(MissionCertificationMethod.builder()
-                .title(title)
-                .text(text)
-                .missionCertificateCount(missionCertificateCount)
-                .build());
+        Mission mission = Mission.builder()
+                .category(missionSaveRequestDto.getCategory())
+                .subject(missionSaveRequestDto.getSubject())
+                .description(missionSaveRequestDto.getDescription())
+                .dayCategory(missionSaveRequestDto.getDayCategory())
+                .expectCo2(missionSaveRequestDto.getExpectCo2())
+                .pictureUrl(filedUrl)
+                .missionCertificationMethod(missionCertificationMethod)
+                .build();
 
         missionRepository.save(mission);
-
         return new MissionSaveResponseDto(mission);
     }
 

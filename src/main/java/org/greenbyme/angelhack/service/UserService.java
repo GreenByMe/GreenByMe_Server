@@ -15,8 +15,11 @@ import org.greenbyme.angelhack.service.dto.post.PostDetailResponseDto;
 import org.greenbyme.angelhack.service.dto.user.*;
 import org.greenbyme.angelhack.util.JwtTokenProvider;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.persistence.NoResultException;
 import java.time.LocalDateTime;
@@ -34,6 +37,8 @@ public class UserService {
     private final PostRepository postRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private FileUploadDownloadService service;
 
     @Transactional
     public UserResponseDto saveUser(UserSaveRequestDto requestDto) {
@@ -97,6 +102,7 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public UserResponseDto updateNickName(UserUpdateNicktDto dto) {
         User user = userRepository.findById(dto.getUserId())
                 .orElseThrow(()->new UserException(ErrorCode.UNSIGNED_USER));
@@ -104,10 +110,18 @@ public class UserService {
         return new UserResponseDto(user.getId());
     }
 
-    public UserResponseDto updatePhotos(UserUpdatePhotoDto dto) {
+    @Transactional
+    public UserResponseDto updatePhotos(UserUpdatePhotoDto dto, MultipartFile file) {
         User user = userRepository.findById(dto.getUserId())
                 .orElseThrow(()->new UserException(ErrorCode.UNSIGNED_USER));
-        user.changePhoto(dto.getPhotoUrl());
+
+        String fileName = service.storeFile(file);
+        String filedUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api/users/images/")
+                .path(fileName)
+                .toUriString();
+
+        user.changePhoto(filedUrl);
         return new UserResponseDto(user.getId());
     }
 

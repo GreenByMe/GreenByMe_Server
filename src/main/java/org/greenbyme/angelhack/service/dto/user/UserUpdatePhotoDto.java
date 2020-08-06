@@ -9,5 +9,8 @@ import lombok.NoArgsConstructor;
 public class UserUpdatePhotoDto {
 
     private Long userId;
-    private String photoUrl;
+
+    public UserUpdatePhotoDto(Long userId) {
+        this.userId = userId;
+    }
 }
