@@ -3,10 +3,7 @@ package org.greenbyme.angelhack.service.dto.page;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.greenbyme.angelhack.domain.mission.Mission;
-import org.greenbyme.angelhack.domain.missionInfo.MissionInfo;
 import org.greenbyme.angelhack.domain.user.User;
-import org.greenbyme.angelhack.service.dto.mission.MissionPopularResponseDto;
 import org.greenbyme.angelhack.service.dto.missionInfo.InProgressResponseDto;
 import org.springframework.data.domain.Page;
 
