@@ -1,10 +1,7 @@
 package org.greenbyme.angelhack.controller;
 
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.service.MissionInfoService;
 import org.greenbyme.angelhack.service.dto.missionInfo.InProgressResponseDto;
 import org.greenbyme.angelhack.service.dto.missionInfo.MissionInfoDeleteResponseDto;
@@ -12,9 +9,7 @@ import org.greenbyme.angelhack.service.dto.missionInfo.MissionInfoDetailResponse
 import org.greenbyme.angelhack.service.dto.missionInfo.MissionInfoSaveResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -26,11 +21,9 @@ public class MissionInfoController {
 
     private final MissionInfoService missionInfoService;
 
-    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
-    @PostMapping("/missions/{missionId}")
-    public ResponseEntity<MissionInfoSaveResponseDto> join(@ApiIgnore final Authentication authentication,
+    @PostMapping("/users/{userId}/missions/{missionId}")
+    public ResponseEntity<MissionInfoSaveResponseDto> join(@PathVariable("userId") final Long userId,
                                                            @PathVariable("missionId") final Long missionId) {
-        Long userId = ((User) authentication.getPrincipal()).getId();
         MissionInfoSaveResponseDto missionInfoSaveResponseDto = missionInfoService.save(userId, missionId);
         return ResponseEntity.status(HttpStatus.CREATED).body(missionInfoSaveResponseDto);
     }
@@ -47,10 +40,8 @@ public class MissionInfoController {
         return ResponseEntity.status(HttpStatus.OK).body(missionInfoDeleteResponseDto);
     }
 
-    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
-    @GetMapping
-    public ResponseEntity<List<InProgressResponseDto>> getMissionInfosInProgress(@ApiIgnore final Authentication authentication) {
-        Long userId = ((User) authentication.getPrincipal()).getId();
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<List<InProgressResponseDto>> getMissionInfosInProgress(@PathVariable("userId") final Long userId) {
         List<InProgressResponseDto> responseDto = missionInfoService.getMissionInfoInProgress(userId);
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
