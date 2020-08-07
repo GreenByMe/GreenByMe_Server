@@ -1,12 +1,13 @@
 package org.greenbyme.angelhack.controller;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.service.FileUploadDownloadService;
 import org.greenbyme.angelhack.service.UserService;
-import org.greenbyme.angelhack.service.dto.FileUploadResponse;
 import org.greenbyme.angelhack.service.dto.missionInfo.MissionInfobyUserDto;
 import org.greenbyme.angelhack.service.dto.post.PostDetailResponseDto;
 import org.greenbyme.angelhack.service.dto.user.*;
@@ -19,9 +20,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -72,26 +74,33 @@ public class UserController {
                 .body(resource);
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<UserDetailResponseDto> getUserDetail(@PathVariable("userId") final Long userId) {
+    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
+    @GetMapping
+    public ResponseEntity<UserDetailResponseDto> getUserDetail(@ApiIgnore final Authentication authentication) {
+        Long userId = ((User) authentication.getPrincipal()).getId();
         return ResponseEntity.status(HttpStatus.OK).body(userService.getUserDetail(userId));
     }
 
-
-    @GetMapping("/{userId}/expectTreeCo2")
-    public ResponseEntity<UserExpectTreeCo2ResponseDto> getUserExpectTreeCo2(@PathVariable("userId") Long id){
-        UserExpectTreeCo2ResponseDto userExpectTreeCo2 = userService.getUserExpectTreeCo2(id);
+    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
+    @GetMapping("/expectTreeCo2")
+    public ResponseEntity<UserExpectTreeCo2ResponseDto> getUserExpectTreeCo2(@ApiIgnore final Authentication authentication) {
+        Long userId = ((User) authentication.getPrincipal()).getId();
+        UserExpectTreeCo2ResponseDto userExpectTreeCo2 = userService.getUserExpectTreeCo2(userId);
         return ResponseEntity.status(HttpStatus.OK).body(userExpectTreeCo2);
     }
 
-    @GetMapping("/{userId}/missionInfos")
-    public ResponseEntity<List<MissionInfobyUserDto>> getUserMissionInfoList(@PathVariable("userId") final Long userId) {
+    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
+    @GetMapping("/missionInfos")
+    public ResponseEntity<List<MissionInfobyUserDto>> getUserMissionInfoList(@ApiIgnore final Authentication authentication) {
+        Long userId = ((User) authentication.getPrincipal()).getId();
         List<MissionInfobyUserDto> dto = userService.getMissionInfoList(userId);
         return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
-    @GetMapping("/{userId}/posts")
-    public ResponseEntity<List<PostDetailResponseDto>> getUserPostList(@PathVariable("userId") final Long userId) {
+    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
+    @GetMapping("/posts")
+    public ResponseEntity<List<PostDetailResponseDto>> getUserPostList(@ApiIgnore final Authentication authentication) {
+        Long userId = ((User) authentication.getPrincipal()).getId();
         List<PostDetailResponseDto> dto = userService.getPostList(userId);
         return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
