@@ -6,7 +6,6 @@ build/
 !**/src/test/**/build/
 .DS_store
 **.jks
-**.yml
 
 ### STS ###
 .apt_generated
