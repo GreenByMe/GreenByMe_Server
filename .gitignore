@@ -35,7 +35,4 @@ out/
 
 ### VS Code ###
 .vscode/
-src/main/resources/**.yml
-src/main/resources/real.yml
-src/main/resources/application-real.yml
 *.p12
