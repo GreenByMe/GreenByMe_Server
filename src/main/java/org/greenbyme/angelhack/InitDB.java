@@ -15,6 +15,7 @@ import org.greenbyme.angelhack.service.dto.user.UserResponseDto;
 import org.greenbyme.angelhack.service.dto.user.UserSaveRequestDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +29,7 @@ import java.util.Arrays;
 public class InitDB {
 
     private final InitService initService;
-
+    private static final Logger logger = LoggerFactory.getLogger(InitService.class);
 
     @PostConstruct
     public void init(){
@@ -41,19 +42,18 @@ public class InitDB {
      static class InitService {
 
         private final EntityManager em;
-        private final UserService userService;
-        private static final Logger logger = LoggerFactory.getLogger(InitService.class);
+        private final PasswordEncoder passwordEncoder;
+
         public void dbInit1(){
-
-            UserSaveRequestDto userSaveRequestDto = new UserSaveRequestDto("김민석", "test" , "test", "민석굴암");
-            UserResponseDto userResponseDto = userService.saveUser(userSaveRequestDto);
-            User findUser = em.createQuery("select u from User u" +
-                    " where u.id =: id", User.class)
-                    .setParameter("id", userResponseDto.getUserId())
-                    .getSingleResult();
-            findUser.changePhoto("http://cafecube.iptime.org:10080/api/users/images/e1dc9a1d-215a-4767-b813-d5c10aca3579_testUser.jpg");
-            logger.info("testUser: {} 저장 완료", userSaveRequestDto.getName());
-
+            User testUser = User.builder()
+                    .name("김민석")
+                    .email("test")
+                    .password(passwordEncoder.encode("test"))
+                    .nickname("민석굴암")
+                    .photo("http://cafecube.iptime.org:10080/api/users/images/e1dc9a1d-215a-4767-b813-d5c10aca3579_testUser.jpg")
+                    .build();
+            em.persist(testUser);
+            logger.info("testUser: {} 저장 완료", testUser.getName());
 
             MissionCertificationMethod disposable = MissionCertificationMethod.builder()
                     .title("인증 방법")
