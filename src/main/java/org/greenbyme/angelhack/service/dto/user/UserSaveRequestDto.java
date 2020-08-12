@@ -14,6 +14,13 @@ public class UserSaveRequestDto {
     private String password;
     private String nickname;
 
+    public UserSaveRequestDto(String name, String email, String password, String nickname) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.nickname = nickname;
+    }
+
     public User toEntity() {
         return User.builder()
                 .name(name)
