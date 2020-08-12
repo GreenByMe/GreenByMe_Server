@@ -1,6 +1,7 @@
 package org.greenbyme.angelhack;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.greenbyme.angelhack.controller.UserController;
 import org.greenbyme.angelhack.domain.Category.Category;
 import org.greenbyme.angelhack.domain.Category.DayCategory;
@@ -26,10 +27,12 @@ import java.util.Arrays;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class InitDB {
 
+    private static final Logger logger = LoggerFactory.getLogger(InitDB.class);
+
     private final InitService initService;
-    private static final Logger logger = LoggerFactory.getLogger(InitService.class);
 
     @PostConstruct
     public void init(){
