@@ -67,7 +67,6 @@ public class MissionController {
                 .body(resource);
     }
 
-
     @GetMapping("/{mission_id}")
     public ResponseEntity<MissionDetailsDto> findOneDetail(@PathVariable("mission_id") final Long id) {
         MissionDetailsDto missionDetailsDto = missionService.findById(id);
