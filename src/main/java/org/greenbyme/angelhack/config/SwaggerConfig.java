@@ -32,7 +32,7 @@ public class SwaggerConfig {
                 .description("Green by me, Green by earth(us)")
                 .version("2.2")
                 .termsOfServiceUrl("Terms of service")
-                .contact(new Contact("Tae Jeong, Da hoon", "https://github.com/GreenByMe/GreenByMe_Server", "xowjd41@naver.com"))
+                .contact(new Contact("Tae Jeong, Da hun", "https://github.com/GreenByMe/GreenByMe_Server", "xowjd41@naver.com"))
                 .license("Apache License Version 2.0")
                 .licenseUrl("https://www.apache.org/licenses/LICENSE-2.0")
                 .build();

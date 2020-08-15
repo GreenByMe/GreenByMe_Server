@@ -1,6 +1,5 @@
 package org.greenbyme.angelhack.service;
 
-
 import org.greenbyme.angelhack.domain.Category.Category;
 import org.greenbyme.angelhack.domain.Category.DayCategory;
 import org.greenbyme.angelhack.domain.mission.MissionCertificateCount;

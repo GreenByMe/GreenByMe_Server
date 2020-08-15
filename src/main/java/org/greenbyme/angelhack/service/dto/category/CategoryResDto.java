@@ -11,10 +11,9 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CategoryResDto {
 
-    List<Category> categories;
+    private List<Category> categories;
 
     public CategoryResDto(List<Category> categories){
         this.categories = categories;
     }
-
 }
