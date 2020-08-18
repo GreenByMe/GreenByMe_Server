@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostUpdateRequestDto {
 
-    private Long userId;
     private String title;
     private String text;
     private Boolean open;

@@ -37,13 +37,11 @@ public class PostService {
     private FileUploadDownloadService service;
 
     @Transactional
-    public PostSaveResponseDto savePosts(final PostSaveRequestDto requestDto, MultipartFile file) {
-        System.out.println("requestDto.getUserId() = " + requestDto.getUserId());
+    public PostSaveResponseDto savePosts(Long userId, PostSaveRequestDto requestDto, MultipartFile file) {
         MissionInfo missionInfo = missionInfoRepository.findById(requestDto.getMissionInfoId())
                 .orElseThrow(() -> new MissionException(ErrorCode.INVALID_MISSIONINFO));
-        User user = userRepository.findById(requestDto.getUserId())
-                .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
-        if(!missionInfo.getUser().getId().equals(user.getId())) {
+        User user = getUser(userId);
+        if (!missionInfo.getUser().getId().equals(user.getId())) {
             throw new PostException(ErrorCode.WRONG_ACCESS);
         }
         List<Post> posts = postRepository.findAllByUserAndMissionInfo(user, missionInfo);
@@ -94,12 +92,11 @@ public class PostService {
     }
 
     public List<PostResponseDto> getPostsByUser(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
+        User user = getUser(userId);
         return postRepository.findAllByUser(user)
                 .stream()
                 .map(p -> new PostResponseDto(p.getId(), user.getNickname(), p.getPicture(), p.getThumbsUp()))
-                .sorted((a,b) -> a.compareTo(b))
+                .sorted(PostResponseDto::compareTo)
                 .collect(Collectors.toList());
     }
 
@@ -109,10 +106,10 @@ public class PostService {
     }
 
     @Transactional
-    public PostUpdateResponseDto updatePost(Long postId, PostUpdateRequestDto requestDto) {
+    public PostUpdateResponseDto updatePost(Long userId, Long postId, PostUpdateRequestDto requestDto) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostException(ErrorCode.INVALID_POST));
-        if (!post.getUser().getId().equals(requestDto.getUserId())) {
+        if (!post.getUser().getId().equals(userId)) {
             throw new IllegalArgumentException("올바르지 않은 사용자 ID");
         }
         post.update(requestDto);
@@ -124,5 +121,10 @@ public class PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostException(ErrorCode.INVALID_POST));
         post.thumbsUp();
+    }
+
+    private User getUser(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
     }
 }
