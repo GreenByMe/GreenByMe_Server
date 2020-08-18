@@ -31,6 +31,7 @@ public class Mission extends BaseTimeEntity {
     @Embedded
     private MissionCertificationMethod missionCertificationMethod;
 
+    @Column(name = "mission_title")
     private String title;
     private String subject;
     private String description;
