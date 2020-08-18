@@ -8,6 +8,8 @@ import org.greenbyme.angelhack.domain.missionInfo.MissionInfo;
 import org.greenbyme.angelhack.domain.missionInfo.MissionInfoRepository;
 import org.greenbyme.angelhack.domain.post.Post;
 import org.greenbyme.angelhack.domain.post.PostRepository;
+import org.greenbyme.angelhack.domain.postlike.PostLike;
+import org.greenbyme.angelhack.domain.postlike.PostLikeRepository;
 import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.domain.user.UserRepository;
 import org.greenbyme.angelhack.exception.*;
@@ -30,6 +32,7 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final PostLikeRepository postLikeRepository;
     private final MissionInfoRepository missionInfoRepository;
     private final MissionRepository missionRepository;
 
@@ -37,13 +40,11 @@ public class PostService {
     private FileUploadDownloadService service;
 
     @Transactional
-    public PostSaveResponseDto savePosts(final PostSaveRequestDto requestDto, MultipartFile file) {
-        System.out.println("requestDto.getUserId() = " + requestDto.getUserId());
+    public PostSaveResponseDto savePosts(Long userId, PostSaveRequestDto requestDto, MultipartFile file) {
         MissionInfo missionInfo = missionInfoRepository.findById(requestDto.getMissionInfoId())
                 .orElseThrow(() -> new MissionException(ErrorCode.INVALID_MISSIONINFO));
-        User user = userRepository.findById(requestDto.getUserId())
-                .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
-        if(!missionInfo.getUser().getId().equals(user.getId())) {
+        User user = getUser(userId);
+        if (!missionInfo.getUser().getId().equals(user.getId())) {
             throw new PostException(ErrorCode.WRONG_ACCESS);
         }
         List<Post> posts = postRepository.findAllByUserAndMissionInfo(user, missionInfo);
@@ -83,23 +84,21 @@ public class PostService {
         return missionInfoRepository.findAllByMission(mission)
                 .stream()
                 .map(postRepository::findByMissionInfo)
-                .map(p -> new PostResponseDto(p.getId(), p.getUser().getNickname(), p.getPicture(), p.getThumbsUp()))
+                .map(p -> new PostResponseDto(p.getId(), p.getUser().getNickname(), p.getPicture(), p.getPostLikes().size()))
                 .collect(Collectors.toList());
     }
 
     public PostDetailResponseDto getPostDetail(Long postId) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new PostException(ErrorCode.INVALID_POST));
+        Post post = getPost(postId);
         return new PostDetailResponseDto(post);
     }
 
     public List<PostResponseDto> getPostsByUser(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
+        User user = getUser(userId);
         return postRepository.findAllByUser(user)
                 .stream()
-                .map(p -> new PostResponseDto(p.getId(), user.getNickname(), p.getPicture(), p.getThumbsUp()))
-                .sorted((a,b) -> a.compareTo(b))
+                .map(p -> new PostResponseDto(p.getId(), user.getNickname(), p.getPicture(), p.getPostLikes().size()))
+                .sorted(PostResponseDto::compareTo)
                 .collect(Collectors.toList());
     }
 
@@ -109,10 +108,9 @@ public class PostService {
     }
 
     @Transactional
-    public PostUpdateResponseDto updatePost(Long postId, PostUpdateRequestDto requestDto) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new PostException(ErrorCode.INVALID_POST));
-        if (!post.getUser().getId().equals(requestDto.getUserId())) {
+    public PostUpdateResponseDto updatePost(Long userId, Long postId, PostUpdateRequestDto requestDto) {
+        Post post = getPost(postId);
+        if (!post.getUser().getId().equals(userId)) {
             throw new IllegalArgumentException("올바르지 않은 사용자 ID");
         }
         post.update(requestDto);
@@ -120,9 +118,25 @@ public class PostService {
     }
 
     @Transactional
-    public void thumbsUp(Long postId) {
-        Post post = postRepository.findById(postId)
+    public void thumbsUp(Long postId, Long userId) {
+        Post post = getPost(postId);
+        User user = getUser(userId);
+        if (postLikeRepository.findByUserAndPost(user, post).isPresent()) {
+            PostLike postLike = postLikeRepository.findByUserAndPost(user, post).get();
+            postLike.remove();
+            postLikeRepository.delete(postLike);
+        } else {
+            postLikeRepository.save(new PostLike(post, user));
+        }
+    }
+
+    private Post getPost(Long postId) {
+        return postRepository.findById(postId)
                 .orElseThrow(() -> new PostException(ErrorCode.INVALID_POST));
-        post.thumbsUp();
+    }
+
+    private User getUser(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
     }
 }

@@ -16,6 +16,7 @@ public class MissionFindAllResponseDto {
     private Long id;
     private Category category;
     private DayCategory dayCategory;
+    private String title;
     private String subject;
     private String description;
     private String pictureUrl;
@@ -26,6 +27,7 @@ public class MissionFindAllResponseDto {
         this.id = mission.getId();
         this.category = mission.getCategory();
         this.dayCategory = mission.getDayCategory();
+        this.title = mission.getTitle();
         this.subject = mission.getSubject();
         this.description = mission.getDescription();
         this.pictureUrl = mission.getPictureUrl();

@@ -18,6 +18,7 @@ public class MissionDetailsDto {
     private Long id;
     private Category category;
     private DayCategory dayCategory;
+    private String title;
     private String subject;
     private String description;
     private double expectTree;
@@ -31,14 +32,15 @@ public class MissionDetailsDto {
 
     @Builder
     public MissionDetailsDto(Mission mission, Long progressByMissionId) {
-        id = mission.getId();
-        category = mission.getCategory();
-        dayCategory = mission.getDayCategory();
-        subject = mission.getSubject();
-        description = mission.getDescription();
-        expectTree = mission.getExpectTree();
-        expectCo2 = mission.getExpectCo2();
-        missionCertificationMethod = mission.getMissionCertificationMethod();
+        this.id = mission.getId();
+        this.category = mission.getCategory();
+        this.dayCategory = mission.getDayCategory();
+        this.title = mission.getTitle();
+        this.subject = mission.getSubject();
+        this.description = mission.getDescription();
+        this.expectTree = mission.getExpectTree();
+        this.expectCo2 = mission.getExpectCo2();
+        this.missionCertificationMethod = mission.getMissionCertificationMethod();
         this.pictureUrl= mission.getPictureUrl();
         this.startDate = LocalDateTime.now();
         this.endDate = LocalDateTime.now().plusDays(mission.getDayCategory().getDay());

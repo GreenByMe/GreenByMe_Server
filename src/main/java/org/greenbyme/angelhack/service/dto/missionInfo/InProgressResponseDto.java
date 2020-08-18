@@ -25,7 +25,7 @@ public class InProgressResponseDto {
 
     public InProgressResponseDto(MissionInfo missionInfo, Long manyPeople) {
         this.missionInfoId = missionInfo.getId();
-        this.missionTitle = missionInfo.getMission().getSubject();
+        this.missionTitle = missionInfo.getMission().getTitle();
         this.finishCount = missionInfo.getFinishCount();
         this.progress = missionInfo.getProgress();
         this.manyPeople = manyPeople;

@@ -25,7 +25,7 @@ public class PostDetailResponseDto {
         this.title = post.getTitle();
         this.nickName = post.getUser().getNickname();
         this.picture = post.getPicture();
-        this.thumbsUp = post.getThumbsUp();
+        this.thumbsUp = post.getPostLikes().size();
         this.text = post.getText();
         this.createDate = post.getCreatedDate();
         this.lastModifiedDate = post.getLastModifiedDate();

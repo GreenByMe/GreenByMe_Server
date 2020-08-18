@@ -20,7 +20,7 @@ import java.time.temporal.ChronoUnit;
 public class MissionInfo extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "missioninfo_id")
     private Long id;
 
