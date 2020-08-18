@@ -83,7 +83,8 @@ public class InitDB {
                     .build();
             Mission mission2 = Mission.builder()
                     .category(Category.ENERGY)
-                    .subject("이번주는 자전거로 이동해보는 것 어떨까요?")
+                    .subject("자전거를 이용해보아요")
+                    .title("이번 주는 자전거로 이동해보는 것 어떨까요?")
                     .description("왜 자전거인가요? <br> 자전거는 도보와 마찬가지로 이동할 때 <br>오염물질을 전혀 배출하지 않아요 ")
                     .dayCategory(DayCategory.WEEK)
                     .missionCertificationMethod(energy)
@@ -101,6 +102,7 @@ public class InitDB {
             Mission mission3 = Mission.builder()
                     .category(Category.TRAFFIC)
                     .subject("버스를 이용해보아요")
+                    .title("이번 달은 버스로 이동해보는 것  어떨까요?")
                     .description("왜 버스인가요? <br> 자동차보다 매연 감소율이 어마무시하답니다.")
                     .dayCategory(DayCategory.MONTH)
                     .missionCertificationMethod(traffic)
