@@ -53,7 +53,7 @@ public class InitDB {
                     .email("test")
                     .password(passwordEncoder.encode("test"))
                     .nickname("민석굴암")
-                    .photo("http://cafecube.iptime.org:10080/api/users/images/e1dc9a1d-215a-4767-b813-d5c10aca3579_testUser.jpg")
+                    .photo("https://cafecube.iptime.org/api/users/images/e1dc9a1d-215a-4767-b813-d5c10aca3579_testUser.jpg")
                     .build();
             em.persist(testUser);
             logger.info("testUser: {} 저장 완료", testUser.getName());
@@ -70,7 +70,7 @@ public class InitDB {
                     .dayCategory(DayCategory.DAY)
                     .missionCertificationMethod(disposable)
                     .expectCo2(1)
-                    .pictureUrl("http://cafecube.iptime.org:10080/api/missions/images/0677c01f-0f3b-4aea-b449-380852cf8b1e_%EC%9D%BC%ED%9A%8C%EC%9A%A9%ED%92%88%20%EB%AF%B8%EC%85%981.PNG")
+                    .pictureUrl("https://cafecube.iptime.org/api/missions/images/0677c01f-0f3b-4aea-b449-380852cf8b1e_%EC%9D%BC%ED%9A%8C%EC%9A%A9%ED%92%88%20%EB%AF%B8%EC%85%981.PNG")
                     .build();
             em.persist(mission1);
             logger.info("mission1: {} 저장완료", mission1.getSubject());
@@ -87,7 +87,7 @@ public class InitDB {
                     .dayCategory(DayCategory.WEEK)
                     .missionCertificationMethod(energy)
                     .expectCo2(1.6)
-                    .pictureUrl("http://cafecube.iptime.org:10080/api/missions/images/2610c808-2377-4ea4-94f1-3f15263cb6a6_%EC%97%90%EB%84%88%EC%A7%80%EC%A4%84%EC%9D%B4%EA%B8%B0%20%EB%AF%B8%EC%85%981.PNG")
+                    .pictureUrl("https://cafecube.iptime.org/api/missions/images/2610c808-2377-4ea4-94f1-3f15263cb6a6_%EC%97%90%EB%84%88%EC%A7%80%EC%A4%84%EC%9D%B4%EA%B8%B0%20%EB%AF%B8%EC%85%981.PNG")
                     .build();
             em.persist(mission2);
             logger.info("mission2: {} 저장완료", mission2.getSubject());
@@ -104,7 +104,7 @@ public class InitDB {
                     .dayCategory(DayCategory.MONTH)
                     .missionCertificationMethod(traffic)
                     .expectCo2(6)
-                    .pictureUrl("http://cafecube.iptime.org:10080/api/missions/images/08e645ce-4ac4-4134-9099-3c2b36a31252_%EA%B5%90%ED%86%B5%20%EB%AF%B8%EC%85%981.PNG")
+                    .pictureUrl("https://cafecube.iptime.org/api/missions/images/08e645ce-4ac4-4134-9099-3c2b36a31252_%EA%B5%90%ED%86%B5%20%EB%AF%B8%EC%85%981.PNG")
                     .build();
             em.persist(mission3);
             logger.info("mission3: {} 저장완료", mission3.getSubject());
