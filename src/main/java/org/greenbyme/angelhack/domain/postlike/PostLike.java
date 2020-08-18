@@ -28,6 +28,13 @@ public class PostLike {
 
     public PostLike(Post post, User user) {
         this.post = post;
+        this.post.addLikes(this);
         this.user = user;
+        this.user.addLikes(this);
+    }
+
+    public void remove() {
+        this.user.deleteLike(this);
+        this.post.deleteLike(this);
     }
 }

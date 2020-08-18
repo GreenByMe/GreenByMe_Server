@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 public class Mission extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "mission_id")
     private Long id;
 
@@ -42,9 +42,10 @@ public class Mission extends BaseTimeEntity {
     private String pictureUrl;
 
     @Builder
-    public Mission(Category category, String subject, String description, DayCategory dayCategory,
+    public Mission(Category category, String title, String subject, String description, DayCategory dayCategory,
                    MissionCertificationMethod missionCertificationMethod, double expectCo2, String pictureUrl) {
         this.category = category;
+        this.title = title;
         this.subject = subject;
         this.description = description;
         this.dayCategory = dayCategory;
