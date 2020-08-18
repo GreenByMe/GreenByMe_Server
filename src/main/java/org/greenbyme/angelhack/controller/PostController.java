@@ -37,14 +37,18 @@ public class PostController {
     @Autowired
     private FileUploadDownloadService service;
 
+    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @PostMapping
-    public ResponseEntity<PostSaveResponseDto> savePost(PostSaveRequestDto requestDto, @RequestParam("file") MultipartFile file) throws IOException {
-        PostSaveResponseDto responseDto = postService.savePosts(requestDto, file);
+    public ResponseEntity<PostSaveResponseDto> savePost(@ApiIgnore final Authentication authentication,
+                                                        final PostSaveRequestDto requestDto,
+                                                        @RequestParam("file") final MultipartFile file) throws IOException {
+        Long userId = ((User) authentication.getPrincipal()).getId();
+        PostSaveResponseDto responseDto = postService.savePosts(userId, requestDto, file);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
     @GetMapping("/images/{fileName:.+}")
-    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request){
+    public ResponseEntity<Resource> downloadFile(@PathVariable final String fileName, HttpServletRequest request) {
         // Load file as Resource
         Resource resource = service.loadFileAsResource(fileName);
 
@@ -57,7 +61,7 @@ public class PostController {
         }
 
         // Fallback to the default content type if type could not be determined
-        if(contentType == null) {
+        if (contentType == null) {
             contentType = "application/octet-stream";
         }
 
@@ -93,9 +97,13 @@ public class PostController {
         return ResponseEntity.ok().build();
     }
 
+    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @PutMapping("/{postId}")
-    public ResponseEntity<PostUpdateResponseDto> updatePost(@PathVariable("postId") final Long postId, @RequestBody PostUpdateRequestDto requestDto) {
-        PostUpdateResponseDto responseDto = postService.updatePost(postId, requestDto);
+    public ResponseEntity<PostUpdateResponseDto> updatePost(@ApiIgnore final Authentication authentication,
+                                                            @PathVariable("postId") final Long postId,
+                                                            @RequestBody final PostUpdateRequestDto requestDto) {
+        Long userId = ((User) authentication.getPrincipal()).getId();
+        PostUpdateResponseDto responseDto = postService.updatePost(userId, postId, requestDto);
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 

@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserUpdateNicktDto {
-
-    private Long userId;
+    
     private String nickName;
 }

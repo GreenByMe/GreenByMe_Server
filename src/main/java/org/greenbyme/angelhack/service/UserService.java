@@ -14,14 +14,13 @@ import org.greenbyme.angelhack.service.dto.missionInfo.MissionInfobyUserDto;
 import org.greenbyme.angelhack.service.dto.post.PostDetailResponseDto;
 import org.greenbyme.angelhack.service.dto.user.*;
 import org.greenbyme.angelhack.util.JwtTokenProvider;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.persistence.NoResultException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,6 +36,7 @@ public class UserService {
     private final PostRepository postRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
+
     @Autowired
     private FileUploadDownloadService service;
 
@@ -53,8 +53,7 @@ public class UserService {
     }
 
     public UserDetailResponseDto getUserDetail(Long userId) {
-        User user = userRepository.findById(userId).
-                orElseThrow(() -> new NoResultException("없는 정보입니다"));
+        User user = getUser(userId);
         return new UserDetailResponseDto(user);
     }
 
@@ -63,8 +62,13 @@ public class UserService {
                 .orElseThrow(() -> new UserException(String.format("%s: 가입되지 않은 이메일입니다.", email), ErrorCode.UNSIGNED));
     }
 
-    public UserExpectTreeCo2ResponseDto getUserExpectTreeCo2(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new NoResultException("등록된 사용자가 없습니다."));
+    private User getUser(final Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
+    }
+
+    public UserExpectTreeCo2ResponseDto getUserExpectTreeCo2(Long userId) {
+        User user = getUser(userId);
         long missionProgressRates = 0L;
         List<MissionInfo> res = missionInfoRepository.findAllByUser(user);
         long missionCount = res.stream()
@@ -80,41 +84,37 @@ public class UserService {
         if (missionCount == 0) {
             missionCount = 0;
         } else {
-            missionProgressRates = (long)( (double)(missionProgressCount /missionCount) * 100);
+            missionProgressRates = (long) ((double) (missionProgressCount / missionCount) * 100);
         }
 
         return new UserExpectTreeCo2ResponseDto(user, missionCount, missionProgressRates);
     }
 
     public List<MissionInfobyUserDto> getMissionInfoList(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
+        User user = getUser(userId);
         return user.getMissionInfoList().stream()
                 .map(MissionInfobyUserDto::new)
                 .collect(Collectors.toList());
     }
 
     public List<PostDetailResponseDto> getPostList(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
+        User user = getUser(userId);
         return user.getPostList().stream()
                 .map(PostDetailResponseDto::new)
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public UserResponseDto updateNickName(UserUpdateNicktDto dto) {
-        User user = userRepository.findById(dto.getUserId())
-                .orElseThrow(()->new UserException(ErrorCode.UNSIGNED_USER));
+    public UserResponseDto updateNickName(UserUpdateNicktDto dto, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
         user.changeNickName(dto.getNickName());
         return new UserResponseDto(user.getId());
     }
 
     @Transactional
-    public UserResponseDto updatePhotos(UserUpdatePhotoDto dto, MultipartFile file) {
-        User user = userRepository.findById(dto.getUserId())
-                .orElseThrow(()->new UserException(ErrorCode.UNSIGNED_USER));
-
+    public UserResponseDto updatePhotos(Long userId, MultipartFile file) {
+        User user = getUser(userId);
         String fileName = service.storeFile(file);
         String filedUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/api/users/images/")

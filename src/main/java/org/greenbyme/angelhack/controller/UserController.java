@@ -105,13 +105,19 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
+    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @PutMapping("/nickname")
-    public ResponseEntity<UserResponseDto> updateUserNickName(final UserUpdateNicktDto dto) {
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.updateNickName(dto));
+    public ResponseEntity<UserResponseDto> updateUserNickName(@ApiIgnore final Authentication authentication,
+                                                              final UserUpdateNicktDto dto) {
+        Long userId = ((User) authentication.getPrincipal()).getId();
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.updateNickName(dto, userId));
     }
 
+    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @PutMapping("/image")
-    public ResponseEntity<UserResponseDto> updateUserPhotos(final UserUpdatePhotoDto dto, @RequestParam("file") MultipartFile file) {
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.updatePhotos(dto, file));
+    public ResponseEntity<UserResponseDto> updateUserPhotos(@ApiIgnore final Authentication authentication,
+                                                            @RequestParam("file") MultipartFile file) {
+        Long userId = ((User) authentication.getPrincipal()).getId();
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.updatePhotos(userId, file));
     }
 }
