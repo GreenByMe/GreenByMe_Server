@@ -123,13 +123,10 @@ public class PostService {
         User user = getUser(userId);
         if (postLikeRepository.findByUserAndPost(user, post).isPresent()) {
             PostLike postLike = postLikeRepository.findByUserAndPost(user, post).get();
-            post.deleteLike(postLike);
-            user.deleteLike(postLike);
+            postLike.remove();
             postLikeRepository.delete(postLike);
         } else {
-            PostLike postLike = postLikeRepository.save(new PostLike(post, user));
-            user.addLikes(postLike);
-            post.addLikes(postLike);
+            postLikeRepository.save(new PostLike(post, user));
         }
     }
 

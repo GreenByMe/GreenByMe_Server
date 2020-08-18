@@ -13,6 +13,7 @@ public class MissionPopularResponseDto {
 
     private Long missionId;
     private Category category;
+    private String title;
     private String subject;
     private String description;
     private String missionPictureUrl;
@@ -24,6 +25,7 @@ public class MissionPopularResponseDto {
     public MissionPopularResponseDto(Mission mission) {
         this.missionId = mission.getId();
         this.category = mission.getCategory();
+        this.title = mission.getTitle();
         this.subject = mission.getSubject();
         this.description = mission.getDescription();
         this.missionPictureUrl = mission.getPictureUrl();

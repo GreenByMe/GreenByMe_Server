@@ -66,6 +66,7 @@ public class InitDB {
             Mission mission1 = Mission.builder()
                     .category(Category.DISPOSABLE)
                     .subject("일회용 수저를 줄여보아요")
+                    .title("오늘은 일회용품을 아껴보는 건 어떨까요?")
                     .description("하루에 버려지는 일회용품 양이 얼마인지 아시나요? 우리가 나서서 일회용품을 줄여 보아요 ")
                     .dayCategory(DayCategory.DAY)
                     .missionCertificationMethod(disposable)
