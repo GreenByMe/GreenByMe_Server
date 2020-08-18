@@ -107,9 +107,12 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 
+    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @PutMapping("/{postId}/thumbsup")
-    public ResponseEntity<Void> thumbsup(@PathVariable("postId") final Long postId) {
-        postService.thumbsUp(postId);
+    public ResponseEntity<Void> thumbsup(@ApiIgnore final Authentication authentication,
+                                         @PathVariable("postId") final Long postId) {
+        Long userId = ((User) authentication.getPrincipal()).getId();
+        postService.thumbsUp(userId, postId);
         return ResponseEntity.ok().build();
     }
 }

@@ -11,6 +11,7 @@ import org.greenbyme.angelhack.domain.mission.MissionCertificateCount;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MissionSaveRequestDto {
 
+    private String title;
     private String subject;
     private String description;
     private double expectCo2;
@@ -23,7 +24,8 @@ public class MissionSaveRequestDto {
 
     //private MissionCertificationMethodRequestDto missionCertificationMethodRequestDto;
 
-    public MissionSaveRequestDto(String subject, String description, double expectCo2, Category category, DayCategory dayCategory, String missionCertificationTitle, String missionCertificationText, MissionCertificateCount missionCertificateCount) {
+    public MissionSaveRequestDto(String title, String subject, String description, double expectCo2, Category category, DayCategory dayCategory, String missionCertificationTitle, String missionCertificationText, MissionCertificateCount missionCertificateCount) {
+        this.title = title;
         this.subject = subject;
         this.description = description;
         this.expectCo2 = expectCo2;
