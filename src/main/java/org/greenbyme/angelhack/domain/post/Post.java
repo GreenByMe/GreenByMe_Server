@@ -6,10 +6,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.greenbyme.angelhack.domain.baseEntity.BaseEntity;
 import org.greenbyme.angelhack.domain.missionInfo.MissionInfo;
+import org.greenbyme.angelhack.domain.postlike.PostLike;
 import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.service.dto.post.PostUpdateRequestDto;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -29,12 +32,13 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "missioninfo_id")
     private MissionInfo missionInfo;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<PostLike> postLikes = new ArrayList<>();
+
     private String picture;
 
     private String title;
     private String text;
-
-    private Integer thumbsUp;
     private Boolean open;
 
     @Builder
@@ -43,7 +47,6 @@ public class Post extends BaseEntity {
         this.text = text;
         this.title = title;
         this.picture = picture;
-        this.thumbsUp = 0;
         this.open = open;
     }
 
@@ -54,7 +57,6 @@ public class Post extends BaseEntity {
         this.text = text;
         this.title = title;
         this.picture = picture;
-        this.thumbsUp = 0;
         this.open = open;
     }
 
@@ -73,8 +75,11 @@ public class Post extends BaseEntity {
         this.title = requestDto.getTitle();
     }
 
-    public void thumbsUp() {
-        this.thumbsUp += 1;
+    public void deleteLike(PostLike postLike) {
+        this.postLikes.remove(postLike);
     }
 
+    public void addLikes(PostLike postLike) {
+        this.postLikes.add(postLike);
+    }
 }

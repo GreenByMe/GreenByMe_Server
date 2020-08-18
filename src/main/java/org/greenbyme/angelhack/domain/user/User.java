@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.greenbyme.angelhack.domain.baseEntity.BaseEntity;
 import org.greenbyme.angelhack.domain.missionInfo.MissionInfo;
 import org.greenbyme.angelhack.domain.post.Post;
+import org.greenbyme.angelhack.domain.postlike.PostLike;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -49,6 +50,9 @@ public class User extends BaseEntity implements UserDetails {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> postList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<PostLike> postLikes = new ArrayList<>();
 
     @Builder
     public User(String name, String email, String password, String nickname, String photo, List<String> roles) {
@@ -120,5 +124,13 @@ public class User extends BaseEntity implements UserDetails {
 
     public void changeNickName(String nickName) {
         this.nickname = nickName;
+    }
+
+    public void deleteLike(PostLike postLike) {
+        this.postLikes.remove(postLike);
+    }
+
+    public void addLikes(PostLike postLike) {
+        this.postLikes.add(postLike);
     }
 }
