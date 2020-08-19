@@ -20,7 +20,7 @@ public class HomePageDto {
     private double expectedTree;
     private long progressRates;
     private List<InProgressResponseDto> progressResponseDtoList;
-    private Page<PopularMissionResponseDto> popularMissionResponseDtoList;
+    private PageDto<PopularMissionResponseDto> popularMissionResponseDtoList;
 
     public HomePageDto(User user, long progressRates, List<InProgressResponseDto> progressMissions, Page<PopularMissionResponseDto> popularMissions) {
         this.nickName = user.getNickname();
@@ -30,6 +30,6 @@ public class HomePageDto {
         this.expectedTree = user.getExpectTree();
         this.progressRates = progressRates;
         this.progressResponseDtoList = progressMissions;
-        this.popularMissionResponseDtoList = popularMissions;
+        this.popularMissionResponseDtoList = new PageDto<>(popularMissions);
     }
 }

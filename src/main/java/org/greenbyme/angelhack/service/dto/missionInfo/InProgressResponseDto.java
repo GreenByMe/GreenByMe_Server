@@ -33,6 +33,5 @@ public class InProgressResponseDto {
         this.endDate = missionInfo.getCreatedDate().plusDays(missionInfo.getMission().getDayCategory().getDay());
         this.remainPeriod = missionInfo.getRemainPeriod();
         this.pictureUrl = missionInfo.getMission().getPictureUrl();
-
     }
 }
