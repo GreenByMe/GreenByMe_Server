@@ -15,6 +15,8 @@ import org.greenbyme.angelhack.domain.user.UserRepository;
 import org.greenbyme.angelhack.exception.*;
 import org.greenbyme.angelhack.service.dto.post.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -78,14 +80,12 @@ public class PostService {
         return new PostSaveResponseDto(savePost.getId(), expectTree, finishCount);
     }
 
-    public List<PostResponseDto> getPostsByMission(Long missionId) {
+    public Page<PostResponseDto> getPostsByMission(Long missionId, Pageable pageable) {
         Mission mission = missionRepository.findById(missionId)
                 .orElseThrow(() -> new MissionException(ErrorCode.INVALID_MISSION));
-        return missionInfoRepository.findAllByMission(mission)
-                .stream()
+        return missionInfoRepository.findAllByMission(mission, pageable)
                 .map(postRepository::findByMissionInfo)
-                .map(p -> new PostResponseDto(p.getId(), p.getUser().getNickname(), p.getPicture(), p.getPostLikes().size()))
-                .collect(Collectors.toList());
+                .map(p -> new PostResponseDto(p.getId(), p.getUser().getNickname(), p.getPicture(), p.getPostLikes().size()));
     }
 
     public PostDetailResponseDto getPostDetail(Long postId) {
@@ -93,13 +93,10 @@ public class PostService {
         return new PostDetailResponseDto(post);
     }
 
-    public List<PostResponseDto> getPostsByUser(Long userId) {
+    public Page<PostResponseDto> getPostsByUser(Long userId, Pageable pageable) {
         User user = getUser(userId);
-        return postRepository.findAllByUser(user)
-                .stream()
-                .map(p -> new PostResponseDto(p.getId(), user.getNickname(), p.getPicture(), p.getPostLikes().size()))
-                .sorted(PostResponseDto::compareTo)
-                .collect(Collectors.toList());
+        return postRepository.findAllByUser(user, pageable)
+                .map(p -> new PostResponseDto(p.getId(), user.getNickname(), p.getPicture(), p.getPostLikes().size()));
     }
 
     @Transactional

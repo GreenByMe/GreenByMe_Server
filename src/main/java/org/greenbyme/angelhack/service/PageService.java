@@ -51,11 +51,13 @@ public class PageService {
                 .filter(m -> m.getMissionInfoStatus().equals(MissionInfoStatus.IN_PROGRESS))
                 .map(m -> new InProgressResponseDto(m, howManyPeopleInMission(m)))
                 .collect(Collectors.toList());
-        Page<PopularMissionResponseDto> popularMissionResponseDtos = missionRepository.findAll(pageable).map(m -> new PopularMissionResponseDto(m, howManyPeopleInMission(m)));
+        List<PopularMissionResponseDto> popularMissionResponseDtos = missionRepository.findAll().stream()
+                .map(m -> new PopularMissionResponseDto(m, howManyPeopleInMission(m)))
+                .collect(Collectors.toList());
         if (missionCount == 0 || missionProgressCount == 0) {
             return new HomePageDto(user, 0, inProgressResponseDtos, popularMissionResponseDtos);
         }
-        long missionProgressRates = (long)( (double)(missionProgressCount /missionCount) * 100);
+        long missionProgressRates = (long) ((double) (missionProgressCount / missionCount) * 100);
         return new HomePageDto(user, missionProgressRates, inProgressResponseDtos, popularMissionResponseDtos);
     }
 
@@ -82,7 +84,7 @@ public class PageService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
         long passMissionCount = missionInfoRepository.findAllByUser(user).stream()
-                .filter(m->m.getMissionInfoStatus().equals(MissionInfoStatus.FINISH))
+                .filter(m -> m.getMissionInfoStatus().equals(MissionInfoStatus.FINISH))
                 .count();
         return new MyPageDto(user, passMissionCount);
     }

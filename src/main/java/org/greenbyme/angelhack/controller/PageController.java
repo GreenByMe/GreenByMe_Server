@@ -1,5 +1,6 @@
 package org.greenbyme.angelhack.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
+@Api(tags = "1. View")
 @Slf4j
 @RestController
 @RequestMapping("/api/page")
