@@ -22,7 +22,7 @@ import java.util.List;
 @Api(tags = "4. PersonalMission")
 @Slf4j
 @RestController
-@RequestMapping("/api/personalMissions")
+@RequestMapping("/api/personalmissions")
 @RequiredArgsConstructor
 public class PersonalMissionController {
 
@@ -37,14 +37,14 @@ public class PersonalMissionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(personalMissionSaveResponseDto);
     }
 
-    @GetMapping("/{personalMission_id}")
-    public ResponseEntity<PersonalMissionDetailResponseDto> PersonalMissionDetail(@PathVariable("personalMission_id") final Long id) {
+    @GetMapping("/{personalMissionId}")
+    public ResponseEntity<PersonalMissionDetailResponseDto> PersonalMissionDetail(@PathVariable("personalMissionId") final Long id) {
         PersonalMissionDetailResponseDto personalMissionDetailResponseDto = personalMissionService.findPersonalMissionDetails(id);
         return ResponseEntity.status(HttpStatus.OK).body(personalMissionDetailResponseDto);
     }
 
-    @DeleteMapping("/{personalMission_id}")
-    public ResponseEntity<PersonalMissionDeleteResponseDto> personalMissionDelete(@PathVariable("personalMission_id") final Long id) {
+    @DeleteMapping("/{personalMissionId}")
+    public ResponseEntity<PersonalMissionDeleteResponseDto> personalMissionDelete(@PathVariable("personalMissionId") final Long id) {
         PersonalMissionDeleteResponseDto personalMissionDeleteResponseDto = personalMissionService.personalMissionDelete(id);
         return ResponseEntity.status(HttpStatus.OK).body(personalMissionDeleteResponseDto);
     }

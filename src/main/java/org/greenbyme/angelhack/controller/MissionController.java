@@ -69,8 +69,8 @@ public class MissionController {
                 .body(resource);
     }
 
-    @GetMapping("/{mission_id}")
-    public ResponseEntity<MissionDetailsDto> findOneDetail(@PathVariable("mission_id") final Long id) {
+    @GetMapping("/{missionId}")
+    public ResponseEntity<MissionDetailsDto> findOneDetail(@PathVariable("missionId") final Long id) {
         MissionDetailsDto missionDetailsDto = missionService.findById(id);
         return ResponseEntity.status(HttpStatus.OK).body(missionDetailsDto);
     }
@@ -96,8 +96,8 @@ public class MissionController {
         return ResponseEntity.status(HttpStatus.OK).body(allByCategoryAndDayCategory);
     }
 
-    @DeleteMapping("/{mission_id}")
-    public ResponseEntity<MissionDeleteDto> missionDelete(@PathVariable("mission_id") final Long id) {
+    @DeleteMapping("/{missionId}")
+    public ResponseEntity<MissionDeleteDto> missionDelete(@PathVariable("missionId") final Long id) {
         MissionDeleteDto missionDeleteDto = missionService.delete(id);
         return ResponseEntity.status(HttpStatus.OK).body((missionDeleteDto));
     }

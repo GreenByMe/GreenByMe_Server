@@ -30,9 +30,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 
+@Api(tags = "2. User")
 @Slf4j
 @RestController
-@Api(tags = "2. User")
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
