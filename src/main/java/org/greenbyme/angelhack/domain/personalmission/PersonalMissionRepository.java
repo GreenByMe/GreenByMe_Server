@@ -2,6 +2,8 @@ package org.greenbyme.angelhack.domain.personalmission;
 
 import org.greenbyme.angelhack.domain.mission.Mission;
 import org.greenbyme.angelhack.domain.user.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -11,6 +13,8 @@ public interface PersonalMissionRepository extends JpaRepository<PersonalMission
     List<PersonalMission> findAllByMission(Mission mission);
 
     List<PersonalMission> findByMission(Mission mission);
+
+    Page<PersonalMission> findAllByMission(Mission mission, Pageable pageable);
 
     List<PersonalMission> findAllByUser(User user);
 

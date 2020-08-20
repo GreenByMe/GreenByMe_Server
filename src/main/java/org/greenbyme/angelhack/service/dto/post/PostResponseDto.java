@@ -25,5 +25,4 @@ public class PostResponseDto {
     public int compareTo(PostResponseDto o) { // 나이를 기준으로 오름차순
         return Long.compare(this.getPostId(), o.getPostId());
     }
-
 }

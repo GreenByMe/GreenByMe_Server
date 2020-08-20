@@ -51,11 +51,13 @@ public class PageService {
                 .filter(m -> m.getPersonalMissionStatus().equals(PersonalMissionStatus.IN_PROGRESS))
                 .map(m -> new InProgressResponseDto(m, howManyPeopleInMission(m)))
                 .collect(Collectors.toList());
-        Page<PopularMissionResponseDto> popularMissionResponseDtos = missionRepository.findAll(pageable).map(m -> new PopularMissionResponseDto(m, howManyPeopleInMission(m)));
+        List<PopularMissionResponseDto> popularMissionResponseDtos = missionRepository.findAll().stream()
+                .map(m -> new PopularMissionResponseDto(m, howManyPeopleInMission(m)))
+                .collect(Collectors.toList());
         if (missionCount == 0 || missionProgressCount == 0) {
             return new HomePageDto(user, 0, inProgressResponseDtos, popularMissionResponseDtos);
         }
-        long missionProgressRates = (long)( (double)(missionProgressCount /missionCount) * 100);
+        long missionProgressRates = (long) ((double) (missionProgressCount / missionCount) * 100);
         return new HomePageDto(user, missionProgressRates, inProgressResponseDtos, popularMissionResponseDtos);
     }
 

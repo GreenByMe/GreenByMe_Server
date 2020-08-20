@@ -8,6 +8,7 @@ import org.greenbyme.angelhack.domain.Category.DayCategory;
 import org.greenbyme.angelhack.service.FileUploadDownloadService;
 import org.greenbyme.angelhack.service.MissionService;
 import org.greenbyme.angelhack.service.dto.mission.*;
+import org.greenbyme.angelhack.service.dto.page.PageDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +34,9 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class MissionController {
 
-    private final MissionService missionService;
     private static final Logger logger = LoggerFactory.getLogger(MissionController.class);
+
+    private final MissionService missionService;
 
     @Autowired
     private FileUploadDownloadService service;
@@ -46,10 +48,9 @@ public class MissionController {
     }
 
     @GetMapping("/images/{fileName:.+}")
-    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request){
+    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
         // Load file as Resource
         Resource resource = service.loadFileAsResource(fileName);
-
         // Try to determine file's content type
         String contentType = null;
         try {
@@ -57,12 +58,10 @@ public class MissionController {
         } catch (IOException ex) {
             logger.info("Could not determine file type.");
         }
-
         // Fallback to the default content type if type could not be determined
-        if(contentType == null) {
+        if (contentType == null) {
             contentType = "application/octet-stream";
         }
-
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
@@ -75,25 +74,25 @@ public class MissionController {
         return ResponseEntity.status(HttpStatus.OK).body(missionDetailsDto);
     }
 
-    @GetMapping("")
-    public ResponseEntity<Page<MissionFindAllResponseDto>> findAllMission(@PageableDefault(size = 10, sort = {"category", "id"}, direction = Sort.Direction.DESC) Pageable pageable) {
+    @GetMapping
+    public ResponseEntity<PageDto<MissionFindAllResponseDto>> findAllMission(@PageableDefault(size = 10, sort = {"category", "id"}, direction = Sort.Direction.DESC) Pageable pageable) {
         Page<MissionFindAllResponseDto> allMission = missionService.findAllMission(pageable);
-        return ResponseEntity.status(HttpStatus.OK).body(allMission);
+        return ResponseEntity.status(HttpStatus.OK).body(new PageDto<>(allMission));
     }
 
     @GetMapping("/categorys/{category}")
-    public ResponseEntity<Page<MissionFindAllByCategoryResponseDto>> findAllByCategory(@PathVariable("category") final Category category,
-                                                                                       @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity<PageDto<MissionFindAllByCategoryResponseDto>> findAllByCategory(@PathVariable("category") final Category category,
+                                                                                          @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<MissionFindAllByCategoryResponseDto> allByCategory = missionService.findAllByCategory(category, pageable);
-        return ResponseEntity.status(HttpStatus.OK).body(allByCategory);
+        return ResponseEntity.status(HttpStatus.OK).body(new PageDto<>(allByCategory));
     }
 
     @GetMapping("/categorys/{category}/daycategory/{datCategory}")
-    public ResponseEntity<Page<MissionFindAllByCategoryAndDayCategoryResponseDto>> findAllByCategoryAndDayCategory(@PathVariable("category") final Category category,
-                                                                                                                   @PathVariable("datCategory") final DayCategory dayCategory,
-                                                                                                                   @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity<PageDto<MissionFindAllByCategoryAndDayCategoryResponseDto>> findAllByCategoryAndDayCategory(@PathVariable("category") final Category category,
+                                                                                                                      @PathVariable("datCategory") final DayCategory dayCategory,
+                                                                                                                      @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<MissionFindAllByCategoryAndDayCategoryResponseDto> allByCategoryAndDayCategory = missionService.findAllByCategoryAndDayCategory(category, dayCategory, pageable);
-        return ResponseEntity.status(HttpStatus.OK).body(allByCategoryAndDayCategory);
+        return ResponseEntity.status(HttpStatus.OK).body(new PageDto<>(allByCategoryAndDayCategory));
     }
 
     @DeleteMapping("/{missionId}")
@@ -103,8 +102,8 @@ public class MissionController {
     }
 
     @GetMapping("/populars")
-    public ResponseEntity<Page<MissionPopularResponseDto>> getPopularMission(@PageableDefault(size = 10, sort = "passCandidatesCount", direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity<PageDto<MissionPopularResponseDto>> getPopularMission(@PageableDefault(size = 10, sort = "passCandidatesCount", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<MissionPopularResponseDto> allByPopular = missionService.findAllByPopular(pageable);
-        return ResponseEntity.status(HttpStatus.OK).body(allByPopular);
+        return ResponseEntity.status(HttpStatus.OK).body(new PageDto<>(allByPopular));
     }
 }
