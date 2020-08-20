@@ -2,28 +2,20 @@ package org.greenbyme.angelhack;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.greenbyme.angelhack.controller.UserController;
 import org.greenbyme.angelhack.domain.Category.Category;
 import org.greenbyme.angelhack.domain.Category.DayCategory;
-import org.greenbyme.angelhack.domain.PeriodScheduler;
 import org.greenbyme.angelhack.domain.mission.Mission;
 import org.greenbyme.angelhack.domain.mission.MissionCertificateCount;
 import org.greenbyme.angelhack.domain.mission.MissionCertificationMethod;
-import org.greenbyme.angelhack.domain.missionInfo.MissionInfo;
 import org.greenbyme.angelhack.domain.user.User;
-import org.greenbyme.angelhack.service.UserService;
-import org.greenbyme.angelhack.service.dto.user.UserResponseDto;
-import org.greenbyme.angelhack.service.dto.user.UserSaveRequestDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
-import java.util.Arrays;
 
 @Component
 @RequiredArgsConstructor

@@ -8,7 +8,7 @@ public enum ErrorCode {
     WRONG_PASSWORD(1200, "잘못된 패스워드"),
     UNSIGNED_USER(1300, "등록되지 않은 유저 idx"),
     INVALID_MISSION(2000,"등록되지 않은 미션 id"),
-    INVALID_MISSIONINFO(2100,"등록되지 않은 미션 정보 id"),
+    INVALID_PERSONAL_MISSION(2100,"등록되지 않은 개인 미션 정보 id"),
     OVER_PROGRESS(2200, "인증 횟수를 초과했습니다"),
     INVALID_POST(3000,"등록되지 않은 인증 id"),
     OVER_CERIFICATION(3100, "하루 인증 횟수를 초과했습니다"),

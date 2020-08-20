@@ -4,15 +4,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.greenbyme.angelhack.domain.mission.Mission;
 import org.greenbyme.angelhack.domain.mission.MissionRepository;
-import org.greenbyme.angelhack.domain.missionInfo.MissionInfo;
-import org.greenbyme.angelhack.domain.missionInfo.MissionInfoRepository;
+import org.greenbyme.angelhack.domain.personalmission.PersonalMission;
+import org.greenbyme.angelhack.domain.personalmission.PersonalMissionRepository;
 import org.greenbyme.angelhack.domain.post.Post;
 import org.greenbyme.angelhack.domain.post.PostRepository;
 import org.greenbyme.angelhack.domain.postlike.PostLike;
 import org.greenbyme.angelhack.domain.postlike.PostLikeRepository;
 import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.domain.user.UserRepository;
-import org.greenbyme.angelhack.exception.*;
+import org.greenbyme.angelhack.exception.ErrorCode;
+import org.greenbyme.angelhack.exception.MissionException;
+import org.greenbyme.angelhack.exception.PostException;
+import org.greenbyme.angelhack.exception.UserException;
 import org.greenbyme.angelhack.service.dto.post.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,7 +27,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -35,7 +37,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final PostLikeRepository postLikeRepository;
-    private final MissionInfoRepository missionInfoRepository;
+    private final PersonalMissionRepository personalMissionRepository;
     private final MissionRepository missionRepository;
 
     @Autowired
@@ -43,13 +45,13 @@ public class PostService {
 
     @Transactional
     public PostSaveResponseDto savePosts(Long userId, PostSaveRequestDto requestDto, MultipartFile file) {
-        MissionInfo missionInfo = missionInfoRepository.findById(requestDto.getMissionInfoId())
-                .orElseThrow(() -> new MissionException(ErrorCode.INVALID_MISSIONINFO));
+        PersonalMission personalMission = personalMissionRepository.findById(requestDto.getPersonalMission_id())
+                .orElseThrow(() -> new MissionException(ErrorCode.INVALID_PERSONAL_MISSION));
         User user = getUser(userId);
-        if (!missionInfo.getUser().getId().equals(user.getId())) {
+        if (!personalMission.getUser().getId().equals(user.getId())) {
             throw new PostException(ErrorCode.WRONG_ACCESS);
         }
-        List<Post> posts = postRepository.findAllByUserAndMissionInfo(user, missionInfo);
+        List<Post> posts = postRepository.findAllByUserAndPersonalMission(user, personalMission);
         long postCount = posts.stream()
                 .filter(p -> p.getCreatedDate().getDayOfYear() == LocalDateTime.now().getDayOfYear())
                 .count();
@@ -65,26 +67,26 @@ public class PostService {
 
         Post savePost = Post.builder()
                 .user(user)
-                .missionInfo(missionInfo)
+                .personalMission(personalMission)
                 .text(requestDto.getText())
                 .title(requestDto.getTitle())
                 .picture(filedUrl)
                 .open(requestDto.getOpen()).build();
         savePost = postRepository.save(savePost);
-        missionInfo.addProgress();
-        if (missionInfo.isEnd()) {
-            missionInfo.getMission().addPassCandidates();
+        personalMission.addProgress();
+        if (personalMission.isEnd()) {
+            personalMission.getMission().addPassCandidates();
         }
-        double expectTree = missionInfo.getMission().getExpectTree();
-        int finishCount = missionInfo.getFinishCount();
+        double expectTree = personalMission.getMission().getExpectTree();
+        int finishCount = personalMission.getFinishCount();
         return new PostSaveResponseDto(savePost.getId(), expectTree, finishCount);
     }
 
     public Page<PostResponseDto> getPostsByMission(Long missionId, Pageable pageable) {
         Mission mission = missionRepository.findById(missionId)
                 .orElseThrow(() -> new MissionException(ErrorCode.INVALID_MISSION));
-        return missionInfoRepository.findAllByMission(mission, pageable)
-                .map(postRepository::findByMissionInfo)
+        return personalMissionRepository.findAllByMission(mission, pageable)
+                .map(postRepository::findByPersonalMission)
                 .map(p -> new PostResponseDto(p.getId(), p.getUser().getNickname(), p.getPicture(), p.getPostLikes().size()));
     }
 

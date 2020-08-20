@@ -1,5 +1,6 @@
 package org.greenbyme.angelhack.controller;
 
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.greenbyme.angelhack.domain.Category.Category;
@@ -26,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
+@Api(tags = "3. Mission")
 @Slf4j
 @RestController
 @RequestMapping("/api/missions")
@@ -66,8 +68,8 @@ public class MissionController {
                 .body(resource);
     }
 
-    @GetMapping("/{mission_id}")
-    public ResponseEntity<MissionDetailsDto> findOneDetail(@PathVariable("mission_id") final Long id) {
+    @GetMapping("/{missionId}")
+    public ResponseEntity<MissionDetailsDto> findOneDetail(@PathVariable("missionId") final Long id) {
         MissionDetailsDto missionDetailsDto = missionService.findById(id);
         return ResponseEntity.status(HttpStatus.OK).body(missionDetailsDto);
     }
@@ -93,8 +95,8 @@ public class MissionController {
         return ResponseEntity.status(HttpStatus.OK).body(new PageDto<>(allByCategoryAndDayCategory));
     }
 
-    @DeleteMapping("/{mission_id}")
-    public ResponseEntity<MissionDeleteDto> missionDelete(@PathVariable("mission_id") final Long id) {
+    @DeleteMapping("/{missionId}")
+    public ResponseEntity<MissionDeleteDto> missionDelete(@PathVariable("missionId") final Long id) {
         MissionDeleteDto missionDeleteDto = missionService.delete(id);
         return ResponseEntity.status(HttpStatus.OK).body((missionDeleteDto));
     }

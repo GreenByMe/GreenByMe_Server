@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Api(tags = "6. Category")
 @RestController
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api/categorys")
-@Api(tags = {"5. Category"})
 public class CategoryController {
 
     private static final Logger logger = LoggerFactory.getLogger(CategoryController.class);

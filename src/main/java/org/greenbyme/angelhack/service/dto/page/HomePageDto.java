@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.greenbyme.angelhack.domain.user.User;
-import org.greenbyme.angelhack.service.dto.missionInfo.InProgressResponseDto;
+import org.greenbyme.angelhack.service.dto.personalmission.InProgressResponseDto;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
