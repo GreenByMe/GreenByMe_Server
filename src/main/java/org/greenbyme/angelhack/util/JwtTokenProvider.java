@@ -37,8 +37,8 @@ public class JwtTokenProvider {
     }
 
     public String createToken(Long id, List<String> roles) {
-        String userid = Long.toString(id);
-        Claims claims = Jwts.claims().setSubject(userid);
+        String userId = Long.toString(id);
+        Claims claims = Jwts.claims().setSubject(userId);
         claims.put("roles", roles);
         Date now = new Date();
         return Jwts.builder()
@@ -75,15 +75,7 @@ public class JwtTokenProvider {
     public String makeReToken(Authentication authentication) throws Exception {
         try {
             User user = (User) userDetailsService.loadUserByUsername(authentication.getName());
-            Claims claims = Jwts.claims().setSubject(Long.toString(user.getId()));
-            claims.put("roles", user.getRoles());
-            Date now = new Date();
-            return Jwts.builder()
-                    .setClaims(claims)
-                    .setIssuedAt(now)
-                    .setExpiration(new Date(now.getTime() + tokenValidMilisecond))
-                    .signWith(SignatureAlgorithm.HS256, secretKey)
-                    .compact();
+            return createToken(user.getId(), user.getRoles());
         } catch (BadCredentialsException e) {
             throw new IllegalArgumentException();
         }
