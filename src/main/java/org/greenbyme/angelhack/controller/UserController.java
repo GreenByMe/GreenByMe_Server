@@ -120,4 +120,10 @@ public class UserController {
         Long userId = ((User) authentication.getPrincipal()).getId();
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.updatePhotos(userId, file));
     }
+
+    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
+    @PostMapping("/refresh")
+    public ResponseEntity<String> refreshToken(@ApiIgnore final Authentication authentication) throws Exception {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.refreshToken(authentication));
+    }
 }
