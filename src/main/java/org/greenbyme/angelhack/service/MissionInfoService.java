@@ -15,6 +15,8 @@ import org.greenbyme.angelhack.service.dto.missionInfo.InProgressResponseDto;
 import org.greenbyme.angelhack.service.dto.missionInfo.MissionInfoDeleteResponseDto;
 import org.greenbyme.angelhack.service.dto.missionInfo.MissionInfoDetailResponseDto;
 import org.greenbyme.angelhack.service.dto.missionInfo.MissionInfoSaveResponseDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,14 +40,14 @@ public class MissionInfoService {
 
         List<MissionInfo> missionInfoByUserIdAndMissionId = missionInfoRepository.findMissionInfoByUserIdAndMissionId(userId, missionId);
         for (MissionInfo missionInfo : missionInfoByUserIdAndMissionId) {
-            if(missionInfo.getMissionInfoStatus()==MissionInfoStatus.IN_PROGRESS){
+            if (missionInfo.getMissionInfoStatus() == MissionInfoStatus.IN_PROGRESS) {
                 throw new MissionInfoException(ErrorCode.ALREADY_EXISTS_MISSION);
             }
         }
         List<MissionInfo> missionInfoByUserIdAndWhereInProgress = missionInfoRepository.findMissionInfoByUserIdAndWhereInProgress(userId);
 
         for (MissionInfo infoByUserIdAndWhereInProgress : missionInfoByUserIdAndWhereInProgress) {
-            if(infoByUserIdAndWhereInProgress.getMission().getDayCategory()==mission.getDayCategory()){
+            if (infoByUserIdAndWhereInProgress.getMission().getDayCategory() == mission.getDayCategory()) {
                 throw new MissionInfoException(ErrorCode.ALREADY_EXISTS_SAME_DAY_MISSION);
             }
         }
@@ -70,23 +72,20 @@ public class MissionInfoService {
         return new MissionInfoDeleteResponseDto(missionInfo);
     }
 
-    public List<InProgressResponseDto> getMissionInfoInProgress(Long userId) {
+    public Page<InProgressResponseDto> getMissionInfoInProgress(Long userId, Pageable pageable) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
-        return missionInfoRepository.findAllByUser(user).stream()
-                .filter(m -> m.getMissionInfoStatus().equals(MissionInfoStatus.IN_PROGRESS))
-                .map(m -> new InProgressResponseDto(m, howManyPeopleInMission(m)))
-                .collect(Collectors.toList());
+        return missionInfoRepository.findAllByUser(user, pageable).map(m -> new InProgressResponseDto(m, howManyPeopleInMission(m)));
     }
 
     private Long howManyPeopleInMission(MissionInfo missionInfo) {
         return missionInfoRepository.findAllByMission(missionInfo.getMission()).stream()
-                .filter(m->m.getMissionInfoStatus().equals(MissionInfoStatus.IN_PROGRESS))
+                .filter(m -> m.getMissionInfoStatus().equals(MissionInfoStatus.IN_PROGRESS))
                 .count();
     }
 
     @Transactional
-    public void changeRemainPeriod(){
+    public void changeRemainPeriod() {
         List<MissionInfo> byMissionInfoStatusEquals = missionInfoRepository.findByMissionInfoStatusEquals(MissionInfoStatus.IN_PROGRESS);
         for (MissionInfo missionInfo : byMissionInfoStatusEquals) {
             missionInfo.changeRemainPeriod();

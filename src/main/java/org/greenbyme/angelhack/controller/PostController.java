@@ -7,11 +7,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.service.FileUploadDownloadService;
 import org.greenbyme.angelhack.service.PostService;
+import org.greenbyme.angelhack.service.dto.page.PageDto;
 import org.greenbyme.angelhack.service.dto.post.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -72,9 +77,10 @@ public class PostController {
     }
 
     @GetMapping("/missions/{missionId}")
-    public ResponseEntity<List<PostResponseDto>> getPostsByMission(@PathVariable("missionId") final Long missionId) {
-        List<PostResponseDto> responseDtos = postService.getPostsByMission(missionId);
-        return ResponseEntity.status(HttpStatus.OK).body(responseDtos);
+    public ResponseEntity<PageDto<PostResponseDto>> getPostsByMission(@PathVariable("missionId") final Long missionId,
+                                                                      @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<PostResponseDto> responseDtos = postService.getPostsByMission(missionId, pageable);
+        return ResponseEntity.status(HttpStatus.OK).body(new PageDto<>(responseDtos));
     }
 
     @GetMapping("/{postId}")
@@ -85,10 +91,11 @@ public class PostController {
 
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @GetMapping
-    public ResponseEntity<List<PostResponseDto>> getPostsByUser(@ApiIgnore final Authentication authentication) {
+    public ResponseEntity<PageDto<PostResponseDto>> getPostsByUser(@ApiIgnore final Authentication authentication,
+                                                                   @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         Long userId = ((User) authentication.getPrincipal()).getId();
-        List<PostResponseDto> responseDtos = postService.getPostsByUser(userId);
-        return ResponseEntity.status(HttpStatus.OK).body(responseDtos);
+        Page<PostResponseDto> responseDtos = postService.getPostsByUser(userId, pageable);
+        return ResponseEntity.status(HttpStatus.OK).body(new PageDto<>(responseDtos));
     }
 
     @DeleteMapping("/{postId}")

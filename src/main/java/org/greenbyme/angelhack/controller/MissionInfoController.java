@@ -10,6 +10,11 @@ import org.greenbyme.angelhack.service.dto.missionInfo.InProgressResponseDto;
 import org.greenbyme.angelhack.service.dto.missionInfo.MissionInfoDeleteResponseDto;
 import org.greenbyme.angelhack.service.dto.missionInfo.MissionInfoDetailResponseDto;
 import org.greenbyme.angelhack.service.dto.missionInfo.MissionInfoSaveResponseDto;
+import org.greenbyme.angelhack.service.dto.page.PageDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -49,9 +54,10 @@ public class MissionInfoController {
 
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @GetMapping
-    public ResponseEntity<List<InProgressResponseDto>> getMissionInfosInProgress(@ApiIgnore final Authentication authentication) {
+    public ResponseEntity<PageDto<InProgressResponseDto>> getMissionInfosInProgress(@ApiIgnore final Authentication authentication,
+                                                                                    @PageableDefault(size = 10) Pageable pageable) {
         Long userId = ((User) authentication.getPrincipal()).getId();
-        List<InProgressResponseDto> responseDto = missionInfoService.getMissionInfoInProgress(userId);
-        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+        Page<InProgressResponseDto> responseDto = missionInfoService.getMissionInfoInProgress(userId, pageable);
+        return ResponseEntity.status(HttpStatus.OK).body(new PageDto<>(responseDto));
     }
 }
