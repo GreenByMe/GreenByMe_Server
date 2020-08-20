@@ -59,13 +59,13 @@ public class PersonalMissionService {
     }
 
     public PersonalMissionDetailResponseDto findPersonalMissionDetails(Long id) {
-        PersonalMission personalMission = personalMissionRepository.findDetailsById(id).orElseThrow(() -> new NoResultException("등록되지 않은 미션입니다."));
+        PersonalMission personalMission = personalMissionRepository.findDetailsById(id).orElseThrow(() -> new NoResultException("등록되지 않은 개인미션입니다."));
         return new PersonalMissionDetailResponseDto(personalMission);
     }
 
     @Transactional
     public PersonalMissionDeleteResponseDto personalMissionDelete(Long id) {
-        PersonalMission personalMission = personalMissionRepository.findById(id).orElseThrow(() -> new NoResultException("등록되지 않은 미션 정보입니다."));
+        PersonalMission personalMission = personalMissionRepository.findById(id).orElseThrow(() -> new NoResultException("등록되지 않은 개인미션 정보입니다."));
         personalMissionRepository.deleteById(id);
         return new PersonalMissionDeleteResponseDto(personalMission);
     }
