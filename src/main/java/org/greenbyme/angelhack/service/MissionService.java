@@ -4,11 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.greenbyme.angelhack.domain.Category.Category;
 import org.greenbyme.angelhack.domain.Category.DayCategory;
 import org.greenbyme.angelhack.domain.mission.Mission;
-import org.greenbyme.angelhack.domain.mission.MissionCertificateCount;
 import org.greenbyme.angelhack.domain.mission.MissionCertificationMethod;
 import org.greenbyme.angelhack.domain.mission.MissionRepository;
-import org.greenbyme.angelhack.domain.missionInfo.MissionInfo;
-import org.greenbyme.angelhack.domain.missionInfo.MissionInfoRepository;
+import org.greenbyme.angelhack.domain.personalmission.PersonalMission;
+import org.greenbyme.angelhack.domain.personalmission.PersonalMissionRepository;
 import org.greenbyme.angelhack.service.dto.mission.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,7 +26,7 @@ import java.util.List;
 public class MissionService {
 
     private final MissionRepository missionRepository;
-    private final MissionInfoRepository missionInfoRepository;
+    private final PersonalMissionRepository personalMissionRepository;
 
     @Autowired
     private FileUploadDownloadService service;
@@ -75,9 +74,9 @@ public class MissionService {
     @Transactional
     public MissionDeleteDto delete(Long id) {
         Mission mission = missionRepository.findById(id).orElseThrow(() -> new NoResultException("등록되지 않은 미션입니다."));
-        List<MissionInfo> missionInfosByMission = missionInfoRepository.findByMission(mission);
-        for (MissionInfo missionInfo : missionInfosByMission) {
-            missionInfoRepository.delete(missionInfo);
+        List<PersonalMission> personalMissionsByPersonalMission = personalMissionRepository.findByMission(mission);
+        for (PersonalMission personalMission : personalMissionsByPersonalMission) {
+            personalMissionRepository.delete(personalMission);
         }
         missionRepository.delete(mission);
         return new MissionDeleteDto(mission);
@@ -85,7 +84,7 @@ public class MissionService {
 
     public MissionDetailsDto findById(Long id) {
         Mission mission = missionRepository.findById(id).orElseThrow(() -> new NoResultException("등록되지 않은 미션입니다."));
-        Long progressByMissionId = missionInfoRepository.findProgressByMissionId(id);
+        Long progressByMissionId = personalMissionRepository.findProgressByMissionId(id);
         return new MissionDetailsDto(mission, progressByMissionId);
     }
 

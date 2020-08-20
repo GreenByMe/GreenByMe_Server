@@ -2,15 +2,15 @@ package org.greenbyme.angelhack.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.greenbyme.angelhack.domain.missionInfo.MissionInfo;
-import org.greenbyme.angelhack.domain.missionInfo.MissionInfoRepository;
-import org.greenbyme.angelhack.domain.missionInfo.MissionInfoStatus;
+import org.greenbyme.angelhack.domain.personalmission.PersonalMission;
+import org.greenbyme.angelhack.domain.personalmission.PersonalMissionRepository;
+import org.greenbyme.angelhack.domain.personalmission.PersonalMissionStatus;
 import org.greenbyme.angelhack.domain.post.PostRepository;
 import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.domain.user.UserRepository;
 import org.greenbyme.angelhack.exception.ErrorCode;
 import org.greenbyme.angelhack.exception.UserException;
-import org.greenbyme.angelhack.service.dto.missionInfo.MissionInfobyUserDto;
+import org.greenbyme.angelhack.service.dto.personalmission.PersonalMissionByUserDto;
 import org.greenbyme.angelhack.service.dto.post.PostDetailResponseDto;
 import org.greenbyme.angelhack.service.dto.user.*;
 import org.greenbyme.angelhack.util.JwtTokenProvider;
@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final MissionInfoRepository missionInfoRepository;
+    private final PersonalMissionRepository personalMissionRepository;
     private final PostRepository postRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
@@ -70,9 +70,9 @@ public class UserService {
     public UserExpectTreeCo2ResponseDto getUserExpectTreeCo2(Long userId) {
         User user = getUser(userId);
         long missionProgressRates = 0L;
-        List<MissionInfo> res = missionInfoRepository.findAllByUser(user);
+        List<PersonalMission> res = personalMissionRepository.findAllByUser(user);
         long missionCount = res.stream()
-                .filter(m -> m.getMissionInfoStatus().equals(MissionInfoStatus.IN_PROGRESS))
+                .filter(m -> m.getPersonalMissionStatus().equals(PersonalMissionStatus.IN_PROGRESS))
                 .count();
         long missionProgressCount = postRepository.findAllByUser(user).stream()
                 .filter(p -> p.getCreatedDate().getDayOfYear() == LocalDateTime.now().getDayOfYear())
@@ -90,10 +90,10 @@ public class UserService {
         return new UserExpectTreeCo2ResponseDto(user, missionCount, missionProgressRates);
     }
 
-    public List<MissionInfobyUserDto> getMissionInfoList(Long userId) {
+    public List<PersonalMissionByUserDto> getPersonalMissionList(Long userId) {
         User user = getUser(userId);
-        return user.getMissionInfoList().stream()
-                .map(MissionInfobyUserDto::new)
+        return user.getPersonalMissionList().stream()
+                .map(PersonalMissionByUserDto::new)
                 .collect(Collectors.toList());
     }
 

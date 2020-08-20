@@ -1,5 +1,6 @@
 package org.greenbyme.angelhack.controller;
 
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.greenbyme.angelhack.domain.Category.Category;
@@ -25,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
+@Api(tags = "3. Mission")
 @Slf4j
 @RestController
 @RequestMapping("/api/missions")

@@ -1,4 +1,4 @@
-package org.greenbyme.angelhack.domain.missionInfo;
+package org.greenbyme.angelhack.domain.personalmission;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -17,11 +17,11 @@ import java.time.temporal.ChronoUnit;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class MissionInfo extends BaseTimeEntity {
+public class PersonalMission extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "missioninfo_id")
+    @Column(name = "personalmission_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -33,7 +33,7 @@ public class MissionInfo extends BaseTimeEntity {
     private Mission mission;
 
     @Enumerated(EnumType.STRING)
-    private MissionInfoStatus missionInfoStatus;
+    private PersonalMissionStatus personalMissionStatus;
 
     private int finishCount;
     private int progress;
@@ -42,13 +42,13 @@ public class MissionInfo extends BaseTimeEntity {
     private RemainPeriod remainPeriod;
 
     @Builder
-    public MissionInfo(User user, Mission mission){
+    public PersonalMission(User user, Mission mission){
         setUser(user);
         this.mission = mission;
         this.finishCount =mission.getMissionCertificationMethod().getMissionCertificateCount().getCount();
         this.remainPeriod = new RemainPeriod((long)mission.getDayCategory().getDay(),0L, 0L);
         this.progress = 0;
-        this.missionInfoStatus = MissionInfoStatus.IN_PROGRESS;
+        this.personalMissionStatus = PersonalMissionStatus.IN_PROGRESS;
     }
 
     public void changeRemainPeriod(){
@@ -62,13 +62,13 @@ public class MissionInfo extends BaseTimeEntity {
     }
 
     private void changeToFinishStatus(){
-        this.missionInfoStatus = MissionInfoStatus.FINISH;
+        this.personalMissionStatus = PersonalMissionStatus.FINISH;
     }
 
-    private void changeToFailStatus() {this.missionInfoStatus = MissionInfoStatus.FAIL;}
+    private void changeToFailStatus() {this.personalMissionStatus = PersonalMissionStatus.FAIL;}
 
     public void addProgress(){
-        if (this.progress >= finishCount || this.missionInfoStatus.equals(MissionInfoStatus.FINISH)) {
+        if (this.progress >= finishCount || this.personalMissionStatus.equals(PersonalMissionStatus.FINISH)) {
             throw new MissionException(ErrorCode.OVER_PROGRESS);
         }
         if (this.progress + 1 == finishCount) {
@@ -79,10 +79,10 @@ public class MissionInfo extends BaseTimeEntity {
 
     private void setUser(User user) {
         this.user = user;
-        user.getMissionInfoList().add(this);
+        user.getPersonalMissionList().add(this);
     }
 
     public boolean isEnd() {
-        return this.missionInfoStatus.equals(MissionInfoStatus.FINISH);
+        return this.personalMissionStatus.equals(PersonalMissionStatus.FINISH);
     }
 }

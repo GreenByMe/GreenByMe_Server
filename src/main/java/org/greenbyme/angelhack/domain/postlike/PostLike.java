@@ -1,5 +1,6 @@
 package org.greenbyme.angelhack.domain.postlike;
 
+import io.swagger.annotations.Api;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,7 @@ import org.greenbyme.angelhack.domain.user.User;
 
 import javax.persistence.*;
 
+@Api(tags = "")
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

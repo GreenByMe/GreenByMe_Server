@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.greenbyme.angelhack.domain.baseEntity.BaseEntity;
-import org.greenbyme.angelhack.domain.missionInfo.MissionInfo;
+import org.greenbyme.angelhack.domain.personalmission.PersonalMission;
 import org.greenbyme.angelhack.domain.post.Post;
 import org.greenbyme.angelhack.domain.postlike.PostLike;
 import org.springframework.security.core.GrantedAuthority;
@@ -46,7 +46,7 @@ public class User extends BaseEntity implements UserDetails {
     private String platformId;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<MissionInfo> missionInfoList = new ArrayList<>();
+    private List<PersonalMission> personalMissionList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> postList = new ArrayList<>();

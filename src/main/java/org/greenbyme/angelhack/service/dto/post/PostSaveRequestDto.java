@@ -8,13 +8,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostSaveRequestDto {
 
-    private Long missionInfoId;
+    private Long personalMission_id;
     private String title;
     private String text;
     private Boolean open;
 
-    public PostSaveRequestDto(Long missionInfoId, String title,  String text, Boolean open) {
-        this.missionInfoId = missionInfoId;
+    public PostSaveRequestDto(Long personalMission_id, String title, String text, Boolean open) {
+        this.personalMission_id = personalMission_id;
         this.title = title;
         this.text = text;
         this.open = open;

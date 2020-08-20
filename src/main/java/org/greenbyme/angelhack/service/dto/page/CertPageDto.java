@@ -3,7 +3,7 @@ package org.greenbyme.angelhack.service.dto.page;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.greenbyme.angelhack.domain.missionInfo.MissionInfo;
+import org.greenbyme.angelhack.domain.personalmission.PersonalMission;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,12 +13,12 @@ import java.util.stream.Collectors;
 public class CertPageDto {
 
     private Long userId;
-    private List<ProgressMissionInfoDto> missionInfoList;
+    private List<ProgressPersonalMissionDto> personalMissions;
 
-    public CertPageDto(Long userId, List<MissionInfo> missionInfos) {
+    public CertPageDto(Long userId, List<PersonalMission> personalMissions) {
         this.userId = userId;
-        this.missionInfoList = missionInfos.stream()
-                .map(ProgressMissionInfoDto::new)
+        this.personalMissions = personalMissions.stream()
+                .map(ProgressPersonalMissionDto::new)
                 .collect(Collectors.toList());
     }
 }
