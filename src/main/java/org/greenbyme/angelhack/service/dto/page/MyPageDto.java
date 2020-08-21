@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.greenbyme.angelhack.domain.user.User;
-import org.greenbyme.angelhack.service.dto.missionInfo.MissionInfoDetailDto;
+import org.greenbyme.angelhack.service.dto.personalmission.PersonalMissionDetailDto;
 import org.greenbyme.angelhack.service.dto.post.PostDetailResponseDto;
 
 import java.util.List;
@@ -21,15 +21,15 @@ public class MyPageDto {
     private double expectCo2;
     private double expectTree;
     private Long passMissionCount;
-    private List<MissionInfoDetailDto> missionInfoList;
+    private List<PersonalMissionDetailDto> personalMissions;
     private List<PostDetailResponseDto> posts;
 
     public MyPageDto(User user, Long passMissionCount) {
         this.userId = user.getId();
         this.email = user.getEmail();
         this.nickName = user.getNickname();
-        this.missionInfoList = user.getMissionInfoList().stream()
-                .map(MissionInfoDetailDto::new)
+        this.personalMissions = user.getPersonalMissionList().stream()
+                .map(PersonalMissionDetailDto::new)
                 .collect(Collectors.toList());
         this.posts = user.getPostList().stream()
                 .map(PostDetailResponseDto::new)

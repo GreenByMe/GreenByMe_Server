@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.greenbyme.angelhack.domain.baseEntity.BaseEntity;
-import org.greenbyme.angelhack.domain.missionInfo.MissionInfo;
+import org.greenbyme.angelhack.domain.personalmission.PersonalMission;
 import org.greenbyme.angelhack.domain.postlike.PostLike;
 import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.service.dto.post.PostUpdateRequestDto;
@@ -29,8 +29,8 @@ public class Post extends BaseEntity {
     private User user;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "missioninfo_id")
-    private MissionInfo missionInfo;
+    @JoinColumn(name = "personalmission_id")
+    private PersonalMission personalMission;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<PostLike> postLikes = new ArrayList<>();
@@ -51,9 +51,9 @@ public class Post extends BaseEntity {
     }
 
     @Builder
-    public Post(User user, MissionInfo missionInfo, String text, String title, String picture, Boolean open) {
+    public Post(User user, PersonalMission personalMission, String text, String title, String picture, Boolean open) {
         setUser(user);
-        this.missionInfo = missionInfo;
+        this.personalMission = personalMission;
         this.text = text;
         this.title = title;
         this.picture = picture;

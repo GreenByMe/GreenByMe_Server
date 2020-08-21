@@ -1,5 +1,6 @@
 package org.greenbyme.angelhack.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -8,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.service.FileUploadDownloadService;
 import org.greenbyme.angelhack.service.UserService;
-import org.greenbyme.angelhack.service.dto.missionInfo.MissionInfobyUserDto;
+import org.greenbyme.angelhack.service.dto.personalmission.PersonalMissionByUserDto;
 import org.greenbyme.angelhack.service.dto.post.PostDetailResponseDto;
 import org.greenbyme.angelhack.service.dto.user.*;
 import org.greenbyme.angelhack.util.JwtTokenProvider;
@@ -29,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 
+@Api(tags = "2. User")
 @Slf4j
 @RestController
 @RequestMapping("/api/users")
@@ -90,10 +92,10 @@ public class UserController {
     }
 
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
-    @GetMapping("/missionInfos")
-    public ResponseEntity<List<MissionInfobyUserDto>> getUserMissionInfoList(@ApiIgnore final Authentication authentication) {
+    @GetMapping("/personalMissions")
+    public ResponseEntity<List<PersonalMissionByUserDto>> getUserPersonalMissionList(@ApiIgnore final Authentication authentication) {
         Long userId = ((User) authentication.getPrincipal()).getId();
-        List<MissionInfobyUserDto> dto = userService.getMissionInfoList(userId);
+        List<PersonalMissionByUserDto> dto = userService.getPersonalMissionList(userId);
         return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 

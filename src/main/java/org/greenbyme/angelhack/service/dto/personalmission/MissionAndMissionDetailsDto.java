@@ -1,4 +1,4 @@
-package org.greenbyme.angelhack.service.dto.missionInfo;
+package org.greenbyme.angelhack.service.dto.personalmission;
 
 import lombok.AccessLevel;
 import lombok.Builder;

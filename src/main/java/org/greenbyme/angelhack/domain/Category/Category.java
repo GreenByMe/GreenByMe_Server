@@ -7,5 +7,6 @@ public enum Category {
     DISPOSABLE,
     TRAFFIC,
     WATERWORKS,
-    CAMPAIGN
+    CAMPAIGN,
+    ALL
 }

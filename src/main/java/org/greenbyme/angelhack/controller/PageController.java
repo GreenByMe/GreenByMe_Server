@@ -1,5 +1,6 @@
 package org.greenbyme.angelhack.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
+@Api(tags = "1. View")
 @Slf4j
 @RestController
 @RequestMapping("/api/page")
@@ -30,10 +32,9 @@ public class PageController {
 
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @GetMapping("/home")
-    public ResponseEntity<HomePageDto> getHomePage(@ApiIgnore final Authentication authentication,
-                                                   @PageableDefault(size = 10, sort = "passCandidatesCount", direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity<HomePageDto> getHomePage(@ApiIgnore final Authentication authentication) {
         Long userId = ((User) authentication.getPrincipal()).getId();
-        return ResponseEntity.status(HttpStatus.OK).body(pageService.getHompeageInfos(userId, pageable));
+        return ResponseEntity.status(HttpStatus.OK).body(pageService.getHompeageInfos(userId));
     }
 
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})

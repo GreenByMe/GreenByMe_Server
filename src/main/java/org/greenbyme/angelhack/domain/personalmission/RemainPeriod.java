@@ -1,14 +1,11 @@
-package org.greenbyme.angelhack.domain.missionInfo;
+package org.greenbyme.angelhack.domain.personalmission;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.greenbyme.angelhack.domain.baseEntity.BaseTimeEntity;
 
 import javax.persistence.Embeddable;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 
 @Getter
 @Setter

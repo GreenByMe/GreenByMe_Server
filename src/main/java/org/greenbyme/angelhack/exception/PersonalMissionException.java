@@ -1,15 +1,15 @@
 package org.greenbyme.angelhack.exception;
 
-public class MissionInfoException extends RuntimeException {
+public class PersonalMissionException extends RuntimeException {
 
     private final ErrorCode errorCode;
 
-    public MissionInfoException(final String message, ErrorCode errorCode) {
+    public PersonalMissionException(final String message, ErrorCode errorCode) {
         super(message);
         this.errorCode = errorCode;
     }
 
-    public MissionInfoException(ErrorCode errorCode){
+    public PersonalMissionException(ErrorCode errorCode){
         super(errorCode.getMessage());
         this.errorCode = errorCode;
     }
