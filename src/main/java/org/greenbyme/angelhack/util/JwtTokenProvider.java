@@ -5,9 +5,12 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
+import org.greenbyme.angelhack.domain.user.User;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
@@ -24,7 +27,7 @@ public class JwtTokenProvider {
 
     @Value("spring.jwt.secret")
     private String secretKey;
-    private long tokenValidMilisecond = 1000L * 60 * 60; // 1시간만 토큰 유효
+    private long tokenValidMilisecond = 1000L * 60 * 60 * 24 * 7 * 2;
 
     private final UserDetailsService userDetailsService;
 
@@ -34,8 +37,8 @@ public class JwtTokenProvider {
     }
 
     public String createToken(Long id, List<String> roles) {
-        String userid = Long.toString(id);
-        Claims claims = Jwts.claims().setSubject(userid);
+        String userId = Long.toString(id);
+        Claims claims = Jwts.claims().setSubject(userId);
         claims.put("roles", roles);
         Date now = new Date();
         return Jwts.builder()
@@ -65,6 +68,15 @@ public class JwtTokenProvider {
             return !claims.getBody().getExpiration().before(new Date());
         } catch (Exception e) {
             return false;
+        }
+    }
+
+    public String makeReToken(Authentication authentication) throws Exception {
+        try {
+            User user = (User) userDetailsService.loadUserByUsername(authentication.getName());
+            return createToken(user.getId(), user.getRoles());
+        } catch (BadCredentialsException e) {
+            throw new IllegalArgumentException();
         }
     }
 }
