@@ -37,7 +37,7 @@ public class PageService {
     private final MissionRepository missionRepository;
     private final PersonalMissionRepository personalMissionRepository;
 
-    public HomePageDto getHompeageInfos(Long userId, Pageable pageable) {
+    public HomePageDto getHompeageInfos(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
         List<PersonalMission> res = personalMissionRepository.findAllByUser(user);
