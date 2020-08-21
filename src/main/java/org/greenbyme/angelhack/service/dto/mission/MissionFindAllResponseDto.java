@@ -20,6 +20,7 @@ public class MissionFindAllResponseDto {
     private String subject;
     private String description;
     private String pictureUrl;
+    private Long passCandidates;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 
@@ -31,6 +32,7 @@ public class MissionFindAllResponseDto {
         this.subject = mission.getSubject();
         this.description = mission.getDescription();
         this.pictureUrl = mission.getPictureUrl();
+        this.passCandidates = mission.getPassCandidatesCount();
         this.startDate = LocalDateTime.now();
         this.endDate = LocalDateTime.now().plusDays(mission.getDayCategory().getDay());
     }

@@ -15,6 +15,8 @@ import org.greenbyme.angelhack.service.dto.post.PostDetailResponseDto;
 import org.greenbyme.angelhack.service.dto.user.*;
 import org.greenbyme.angelhack.util.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -91,24 +93,21 @@ public class UserService {
         return new UserExpectTreeCo2ResponseDto(user, missionCount, missionProgressRates);
     }
 
-    public List<PersonalMissionByUserDto> getPersonalMissionList(Long userId) {
+    public Page<PersonalMissionByUserDto> getPersonalMissionList(Long userId, Pageable pageable) {
         User user = getUser(userId);
-        return user.getPersonalMissionList().stream()
-                .map(PersonalMissionByUserDto::new)
-                .collect(Collectors.toList());
+        return personalMissionRepository.findAllByUser(user, pageable)
+                .map(PersonalMissionByUserDto::new);
     }
 
-    public List<PostDetailResponseDto> getPostList(Long userId) {
+    public Page<PostDetailResponseDto> getPostList(Long userId, Pageable pageable) {
         User user = getUser(userId);
-        return user.getPostList().stream()
-                .map(PostDetailResponseDto::new)
-                .collect(Collectors.toList());
+        return postRepository.findAllByUser(user, pageable)
+                .map(PostDetailResponseDto::new);
     }
 
     @Transactional
     public UserResponseDto updateNickName(UserUpdateNicktDto dto, Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
+        User user = getUser(userId);
         user.changeNickName(dto.getNickName());
         return new UserResponseDto(user.getId());
     }
@@ -138,5 +137,13 @@ public class UserService {
 
     public String refreshToken(Authentication authentication) throws Exception {
         return jwtTokenProvider.makeReToken(authentication);
+    }
+
+    public Boolean checkEmail(String email) {
+        return !userRepository.findByEmail(email).isPresent();
+    }
+
+    public Boolean checkNickName(String nickname) {
+        return !userRepository.findByNickname(nickname).isPresent();
     }
 }
