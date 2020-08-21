@@ -107,8 +107,7 @@ public class UserService {
 
     @Transactional
     public UserResponseDto updateNickName(UserUpdateNicktDto dto, Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
+        User user = getUser(userId);
         user.changeNickName(dto.getNickName());
         return new UserResponseDto(user.getId());
     }

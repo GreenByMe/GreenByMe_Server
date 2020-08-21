@@ -1,19 +1,17 @@
 package org.greenbyme.angelhack.controller;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.greenbyme.angelhack.domain.user.User;
+import org.greenbyme.angelhack.exception.UserException;
 import org.greenbyme.angelhack.service.FileUploadDownloadService;
 import org.greenbyme.angelhack.service.UserService;
 import org.greenbyme.angelhack.service.dto.page.PageDto;
 import org.greenbyme.angelhack.service.dto.personalmission.PersonalMissionByUserDto;
 import org.greenbyme.angelhack.service.dto.post.PostDetailResponseDto;
 import org.greenbyme.angelhack.service.dto.user.*;
+import org.greenbyme.angelhack.util.FileDownloadException;
 import org.greenbyme.angelhack.util.JwtTokenProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +31,6 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.List;
 
 @Api(tags = "2. User")
 @Slf4j
@@ -50,20 +47,33 @@ public class UserController {
     @Autowired
     private FileUploadDownloadService service;
 
-    @ApiOperation(value = "유저 가입", response = UserResponseDto.class)
+    @ApiOperation(value = "유저 가입")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "가입 성공", response = UserResponseDto.class),
+            @ApiResponse(code = 1000, message = "이미 가입된 메일")
+    })
     @PostMapping
     public ResponseEntity<UserResponseDto> saveUser(@RequestBody final UserSaveRequestDto requestDto) {
         UserResponseDto responseDto = userService.saveUser(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
-    @ApiOperation(value = "이메일, 패스워드를 받아서 로그인하여 토큰을 반환한다", response = String.class)
+    @ApiOperation(value = "이메일, 패스워드를 받아서 로그인하여 토큰을 반환한다")
+    @ApiResponses(value = {
+            @ApiResponse(code = 202, message = "로그인 성공", response = String.class),
+            @ApiResponse(code = 1100, message = "등록되지 않은 이메일", response = UserException.class),
+            @ApiResponse(code = 1200, message = "잘못된 패스워드", response = UserException.class),
+    })
     @PostMapping("/signin")
     public ResponseEntity<String> signIn(@RequestBody final UserLoginRequestDto userLoginRequestDto) {
         User user = userService.login(userLoginRequestDto);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(jwtTokenProvider.createToken(user.getId(), user.getRoles()));
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "이미지 조회 성공", response = Resource.class),
+            @ApiResponse(code = 400, message = "파일 조회 실패", response = FileDownloadException.class)
+    })
     @GetMapping("/images/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
         Resource resource = service.loadFileAsResource(fileName);
@@ -82,7 +92,11 @@ public class UserController {
                 .body(resource);
     }
 
-    @ApiOperation(value = "유저 정보 상세 조회", response = UserDetailResponseDto.class)
+    @ApiOperation(value = "유저 정보 상세 조회")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "조회 성공", response = UserDetailResponseDto.class),
+            @ApiResponse(code = 1300, message = "등록되지 않은 유저", response = UserException.class)
+    })
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @GetMapping
     public ResponseEntity<UserDetailResponseDto> getUserDetail(@ApiIgnore final Authentication authentication) {
@@ -90,7 +104,11 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getUserDetail(userId));
     }
 
-    @ApiOperation(value = "유저 감소량 조회", response = UserExpectTreeCo2ResponseDto.class)
+    @ApiOperation(value = "유저 감소량 조회")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "조회 성공", response = UserExpectTreeCo2ResponseDto.class),
+            @ApiResponse(code = 1300, message = "등록되지 않은 유저", response = UserException.class)
+    })
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @GetMapping("/expectTreeCo2")
     public ResponseEntity<UserExpectTreeCo2ResponseDto> getUserExpectTreeCo2(@ApiIgnore final Authentication authentication) {
@@ -99,7 +117,11 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userExpectTreeCo2);
     }
 
-    @ApiOperation(value = "유저 진행 미션 조회", response = PersonalMissionByUserDto.class)
+    @ApiOperation(value = "유저 진행 미션 조회")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "조회 성공", response = PersonalMissionByUserDto.class),
+            @ApiResponse(code = 1300, message = "등록되지 않은 유저", response = UserException.class)
+    })
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @GetMapping("/personalMissions")
     public ResponseEntity<PageDto<PersonalMissionByUserDto>> getUserPersonalMissionList(@ApiIgnore final Authentication authentication,
@@ -109,7 +131,11 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(new PageDto<>(dto));
     }
 
-    @ApiOperation(value = "유저 게시글 조회", response = PostDetailResponseDto.class)
+    @ApiOperation(value = "유저 게시글 조회")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "조회 성공", response = PostDetailResponseDto.class),
+            @ApiResponse(code = 1300, message = "등록되지 않은 유저", response = UserException.class)
+    })
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @GetMapping("/posts")
     public ResponseEntity<PageDto<PostDetailResponseDto>> getUserPostList(@ApiIgnore final Authentication authentication,
@@ -119,7 +145,11 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(new PageDto<>(dto));
     }
 
-    @ApiOperation(value = "유저 닉네임 수정", response = UserResponseDto.class)
+    @ApiOperation(value = "유저 닉네임 수정")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "닉네임 수정 성공", response = UserResponseDto.class),
+            @ApiResponse(code = 1300, message = "등록되지 않은 유저", response = UserException.class)
+    })
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @PutMapping("/nickname")
     public ResponseEntity<UserResponseDto> updateUserNickName(@ApiIgnore final Authentication authentication,
@@ -128,7 +158,11 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.updateNickName(dto, userId));
     }
 
-    @ApiOperation(value = "유저 이미지 수정", response = UserResponseDto.class)
+    @ApiOperation(value = "유저 이미지 수정")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "이미지 수정 성공", response = UserResponseDto.class),
+            @ApiResponse(code = 1300, message = "등록되지 않은 유저", response = UserException.class)
+    })
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @PutMapping("/image")
     public ResponseEntity<UserResponseDto> updateUserPhotos(@ApiIgnore final Authentication authentication,
@@ -137,20 +171,20 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.updatePhotos(userId, file));
     }
 
-    @ApiOperation(value = "토큰 Refresh", response = String.class)
+    @ApiOperation(value = "토큰 Refresh")
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @PostMapping("/refresh")
     public ResponseEntity<String> refreshToken(@ApiIgnore final Authentication authentication) throws Exception {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.refreshToken(authentication));
     }
 
-    @ApiOperation(value = "이메일 중복 체크")
+    @ApiOperation(value = "이메일 중복 체크", response = Boolean.class)
     @GetMapping("/email/{email}")
     public ResponseEntity<Boolean> checkEmail(@PathVariable("email") String email) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.checkEmail(email));
     }
 
-    @ApiOperation(value = "닉네임 중복 체크")
+    @ApiOperation(value = "닉네임 중복 체크", response = Boolean.class)
     @GetMapping("/nickname/{nickname}")
     public ResponseEntity<Boolean> checkNickName(@PathVariable("nickname") String nickname) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.checkNickName(nickname));
