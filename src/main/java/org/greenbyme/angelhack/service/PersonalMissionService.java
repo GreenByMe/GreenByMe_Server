@@ -15,6 +15,8 @@ import org.greenbyme.angelhack.service.dto.personalmission.InProgressResponseDto
 import org.greenbyme.angelhack.service.dto.personalmission.PersonalMissionDeleteResponseDto;
 import org.greenbyme.angelhack.service.dto.personalmission.PersonalMissionDetailResponseDto;
 import org.greenbyme.angelhack.service.dto.personalmission.PersonalMissionSaveResponseDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,14 +40,14 @@ public class PersonalMissionService {
 
         List<PersonalMission> personalMissionByUserIdAndPersonalMissionId = personalMissionRepository.findPersonalMissionByUserIdAndMissionId(userId, missionId);
         for (PersonalMission personalMission : personalMissionByUserIdAndPersonalMissionId) {
-            if(personalMission.getPersonalMissionStatus()== PersonalMissionStatus.IN_PROGRESS){
+            if (personalMission.getPersonalMissionStatus() == PersonalMissionStatus.IN_PROGRESS) {
                 throw new PersonalMissionException(ErrorCode.ALREADY_EXISTS_MISSION);
             }
         }
         List<PersonalMission> personalMissionByUserIdAndWhereInProgresses = personalMissionRepository.findPersonalMissionByUserIdAndWhereInProgress(userId);
 
         for (PersonalMission infoByUserIdAndWhereInProgress : personalMissionByUserIdAndWhereInProgresses) {
-            if(infoByUserIdAndWhereInProgress.getMission().getDayCategory()==mission.getDayCategory()){
+            if (infoByUserIdAndWhereInProgress.getMission().getDayCategory() == mission.getDayCategory()) {
                 throw new PersonalMissionException(ErrorCode.ALREADY_EXISTS_SAME_DAY_MISSION);
             }
         }
@@ -70,23 +72,21 @@ public class PersonalMissionService {
         return new PersonalMissionDeleteResponseDto(personalMission);
     }
 
-    public List<InProgressResponseDto> getPersonalMissionInProgress(Long userId) {
+    public Page<InProgressResponseDto> getPersonalMissionInProgress(Long userId, Pageable pageable) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
-        return personalMissionRepository.findAllByUser(user).stream()
-                .filter(m -> m.getPersonalMissionStatus().equals(PersonalMissionStatus.IN_PROGRESS))
-                .map(m -> new InProgressResponseDto(m, howManyPeopleInMission(m)))
-                .collect(Collectors.toList());
+        return personalMissionRepository.findAllByUser(user, pageable)
+                .map(m -> new InProgressResponseDto(m, howManyPeopleInMission(m)));
     }
 
     private Long howManyPeopleInMission(PersonalMission personalMission) {
         return personalMissionRepository.findAllByMission(personalMission.getMission()).stream()
-                .filter(m->m.getPersonalMissionStatus().equals(PersonalMissionStatus.IN_PROGRESS))
+                .filter(m -> m.getPersonalMissionStatus().equals(PersonalMissionStatus.IN_PROGRESS))
                 .count();
     }
 
     @Transactional
-    public void changeRemainPeriod(){
+    public void changeRemainPeriod() {
         List<PersonalMission> byPersonalMissionStatusEquals = personalMissionRepository.findByPersonalMissionStatusEquals(PersonalMissionStatus.IN_PROGRESS);
         for (PersonalMission personalMission : byPersonalMissionStatusEquals) {
             personalMission.changeRemainPeriod();
