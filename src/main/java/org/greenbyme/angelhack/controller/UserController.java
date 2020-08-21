@@ -1,5 +1,6 @@
 package org.greenbyme.angelhack.controller;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -141,5 +142,17 @@ public class UserController {
     @PostMapping("/refresh")
     public ResponseEntity<String> refreshToken(@ApiIgnore final Authentication authentication) throws Exception {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.refreshToken(authentication));
+    }
+
+    @ApiOperation(value = "이메일 중복 체크")
+    @GetMapping("/email/{email}")
+    public ResponseEntity<Boolean> checkEmail(@PathVariable("email") String email) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.checkEmail(email));
+    }
+
+    @ApiOperation(value = "닉네임 중복 체크")
+    @GetMapping("/nickname/{nickname}")
+    public ResponseEntity<Boolean> checkNickName(@PathVariable("nickname") String nickname) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.checkNickName(nickname));
     }
 }

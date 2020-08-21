@@ -139,4 +139,12 @@ public class UserService {
     public String refreshToken(Authentication authentication) throws Exception {
         return jwtTokenProvider.makeReToken(authentication);
     }
+
+    public Boolean checkEmail(String email) {
+        return !userRepository.findByEmail(email).isPresent();
+    }
+
+    public Boolean checkNickName(String nickname) {
+        return !userRepository.findByNickname(nickname).isPresent();
+    }
 }
