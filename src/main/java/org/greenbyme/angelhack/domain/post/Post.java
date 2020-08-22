@@ -28,8 +28,8 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "personalmission_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "personal_mission_id")
     private PersonalMission personalMission;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
@@ -53,11 +53,16 @@ public class Post extends BaseEntity {
     @Builder
     public Post(User user, PersonalMission personalMission, String text, String title, String picture, Boolean open) {
         setUser(user);
-        this.personalMission = personalMission;
+        setPersonalMission(personalMission);
         this.text = text;
         this.title = title;
         this.picture = picture;
         this.open = open;
+    }
+
+    private void setPersonalMission(PersonalMission personalMission){
+        this.personalMission = personalMission;
+        personalMission.getPosts().add(this);
     }
 
     private void setUser(User user) {
