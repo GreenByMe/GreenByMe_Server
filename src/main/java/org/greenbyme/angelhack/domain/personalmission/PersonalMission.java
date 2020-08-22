@@ -35,9 +35,6 @@ public class PersonalMission extends BaseTimeEntity {
     @JoinColumn(name = "mission_id")
     private Mission mission;
 
-    @OneToMany(mappedBy = "personalMission")
-    private List<Post> posts = new ArrayList<>();
-
     @Enumerated(EnumType.STRING)
     private PersonalMissionStatus personalMissionStatus;
 

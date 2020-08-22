@@ -27,18 +27,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-@Rollback(value = false)
 class PostRepositoryTest {
 
-    @Autowired PostRepository postRepository;
+    @Autowired
+    PostRepository postRepository;
     @Autowired
     EntityManager em;
-
-    @PersistenceUnit
-    EntityManagerFactory emf;
-
+    
     @BeforeEach
-    public void init(){
+    public void init() {
         User testUser = User.builder()
                 .name("김민석")
                 .email("test")
@@ -105,29 +102,23 @@ class PostRepositoryTest {
                 .build();
         em.persist(personalMission);
 
-        Post post1= Post.builder()
+        Post post1 = Post.builder()
                 .user(testUser)
                 .personalMission(personalMission)
+                .open(true)
                 .build();
         em.persist(post1);
     }
 
     @DisplayName("Personal Mission 저장확인")
     @Test
-    public void personalMissionSave(){
+    public void personalMissionSave() {
+        //given
 
+        //when
         Post post = postRepository.findById(1L).orElseThrow(() -> new NoResultException("없는 아이디"));
 
-        System.out.println("post = " + post);
-        boolean loaded = emf.getPersistenceUnitUtil().isLoaded(post.getLastModifiedBy());
-        System.out.println("loaded = " + loaded);
-
+        //then
         Assertions.assertThat(post.getPersonalMission().getId()).isEqualTo(1L);
-
-
     }
-
-
-
-
 }

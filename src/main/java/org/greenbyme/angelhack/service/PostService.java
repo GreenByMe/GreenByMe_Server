@@ -52,11 +52,9 @@ public class PostService {
             throw new PostException(ErrorCode.WRONG_ACCESS);
         }
         List<Post> posts = postRepository.findAllByPersonalMission(personalMission);
-        System.out.println("=======posts = " + posts);
         long postCount = posts.stream()
                 .map(p -> p.getLastModifiedDate().getDayOfYear() == LocalDateTime.now().getDayOfYear())
                 .count();
-        System.out.println("postCount = " + postCount);
         if (postCount > 0) {
             throw new PostException(ErrorCode.OVER_CERIFICATION);
         }
@@ -73,7 +71,8 @@ public class PostService {
                 .text(requestDto.getText())
                 .title(requestDto.getTitle())
                 .picture(filedUrl)
-                .open(requestDto.getOpen()).build();
+                .open(requestDto.getOpen())
+                .build();
         Post savedPost = postRepository.save(savePost);
         personalMission.addProgress();
         if (personalMission.isEnd()) {

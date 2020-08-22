@@ -2,9 +2,6 @@ spring:
   profiles:
     active: test
   datasource:
-    url: jdbc:h2:tcp://localhost/~/greenbyme
-    username: sa
-    password:
     driver-class-name: org.h2.Driver
   jpa:
     hibernate:

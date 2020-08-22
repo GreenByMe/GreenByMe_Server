@@ -7,6 +7,7 @@ import org.greenbyme.angelhack.domain.mission.MissionRepository;
 import org.greenbyme.angelhack.domain.personalmission.PersonalMission;
 import org.greenbyme.angelhack.domain.personalmission.PersonalMissionRepository;
 import org.greenbyme.angelhack.domain.personalmission.PersonalMissionStatus;
+import org.greenbyme.angelhack.domain.post.Post;
 import org.greenbyme.angelhack.domain.post.PostRepository;
 import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.domain.user.UserRepository;
@@ -86,6 +87,7 @@ public class PageService {
         long passMissionCount = personalMissionRepository.findAllByUser(user).stream()
                 .filter(m->m.getPersonalMissionStatus().equals(PersonalMissionStatus.FINISH))
                 .count();
-        return new MyPageDto(user, passMissionCount);
+        List<Post> posts = postRepository.findAllByUser(user);
+        return new MyPageDto(user, passMissionCount, posts);
     }
 }

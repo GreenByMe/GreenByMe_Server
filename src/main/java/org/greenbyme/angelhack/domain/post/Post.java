@@ -1,9 +1,6 @@
 package org.greenbyme.angelhack.domain.post;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.greenbyme.angelhack.domain.baseEntity.BaseEntity;
 import org.greenbyme.angelhack.domain.personalmission.PersonalMission;
 import org.greenbyme.angelhack.domain.postlike.PostLike;
@@ -17,6 +14,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(of = {"id", "title", "text", "open"})
 public class Post extends BaseEntity {
 
     @Id
@@ -42,32 +40,17 @@ public class Post extends BaseEntity {
     private Boolean open;
 
     @Builder
-    public Post(User user, String text, String title, String picture, Boolean open) {
-        setUser(user);
-        this.text = text;
-        this.title = title;
-        this.picture = picture;
-        this.open = open;
-    }
-
-    @Builder
     public Post(User user, PersonalMission personalMission, String text, String title, String picture, Boolean open) {
-        setUser(user);
-        setPersonalMission(personalMission);
+        changeUser(user);
+        this.personalMission = personalMission;
         this.text = text;
         this.title = title;
         this.picture = picture;
         this.open = open;
     }
 
-    private void setPersonalMission(PersonalMission personalMission){
-        this.personalMission = personalMission;
-        personalMission.getPosts().add(this);
-    }
-
-    private void setUser(User user) {
+    private void changeUser(User user) {
         this.user = user;
-        user.getPostList().add(this);
     }
 
     public boolean isOpen() {
