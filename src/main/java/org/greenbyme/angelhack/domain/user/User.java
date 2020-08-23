@@ -49,9 +49,6 @@ public class User extends BaseEntity implements UserDetails {
     private List<PersonalMission> personalMissionList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Post> postList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<PostLike> postLikes = new ArrayList<>();
 
     @Builder

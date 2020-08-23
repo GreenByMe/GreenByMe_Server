@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.greenbyme.angelhack.domain.baseEntity.BaseTimeEntity;
 import org.greenbyme.angelhack.domain.mission.Mission;
+import org.greenbyme.angelhack.domain.post.Post;
 import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.exception.ErrorCode;
 import org.greenbyme.angelhack.exception.MissionException;
@@ -13,6 +14,8 @@ import org.greenbyme.angelhack.exception.MissionException;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -21,7 +24,7 @@ public class PersonalMission extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "personalmission_id")
+    @Column(name = "personal_mission_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

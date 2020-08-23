@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.greenbyme.angelhack.domain.personalmission.PersonalMission;
 import org.greenbyme.angelhack.domain.personalmission.PersonalMissionRepository;
 import org.greenbyme.angelhack.domain.personalmission.PersonalMissionStatus;
+import org.greenbyme.angelhack.domain.post.Post;
 import org.greenbyme.angelhack.domain.post.PostRepository;
 import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.domain.user.UserRepository;
@@ -57,7 +58,8 @@ public class UserService {
 
     public UserDetailResponseDto getUserDetail(Long userId) {
         User user = getUser(userId);
-        return new UserDetailResponseDto(user);
+        List<Post> posts = postRepository.findAllByUser(user);
+        return new UserDetailResponseDto(user, posts);
     }
 
     private User getUser(final String email) {
