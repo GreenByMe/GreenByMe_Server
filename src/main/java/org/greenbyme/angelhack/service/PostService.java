@@ -80,7 +80,7 @@ public class PostService {
         }
         double expectTree = personalMission.getMission().getExpectTree();
         int finishCount = personalMission.getFinishCount();
-        return new PostSaveResponseDto(savedPost.getId(), expectTree, finishCount);
+        return new PostSaveResponseDto(savedPost.getId(), user.getNickname(), expectTree, finishCount);
     }
 
     public Page<PostResponseDto> getPostsByMission(Long missionId, Pageable pageable) {
