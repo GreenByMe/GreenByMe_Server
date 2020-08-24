@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public class InProgressResponseDto {
 
     private Long personalMissionId;
+    private Long missionId;
     private String missionTitle;
     private int finishCount;
     private int progress;
@@ -24,6 +25,7 @@ public class InProgressResponseDto {
 
     public InProgressResponseDto(PersonalMission personalMission, Long manyPeople) {
         this.personalMissionId = personalMission.getId();
+        this.missionId = personalMission.getMission().getId();
         this.missionTitle = personalMission.getMission().getTitle();
         this.finishCount = personalMission.getFinishCount();
         this.progress = personalMission.getProgress();

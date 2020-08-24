@@ -9,12 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TokenResponse {
 
-    private String accessToken;
-    private Long id;
+    private String token;
 
     @Builder
-    public TokenResponse(String accessToken, Long id) {
-        this.accessToken = accessToken;
-        this.id = id;
+    public TokenResponse(String accessToken) {
+        this.token = accessToken;
     }
 }

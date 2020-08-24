@@ -16,6 +16,7 @@ public class MissionFindAllByCategoryResponseDto {
     private Long id;
     private Category category;
     private DayCategory dayCategory;
+    private String title;
     private String subject;
     private String description;
     private LocalDateTime startDate;
@@ -26,6 +27,7 @@ public class MissionFindAllByCategoryResponseDto {
     public MissionFindAllByCategoryResponseDto(Mission mission) {
         this.id = mission.getId();
         this.category = mission.getCategory();
+        this.title = mission.getTitle();
         this.dayCategory = mission.getDayCategory();
         this.subject = mission.getSubject();
         this.description = mission.getDescription();

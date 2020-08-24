@@ -45,15 +45,15 @@ public class PostService {
 
     @Transactional
     public PostSaveResponseDto savePosts(Long userId, PostSaveRequestDto requestDto, MultipartFile file) {
-        PersonalMission personalMission = personalMissionRepository.findById(requestDto.getPersonalMission_id())
+        PersonalMission personalMission = personalMissionRepository.findDetailsById(requestDto.getPersonalMission_id())
                 .orElseThrow(() -> new MissionException(ErrorCode.INVALID_PERSONAL_MISSION));
         User user = getUser(userId);
         if (!personalMission.getUser().getId().equals(user.getId())) {
             throw new PostException(ErrorCode.WRONG_ACCESS);
         }
-        List<Post> posts = postRepository.findAllByUserAndPersonalMission(user, personalMission);
+        List<Post> posts = postRepository.findAllByPersonalMission(personalMission);
         long postCount = posts.stream()
-                .filter(p -> p.getCreatedDate().getDayOfYear() == LocalDateTime.now().getDayOfYear())
+                .map(p -> p.getLastModifiedDate().getDayOfYear() == LocalDateTime.now().getDayOfYear())
                 .count();
         if (postCount > 0) {
             throw new PostException(ErrorCode.OVER_CERIFICATION);
@@ -71,15 +71,16 @@ public class PostService {
                 .text(requestDto.getText())
                 .title(requestDto.getTitle())
                 .picture(filedUrl)
-                .open(requestDto.getOpen()).build();
-        savePost = postRepository.save(savePost);
+                .open(requestDto.getOpen())
+                .build();
+        Post savedPost = postRepository.save(savePost);
         personalMission.addProgress();
         if (personalMission.isEnd()) {
             personalMission.getMission().addPassCandidates();
         }
         double expectTree = personalMission.getMission().getExpectTree();
         int finishCount = personalMission.getFinishCount();
-        return new PostSaveResponseDto(savePost.getId(), expectTree, finishCount);
+        return new PostSaveResponseDto(savedPost.getId(), user.getNickname(), expectTree, finishCount);
     }
 
     public Page<PostResponseDto> getPostsByMission(Long missionId, Pageable pageable) {

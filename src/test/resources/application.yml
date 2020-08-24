@@ -1,14 +1,7 @@
 spring:
   profiles:
-    active: dev
-
----
-spring:
-  profiles: local
+    active: test
   datasource:
-    url: jdbc:h2:tcp://localhost/~/greenbyme
-    username: sa
-    password:
     driver-class-name: org.h2.Driver
   jpa:
     hibernate:
@@ -35,7 +28,3 @@ logging:
         type:
 file:
   upload-dir: ./uploads
-
----
-spring.profiles: dev
-spring.profiles.include: real
