@@ -49,6 +49,10 @@ public class UserService {
         if (userRepository.findByEmail(requestDto.getEmail()).isPresent()) {
             throw new UserException("이미 가입된 메일입니다", ErrorCode.MEMBER_DUPLICATED_EMAIL);
         }
+
+        if (userRepository.findByNickname(requestDto.getNickname()).isPresent()) {
+            throw new UserException("이미 가입된 닉네임 입니다.", ErrorCode.MEMBER_DUPLICATED_NICKNAME);
+        }
         String encodePassword = passwordEncoder.encode(requestDto.getPassword());
         User user = requestDto.toEntity();
         user.changePassword(encodePassword);

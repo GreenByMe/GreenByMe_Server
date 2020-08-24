@@ -7,6 +7,7 @@ public enum ErrorCode {
     UNSIGNED(1100, "등록되지 않은 이메일"),
     WRONG_PASSWORD(1200, "잘못된 패스워드"),
     UNSIGNED_USER(1300, "등록되지 않은 유저 idx"),
+    MEMBER_DUPLICATED_NICKNAME(1000, "중복된 이메일 가입시도."),
     INVALID_MISSION(2000,"등록되지 않은 미션 id"),
     INVALID_PERSONAL_MISSION(2100,"등록되지 않은 개인 미션 정보 id"),
     OVER_PROGRESS(2200, "인증 횟수를 초과했습니다"),
