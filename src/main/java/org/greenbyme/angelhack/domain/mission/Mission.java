@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EntityListeners(DomainListener.class)
-@ToString(of = {"id", "category", "dayCategory","missionCertificationMethod", "title","subject","description","expectTree","expectCo2","passCandidatesCount","pictureUrl"})
+@ToString(of = {"id","title","subject", "missionCertificationMethod" })
 public class Mission extends BaseTimeEntity {
 
     @Id
@@ -77,4 +77,3 @@ public class Mission extends BaseTimeEntity {
         this.passCandidatesCount += 1;
     }
 }
-

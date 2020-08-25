@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EntityListeners(DomainListener.class)
-@ToString(of = {"id", "name", "email","password","nickname","photo", "expectTree", "expectCo2", "roles","platformType","platformId"})
+@ToString(of = {"id", "email","nickname"})
 public class User extends BaseEntity implements UserDetails {
 
     @Id

@@ -11,7 +11,6 @@ public enum ErrorCode {
     ENTITY_NOT_FOUND(400, "C_006", " Entity Not Found"),
     WRONG_ACCESS(403, "C_007", "잘못된 접근"),
 
-
     // User
     MEMBER_DUPLICATED_EMAIL(409, "U_001", "중복된 이메일 가입시도."),
     MEMBER_DUPLICATED_NICKNAME(409, "U_002", "중복된 닉네임 가입시도."),
