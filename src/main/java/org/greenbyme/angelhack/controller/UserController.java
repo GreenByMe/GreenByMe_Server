@@ -7,6 +7,7 @@ import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.exception.UserException;
 import org.greenbyme.angelhack.service.FileUploadDownloadService;
 import org.greenbyme.angelhack.service.UserService;
+import org.greenbyme.angelhack.service.dto.BasicResponseDto;
 import org.greenbyme.angelhack.service.dto.TokenResponse;
 import org.greenbyme.angelhack.service.dto.page.PageDto;
 import org.greenbyme.angelhack.service.dto.personalmission.PersonalMissionByUserDto;
@@ -43,14 +44,13 @@ public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     private final UserService userService;
-    private final JwtTokenProvider jwtTokenProvider;
 
     @Autowired
     private FileUploadDownloadService service;
 
     @ApiOperation(value = "유저 가입")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "가입 성공", response = UserResponseDto.class),
+            @ApiResponse(code = 201, message = "가입 성공", response = BasicResponseDto.class),
             @ApiResponse(code = 500, message = "이미 가입된 메일", response = UserException.class)
     })
     @PostMapping
@@ -61,13 +61,13 @@ public class UserController {
 
     @ApiOperation(value = "이메일, 패스워드를 받아서 로그인하여 토큰을 반환한다")
     @ApiResponses(value = {
-            @ApiResponse(code = 202, message = "로그인 성공", response = TokenResponse.class),
+            @ApiResponse(code = 201, message = "로그인 성공", response = TokenResponse.class),
             @ApiResponse(code = 500, message = "로그인 실패", response = UserException.class)
     })
     @PostMapping("/signin")
-    public ResponseEntity<TokenResponse> signIn(@RequestBody final UserLoginRequestDto userLoginRequestDto) {
-        User user = userService.login(userLoginRequestDto);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(new TokenResponse(jwtTokenProvider.createToken(user.getId(), user.getRoles())));
+    public ResponseEntity<BasicResponseDto<String>> signIn(@RequestBody final UserLoginRequestDto userLoginRequestDto) {
+        String token = userService.login(userLoginRequestDto);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(BasicResponseDto.of(token, String.valueOf(HttpStatus.CREATED.value())));
     }
 
     @ApiResponses(value = {
@@ -171,11 +171,11 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.updatePhotos(userId, file));
     }
 
-    @ApiOperation(value = "토큰 Refresh", response = TokenResponse.class)
+    @ApiOperation(value = "토큰 Refresh")
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @PostMapping("/refresh")
-    public ResponseEntity<TokenResponse> refreshToken(@ApiIgnore final Authentication authentication) throws Exception {
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(new TokenResponse(userService.refreshToken(authentication)));
+    public ResponseEntity<BasicResponseDto<String>> refreshToken(@ApiIgnore final Authentication authentication) throws Exception {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(BasicResponseDto.of(userService.refreshToken(authentication), String.valueOf(HttpStatus.CREATED.value())));
     }
 
     @ApiOperation(value = "이메일 중복 체크", response = Boolean.class)

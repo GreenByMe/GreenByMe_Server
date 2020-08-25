@@ -131,14 +131,14 @@ public class UserService {
         return new UserResponseDto(user.getId());
     }
 
-    public User login(UserLoginRequestDto dto) {
+    public String login(UserLoginRequestDto dto) {
         User user = getUser(dto.getEmail());
         String encodePassword = user.getPassword();
         String rawPassword = dto.getPassword();
         if (!passwordEncoder.matches(rawPassword, encodePassword)) {
             throw new UserException("잘못된 비밀번호입니다.", ErrorCode.WRONG_PASSWORD);
         }
-        return user;
+        return jwtTokenProvider.createToken(user.getId(), user.getRoles());
     }
 
     public String refreshToken(Authentication authentication) throws Exception {
