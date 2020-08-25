@@ -1,14 +1,10 @@
 package org.greenbyme.angelhack.domain.personalmission;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Embeddable;
 
-@Getter
-@Setter
+@Data
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RemainPeriod {
