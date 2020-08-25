@@ -12,9 +12,9 @@ public class BasicResponseDto<T> {
     private String status;
     private String message;
 
-    public BasicResponseDto(T data, String status, String message) {
+    private BasicResponseDto(T data, String status, String message) {
         this.data = data;
-        this.status = status;[]
+        this.status = status;
         this.message = message;
     }
 
