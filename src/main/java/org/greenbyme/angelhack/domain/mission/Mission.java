@@ -1,11 +1,9 @@
 package org.greenbyme.angelhack.domain.mission;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.greenbyme.angelhack.domain.Category.Category;
 import org.greenbyme.angelhack.domain.Category.DayCategory;
+import org.greenbyme.angelhack.domain.DomainListener;
 import org.greenbyme.angelhack.domain.baseEntity.BaseTimeEntity;
 
 import javax.persistence.*;
@@ -15,6 +13,8 @@ import javax.validation.constraints.NotNull;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@EntityListeners(DomainListener.class)
+@ToString(of = {"id","title","subject", "missionCertificationMethod" })
 public class Mission extends BaseTimeEntity {
 
     @Id
@@ -77,4 +77,3 @@ public class Mission extends BaseTimeEntity {
         this.passCandidatesCount += 1;
     }
 }
-

@@ -1,6 +1,7 @@
 package org.greenbyme.angelhack.domain.post;
 
 import lombok.*;
+import org.greenbyme.angelhack.domain.DomainListener;
 import org.greenbyme.angelhack.domain.baseEntity.BaseEntity;
 import org.greenbyme.angelhack.domain.personalmission.PersonalMission;
 import org.greenbyme.angelhack.domain.postlike.PostLike;
@@ -14,6 +15,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EntityListeners(DomainListener.class)
 @ToString(of = {"id", "title", "text", "open"})
 public class Post extends BaseEntity {
 
