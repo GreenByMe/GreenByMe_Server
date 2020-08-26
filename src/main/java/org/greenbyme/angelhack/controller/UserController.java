@@ -67,7 +67,7 @@ public class UserController {
     @PostMapping("/signin")
     public ResponseEntity<BasicResponseDto<String>> signIn(@RequestBody final UserLoginRequestDto userLoginRequestDto) {
         String token = userService.login(userLoginRequestDto);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(BasicResponseDto.of(token, String.valueOf(HttpStatus.CREATED.value())));
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(BasicResponseDto.of(token, (HttpStatus.CREATED.value())));
     }
 
     @ApiResponses(value = {
@@ -175,7 +175,7 @@ public class UserController {
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @PostMapping("/refresh")
     public ResponseEntity<BasicResponseDto<String>> refreshToken(@ApiIgnore final Authentication authentication) throws Exception {
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(BasicResponseDto.of(userService.refreshToken(authentication), String.valueOf(HttpStatus.CREATED.value())));
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(BasicResponseDto.of(userService.refreshToken(authentication), HttpStatus.CREATED.value()));
     }
 
     @ApiOperation(value = "이메일 중복 체크", response = Boolean.class)
