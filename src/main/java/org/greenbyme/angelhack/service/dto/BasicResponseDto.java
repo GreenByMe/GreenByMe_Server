@@ -9,36 +9,32 @@ import lombok.NoArgsConstructor;
 public class BasicResponseDto<T> {
 
     private T data;
-    private String status;
+    private Integer status;
     private String message;
 
-    private BasicResponseDto(T data, String status, String message) {
+    private BasicResponseDto(T data, int status, String message) {
         this.data = data;
         this.status = status;
         this.message = message;
     }
 
     public static <Void> BasicResponseDto<Void> empty() {
-        return new BasicResponseDto<>(null, null, null);
+        return new BasicResponseDto<>(null, 0, null);
     }
 
-    public static <Void> BasicResponseDto<Void> error(final String code) {
+    public static <Void> BasicResponseDto<Void> error(final int code) {
         return new BasicResponseDto<>(null, code, null);
     }
 
-    public static <Void> BasicResponseDto<Void> error(final String code, final String message) {
+    public static <Void> BasicResponseDto<Void> error(final int code, final String message) {
         return new BasicResponseDto<>(null, code, message);
     }
 
-    public static <T> BasicResponseDto<T> of(final T data) {
-        return new BasicResponseDto<>(data, null, null);
-    }
-
-    public static <T> BasicResponseDto<T> of(final T data, final String code) {
+    public static <T> BasicResponseDto<T> of(final T data, final int code) {
         return new BasicResponseDto<>(data, code, null);
     }
 
-    public static <T> BasicResponseDto<T> of(final T data, final String code, final String message) {
+    public static <T> BasicResponseDto<T> of(final T data, final int code, final String message) {
         return new BasicResponseDto<>(data, code, message);
     }
 }
