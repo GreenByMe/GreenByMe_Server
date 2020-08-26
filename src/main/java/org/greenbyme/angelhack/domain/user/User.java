@@ -1,10 +1,8 @@
 package org.greenbyme.angelhack.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.greenbyme.angelhack.domain.DomainListener;
 import org.greenbyme.angelhack.domain.baseEntity.BaseEntity;
 import org.greenbyme.angelhack.domain.personalmission.PersonalMission;
 import org.greenbyme.angelhack.domain.post.Post;
@@ -22,6 +20,8 @@ import java.util.stream.Collectors;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@EntityListeners(DomainListener.class)
+@ToString(of = {"id", "email","nickname"})
 public class User extends BaseEntity implements UserDetails {
 
     @Id

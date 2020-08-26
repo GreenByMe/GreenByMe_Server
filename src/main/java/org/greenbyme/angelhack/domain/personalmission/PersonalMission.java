@@ -1,9 +1,7 @@
 package org.greenbyme.angelhack.domain.personalmission;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.greenbyme.angelhack.domain.DomainListener;
 import org.greenbyme.angelhack.domain.baseEntity.BaseTimeEntity;
 import org.greenbyme.angelhack.domain.mission.Mission;
 import org.greenbyme.angelhack.domain.post.Post;
@@ -14,12 +12,12 @@ import org.greenbyme.angelhack.exception.MissionException;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@EntityListeners(DomainListener.class)
+@ToString(of={"id", "finishCount","progress", "remainPeriod"})
 public class PersonalMission extends BaseTimeEntity {
 
     @Id

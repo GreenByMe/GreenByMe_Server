@@ -1,9 +1,6 @@
 package org.greenbyme.angelhack.domain.mission;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -15,6 +12,7 @@ import javax.validation.constraints.NotEmpty;
 @Embeddable
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(of = {"title", "text", "missionCertificateCount"})
 public class MissionCertificationMethod {
 
     @NotEmpty @Column(name = "title", nullable = false)
