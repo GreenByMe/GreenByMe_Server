@@ -1,6 +1,7 @@
 package org.greenbyme.angelhack.config.security;
 
 import lombok.RequiredArgsConstructor;
+import org.greenbyme.angelhack.config.ExceptionHandlerFilter;
 import org.greenbyme.angelhack.util.JwtAuthenticationFilter;
 import org.greenbyme.angelhack.util.JwtTokenProvider;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 @RequiredArgsConstructor
 @Configuration
@@ -46,6 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new ExceptionHandlerFilter(), LogoutFilter.class)
                 .cors();
     }
 
