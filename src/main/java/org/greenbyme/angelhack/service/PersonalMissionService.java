@@ -60,15 +60,22 @@ public class PersonalMissionService {
         return new PersonalMissionSaveResponseDto(personalMission);
     }
 
-    public PersonalMissionDetailResponseDto findPersonalMissionDetails(Long id) {
-        PersonalMission personalMission = personalMissionRepository.findDetailsById(id).orElseThrow(() -> new NoResultException("등록되지 않은 개인미션입니다."));
+    public PersonalMissionDetailResponseDto findPersonalMissionDetails(Long personalMissionId, Long userId) {
+        PersonalMission personalMission = personalMissionRepository.findDetailsById(personalMissionId)
+                .orElseThrow(() -> new NoResultException("등록되지 않은 개인미션입니다."));
         return new PersonalMissionDetailResponseDto(personalMission);
     }
 
     @Transactional
-    public PersonalMissionDeleteResponseDto personalMissionDelete(Long id) {
-        PersonalMission personalMission = personalMissionRepository.findById(id).orElseThrow(() -> new NoResultException("등록되지 않은 개인미션 정보입니다."));
-        personalMissionRepository.deleteById(id);
+    public PersonalMissionDeleteResponseDto personalMissionDelete(Long personalMissionId, Long userId) {
+        PersonalMission personalMission = personalMissionRepository.findById(personalMissionId)
+                .orElseThrow(() -> new NoResultException("등록되지 않은 개인미션입니다."));
+        User user = userRepository.findById(userId)
+                .orElseThrow(()-> new UserException(ErrorCode.UNSIGNED_USER));
+        if (!personalMission.getUser().equals(user)) {
+            throw new PersonalMissionException(ErrorCode.INVALID_USER_ACCESS);
+        }
+        personalMissionRepository.deleteById(personalMissionId);
         return new PersonalMissionDeleteResponseDto(personalMission);
     }
 

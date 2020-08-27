@@ -30,7 +30,7 @@ public class UserDetailResponseDto {
                 .map(PersonalMissionDetailDto::new)
                 .collect(Collectors.toList());
         this.posts = posts.stream()
-                .map(PostDetailResponseDto::new)
+                .map(p -> new PostDetailResponseDto(p, true))
                 .collect(Collectors.toList());
         this.pictureUrl = user.getPhoto();
     }

@@ -17,16 +17,18 @@ public class PostDetailResponseDto {
     private Integer thumbsUp;
     private String title;
     private String text;
+    private Boolean isMine;
     private LocalDateTime createDate;
     private LocalDateTime lastModifiedDate;
 
-    public PostDetailResponseDto(Post post) {
+    public PostDetailResponseDto(Post post, boolean mine) {
         this.postId = post.getId();
         this.title = post.getTitle();
         this.nickName = post.getUser().getNickname();
         this.picture = post.getPicture();
         this.thumbsUp = post.getPostLikes().size();
         this.text = post.getText();
+        this.isMine = mine;
         this.createDate = post.getCreatedDate();
         this.lastModifiedDate = post.getLastModifiedDate();
     }

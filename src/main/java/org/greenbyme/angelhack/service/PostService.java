@@ -91,9 +91,14 @@ public class PostService {
                 .map(p -> new PostResponseDto(p.getId(), p.getUser().getNickname(), p.getPicture(), p.getPostLikes().size()));
     }
 
-    public PostDetailResponseDto getPostDetail(Long postId) {
+    public PostDetailResponseDto getPostDetail(Long postId, Long userId) {
         Post post = getPost(postId);
-        return new PostDetailResponseDto(post);
+        User user = getUser(userId);
+        boolean mine = false;
+        if (post.getUser().equals(user)) {
+            mine = true;
+        }
+        return new PostDetailResponseDto(post, mine);
     }
 
     public Page<PostResponseDto> getPostsByUser(Long userId, Pageable pageable) {
@@ -103,15 +108,21 @@ public class PostService {
     }
 
     @Transactional
-    public void deletePost(Long postId) {
+    public void deletePost(Long postId, Long userId) {
+        Post post = getPost(postId);
+        User user = getUser(userId);
+        if (!post.getUser().equals(user)) {
+            throw new PostException(ErrorCode.INVALID_POST_ACCESS);
+        }
         postRepository.deleteById(postId);
     }
 
     @Transactional
     public PostUpdateResponseDto updatePost(Long userId, Long postId, PostUpdateRequestDto requestDto) {
         Post post = getPost(postId);
-        if (!post.getUser().getId().equals(userId)) {
-            throw new IllegalArgumentException("올바르지 않은 사용자 ID");
+        User user = getUser(userId);
+        if (!post.getUser().equals(user)) {
+            throw new PostException(ErrorCode.INVALID_POST_ACCESS);
         }
         post.update(requestDto);
         return new PostUpdateResponseDto(post);

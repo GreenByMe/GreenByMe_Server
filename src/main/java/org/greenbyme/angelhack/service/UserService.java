@@ -108,7 +108,7 @@ public class UserService {
     public Page<PostDetailResponseDto> getPostList(Long userId, Pageable pageable) {
         User user = getUser(userId);
         return postRepository.findAllByUser(user, pageable)
-                .map(PostDetailResponseDto::new);
+                .map(p -> new PostDetailResponseDto(p, true));
     }
 
     @Transactional
