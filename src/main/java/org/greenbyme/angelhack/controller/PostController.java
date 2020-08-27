@@ -29,7 +29,6 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.List;
 
 @Api(tags = "5. Post")
 @Slf4j
@@ -85,9 +84,12 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK).body(new PageDto<>(responseDtos));
     }
 
+    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @GetMapping("/{postId}")
-    public ResponseEntity<PostDetailResponseDto> getPostDetail(@PathVariable("postId") final Long postId) {
-        PostDetailResponseDto responseDto = postService.getPostDetail(postId);
+    public ResponseEntity<PostDetailResponseDto> getPostDetail(@ApiIgnore final Authentication authentication,
+                                                               @PathVariable("postId") final Long postId) {
+        Long userId = ((User) authentication.getPrincipal()).getId();
+        PostDetailResponseDto responseDto = postService.getPostDetail(postId, userId);
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 
@@ -100,9 +102,12 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK).body(new PageDto<>(responseDtos));
     }
 
+    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @DeleteMapping("/{postId}")
-    public ResponseEntity<Void> deletePost(@PathVariable("postId") final Long postId) {
-        postService.deletePost(postId);
+    public ResponseEntity<Void> deletePost(@ApiIgnore final Authentication authentication,
+                                           @PathVariable("postId") final Long postId) {
+        Long userId = ((User) authentication.getPrincipal()).getId();
+        postService.deletePost(postId, userId);
         return ResponseEntity.ok().build();
     }
 

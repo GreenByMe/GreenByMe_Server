@@ -53,7 +53,7 @@ public class UserController {
             @ApiResponse(code = 201, message = "가입 성공", response = BasicResponseDto.class),
             @ApiResponse(code = 500, message = "이미 가입된 메일", response = UserException.class)
     })
-    @PostMapping
+    @PostMapping("/signup")
     public ResponseEntity<UserResponseDto> saveUser(@RequestBody final UserSaveRequestDto requestDto) {
         UserResponseDto responseDto = userService.saveUser(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);

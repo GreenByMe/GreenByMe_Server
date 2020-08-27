@@ -33,7 +33,7 @@ public class MyPageDto {
                 .map(PersonalMissionDetailDto::new)
                 .collect(Collectors.toList());
         this.posts = posts.stream()
-                .map(PostDetailResponseDto::new)
+                .map(p -> new PostDetailResponseDto(p, true))
                 .collect(Collectors.toList());
         this.pictureUrl = user.getPhoto();
         this.expectCo2 = user.getExpectCo2();

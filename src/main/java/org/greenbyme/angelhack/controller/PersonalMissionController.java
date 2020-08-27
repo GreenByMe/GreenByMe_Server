@@ -41,15 +41,21 @@ public class PersonalMissionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(personalMissionSaveResponseDto);
     }
 
+    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @GetMapping("/{personalMissionId}")
-    public ResponseEntity<PersonalMissionDetailResponseDto> PersonalMissionDetail(@PathVariable("personalMissionId") final Long id) {
-        PersonalMissionDetailResponseDto personalMissionDetailResponseDto = personalMissionService.findPersonalMissionDetails(id);
+    public ResponseEntity<PersonalMissionDetailResponseDto> PersonalMissionDetail(@ApiIgnore final Authentication authentication,
+                                                                                  @PathVariable("personalMissionId") final Long personalMissionId) {
+        Long userId = ((User) authentication.getPrincipal()).getId();
+        PersonalMissionDetailResponseDto personalMissionDetailResponseDto = personalMissionService.findPersonalMissionDetails(personalMissionId, userId);
         return ResponseEntity.status(HttpStatus.OK).body(personalMissionDetailResponseDto);
     }
 
+    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @DeleteMapping("/{personalMissionId}")
-    public ResponseEntity<PersonalMissionDeleteResponseDto> personalMissionDelete(@PathVariable("personalMissionId") final Long id) {
-        PersonalMissionDeleteResponseDto personalMissionDeleteResponseDto = personalMissionService.personalMissionDelete(id);
+    public ResponseEntity<PersonalMissionDeleteResponseDto> personalMissionDelete(@ApiIgnore final Authentication authentication,
+                                                                                  @PathVariable("personalMissionId") final Long personalMissionId) {
+        Long userId = ((User) authentication.getPrincipal()).getId();
+        PersonalMissionDeleteResponseDto personalMissionDeleteResponseDto = personalMissionService.personalMissionDelete(personalMissionId, userId);
         return ResponseEntity.status(HttpStatus.OK).body(personalMissionDeleteResponseDto);
     }
 
