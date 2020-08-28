@@ -39,8 +39,7 @@ public class PageService {
     private final PersonalMissionRepository personalMissionRepository;
 
     public HomePageDto getHompeageInfos(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
+        User user = findByUserId(userId);
         List<PersonalMission> res = personalMissionRepository.findAllByUser(user);
         long missionCount = res.stream()
                 .filter(m -> m.getPersonalMissionStatus().equals(PersonalMissionStatus.IN_PROGRESS))
@@ -75,19 +74,22 @@ public class PageService {
     }
 
     public CertPageDto getCertPage(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
+        User user = findByUserId(userId);
         List<PersonalMission> personalMissions = personalMissionRepository.findAllByUser(user);
         return new CertPageDto(userId, personalMissions);
     }
 
     public MyPageDto getMyPage(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
+        User user = findByUserId(userId);
         long passMissionCount = personalMissionRepository.findAllByUser(user).stream()
-                .filter(m->m.getPersonalMissionStatus().equals(PersonalMissionStatus.FINISH))
+                .filter(m -> m.getPersonalMissionStatus().equals(PersonalMissionStatus.FINISH))
                 .count();
         List<Post> posts = postRepository.findAllByUser(user);
         return new MyPageDto(user, passMissionCount, posts);
+    }
+
+    private User findByUserId(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
     }
 }
