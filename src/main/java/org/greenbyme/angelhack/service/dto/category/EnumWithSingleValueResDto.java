@@ -7,14 +7,15 @@ import org.greenbyme.angelhack.domain.Category.Category;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CategoryResDto {
+public class EnumWithSingleValueResDto {
 
-    private HashMap<Category, Integer> categories;
+    private TreeMap<?, Integer> enums;
 
-    public CategoryResDto(HashMap<Category, Integer> categories){
-        this.categories = categories;
+    public EnumWithSingleValueResDto(TreeMap<?, Integer> enums){
+        this.enums = enums;
     }
 }
