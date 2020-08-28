@@ -74,6 +74,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(BasicResponseDto.of(token, (HttpStatus.CREATED.value())));
     }
 
+    @ApiOperation(value = "이미지 불러 오기")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "이미지 조회 성공", response = Resource.class),
             @ApiResponse(code = 400, message = "파일 조회 실패", response = FileDownloadException.class)
