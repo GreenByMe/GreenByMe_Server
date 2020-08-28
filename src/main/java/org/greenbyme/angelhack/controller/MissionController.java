@@ -1,14 +1,20 @@
 package org.greenbyme.angelhack.controller;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.greenbyme.angelhack.domain.Category.Category;
 import org.greenbyme.angelhack.domain.Category.DayCategory;
+import org.greenbyme.angelhack.exception.ErrorResponse;
 import org.greenbyme.angelhack.service.FileUploadDownloadService;
 import org.greenbyme.angelhack.service.MissionService;
+import org.greenbyme.angelhack.service.dto.BasicResponseDto;
 import org.greenbyme.angelhack.service.dto.mission.*;
 import org.greenbyme.angelhack.service.dto.page.PageDto;
+import org.greenbyme.angelhack.util.FileDownloadException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,12 +47,21 @@ public class MissionController {
     @Autowired
     private FileUploadDownloadService service;
 
+    @ApiOperation(value = "미션 저장")
+    @ApiResponses(
+            @ApiResponse(code = 201, message = "미션 저장 성공", response = MissionSaveResponseDto.class)
+    )
     @PostMapping
-    public ResponseEntity<MissionSaveResponseDto> save(MissionSaveRequestDto missionSaveRequestDto, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<BasicResponseDto<MissionSaveResponseDto>> save(MissionSaveRequestDto missionSaveRequestDto, @RequestParam("file") MultipartFile file) {
         MissionSaveResponseDto missionSaveResponseDto = missionService.save(missionSaveRequestDto, file);
-        return ResponseEntity.status(HttpStatus.CREATED).body(missionSaveResponseDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(BasicResponseDto.of(missionSaveResponseDto, HttpStatus.CREATED.value()));
     }
 
+    @ApiOperation(value = "이미지 불러 오기")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "이미지 조회 성공", response = Resource.class),
+            @ApiResponse(code = 400, message = "파일 조회 실패", response = FileDownloadException.class)
+    })
     @GetMapping("/images/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
         // Load file as Resource
@@ -68,42 +83,68 @@ public class MissionController {
                 .body(resource);
     }
 
+    @ApiOperation(value = "미션 상세 조회")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "미션 조회 성공", response = MissionDetailsDto.class),
+            @ApiResponse(code = 400, message = "존재하지 않는 미션", response = ErrorResponse.class)
+    })
     @GetMapping("/{missionId}")
-    public ResponseEntity<MissionDetailsDto> findOneDetail(@PathVariable("missionId") final Long id) {
+    public ResponseEntity<BasicResponseDto<MissionDetailsDto>> findOneDetail(@PathVariable("missionId") final Long id) {
         MissionDetailsDto missionDetailsDto = missionService.findById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(missionDetailsDto);
+        return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(missionDetailsDto, HttpStatus.OK.value()));
     }
 
+    @ApiOperation(value = "미션 전체 조회")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "조회 성공", response = MissionFindAllResponseDto.class)
+    })
     @GetMapping
-    public ResponseEntity<PageDto<MissionFindAllResponseDto>> findAllMission(@PageableDefault(size = 10, sort = {"category", "id"}, direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity<BasicResponseDto<PageDto<MissionFindAllResponseDto>>> findAllMission(@PageableDefault(size = 10, sort = {"category", "id"}, direction = Sort.Direction.DESC) Pageable pageable) {
         Page<MissionFindAllResponseDto> allMission = missionService.findAllMission(pageable);
-        return ResponseEntity.status(HttpStatus.OK).body(new PageDto<>(allMission));
+        return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(new PageDto<>(allMission), HttpStatus.OK.value()));
     }
 
+    @ApiOperation(value = "카테고리 내 미션 전체 조회")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "조회 성공", response = MissionFindAllByCategoryResponseDto.class)
+    })
     @GetMapping("/categorys/{category}")
-    public ResponseEntity<PageDto<MissionFindAllByCategoryResponseDto>> findAllByCategory(@PathVariable("category") final Category category,
-                                                                                          @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity<BasicResponseDto<PageDto<MissionFindAllByCategoryResponseDto>>> findAllByCategory(@PathVariable("category") final Category category,
+                                                                                                            @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<MissionFindAllByCategoryResponseDto> allByCategory = missionService.findAllByCategory(category, pageable);
-        return ResponseEntity.status(HttpStatus.OK).body(new PageDto<>(allByCategory));
+        return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(new PageDto<>(allByCategory), HttpStatus.OK.value()));
     }
 
+    @ApiOperation(value = "카테고리, 기간 내 미션 전체 조회")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "조회 성공", response = MissionFindAllByCategoryAndDayCategoryResponseDto.class)
+    })
     @GetMapping("/categorys/{category}/daycategory/{datCategory}")
-    public ResponseEntity<PageDto<MissionFindAllByCategoryAndDayCategoryResponseDto>> findAllByCategoryAndDayCategory(@PathVariable("category") final Category category,
-                                                                                                                      @PathVariable("datCategory") final DayCategory dayCategory,
-                                                                                                                      @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity<BasicResponseDto<PageDto<MissionFindAllByCategoryAndDayCategoryResponseDto>>> findAllByCategoryAndDayCategory(@PathVariable("category") final Category category,
+                                                                                                                                        @PathVariable("datCategory") final DayCategory dayCategory,
+                                                                                                                                        @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<MissionFindAllByCategoryAndDayCategoryResponseDto> allByCategoryAndDayCategory = missionService.findAllByCategoryAndDayCategory(category, dayCategory, pageable);
-        return ResponseEntity.status(HttpStatus.OK).body(new PageDto<>(allByCategoryAndDayCategory));
+        return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(new PageDto<>(allByCategoryAndDayCategory), HttpStatus.OK.value()));
     }
 
+    @ApiOperation(value = "미션 삭제")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "삭제 성공", response = MissionDeleteDto.class),
+            @ApiResponse(code = 400, message = "존재하지 않는 미션", response = ErrorResponse.class)
+    })
     @DeleteMapping("/{missionId}")
-    public ResponseEntity<MissionDeleteDto> missionDelete(@PathVariable("missionId") final Long id) {
+    public ResponseEntity<BasicResponseDto<MissionDeleteDto>> missionDelete(@PathVariable("missionId") final Long id) {
         MissionDeleteDto missionDeleteDto = missionService.delete(id);
-        return ResponseEntity.status(HttpStatus.OK).body((missionDeleteDto));
+        return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(missionDeleteDto, HttpStatus.OK.value()));
     }
 
+    @ApiOperation(value = "인기 미션 조회")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "조회 성공", response = MissionPopularResponseDto.class)
+    })
     @GetMapping("/populars")
-    public ResponseEntity<PageDto<MissionPopularResponseDto>> getPopularMission(@PageableDefault(size = 10, sort = "passCandidatesCount", direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity<BasicResponseDto<PageDto<MissionPopularResponseDto>>> getPopularMission(@PageableDefault(size = 10, sort = "passCandidatesCount", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<MissionPopularResponseDto> allByPopular = missionService.findAllByPopular(pageable);
-        return ResponseEntity.status(HttpStatus.OK).body(new PageDto<>(allByPopular));
+        return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(new PageDto<>(allByPopular), HttpStatus.OK.value()));
     }
 }
