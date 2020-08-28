@@ -9,6 +9,7 @@ import org.greenbyme.angelhack.domain.personalmission.PersonalMissionStatus;
 import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.domain.user.UserRepository;
 import org.greenbyme.angelhack.exception.ErrorCode;
+import org.greenbyme.angelhack.exception.MissionException;
 import org.greenbyme.angelhack.exception.PersonalMissionException;
 import org.greenbyme.angelhack.exception.UserException;
 import org.greenbyme.angelhack.service.dto.personalmission.InProgressResponseDto;
@@ -35,8 +36,9 @@ public class PersonalMissionService {
 
     @Transactional
     public PersonalMissionSaveResponseDto save(Long userId, Long missionId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new NoResultException("존재하지 않는 사용자입니다."));
-        Mission mission = missionRepository.findById(missionId).orElseThrow(() -> new NoResultException("존재하지 않는 미션입니다."));
+        User user = findByUserId(userId);
+        Mission mission = missionRepository.findById(missionId)
+                .orElseThrow(() -> new MissionException(ErrorCode.INVALID_MISSION));
 
         List<PersonalMission> personalMissionByUserIdAndPersonalMissionId = personalMissionRepository.findPersonalMissionByUserIdAndMissionId(userId, missionId);
         for (PersonalMission personalMission : personalMissionByUserIdAndPersonalMissionId) {
@@ -62,16 +64,17 @@ public class PersonalMissionService {
 
     public PersonalMissionDetailResponseDto findPersonalMissionDetails(Long personalMissionId, Long userId) {
         PersonalMission personalMission = personalMissionRepository.findDetailsById(personalMissionId)
-                .orElseThrow(() -> new NoResultException("등록되지 않은 개인미션입니다."));
+                .orElseThrow(() -> new PersonalMissionException(ErrorCode.INVALID_PERSONAL_MISSION));
+        if (!personalMission.getUser().equals(findByUserId(userId))) {
+            throw new UserException(ErrorCode.INVALID_USER_ACCESS);
+        }
         return new PersonalMissionDetailResponseDto(personalMission);
     }
 
     @Transactional
     public PersonalMissionDeleteResponseDto personalMissionDelete(Long personalMissionId, Long userId) {
-        PersonalMission personalMission = personalMissionRepository.findById(personalMissionId)
-                .orElseThrow(() -> new NoResultException("등록되지 않은 개인미션입니다."));
-        User user = userRepository.findById(userId)
-                .orElseThrow(()-> new UserException(ErrorCode.UNSIGNED_USER));
+        PersonalMission personalMission = findByPersonalMissionId(personalMissionId);
+        User user = findByUserId(userId);
         if (!personalMission.getUser().equals(user)) {
             throw new PersonalMissionException(ErrorCode.INVALID_USER_ACCESS);
         }
@@ -80,8 +83,7 @@ public class PersonalMissionService {
     }
 
     public Page<InProgressResponseDto> getPersonalMissionInProgress(Long userId, Pageable pageable) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
+        User user = findByUserId(userId);
         return personalMissionRepository.findAllByUser(user, pageable)
                 .map(m -> new InProgressResponseDto(m, howManyPeopleInMission(m)));
     }
@@ -98,5 +100,15 @@ public class PersonalMissionService {
         for (PersonalMission personalMission : byPersonalMissionStatusEquals) {
             personalMission.changeRemainPeriod();
         }
+    }
+
+    private User findByUserId(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
+    }
+
+    private PersonalMission findByPersonalMissionId(Long id) {
+        return personalMissionRepository.findById(id)
+                .orElseThrow(() -> new PersonalMissionException(ErrorCode.INVALID_PERSONAL_MISSION));
     }
 }
