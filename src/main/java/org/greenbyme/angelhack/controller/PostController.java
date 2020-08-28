@@ -46,9 +46,7 @@ public class PostController {
     @ApiOperation(value = "게시글 저장")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "저장 성공", response = PostSaveResponseDto.class),
-            @ApiResponse(code = 400, message = "등록되지 않은 개인 미션", response = ErrorResponse.class),
-            @ApiResponse(code = 400, message = "등록되지 않은 유저", response = ErrorResponse.class),
-            @ApiResponse(code = 400, message = "하루 인증 횟수 초과", response = ErrorResponse.class)
+            @ApiResponse(code = 400, message = "1.등록되지 않은 개인 미션 \t\n 2.등록되지 않은 유저 \t\n 3.하루 인증 횟수 초과", response = ErrorResponse.class)
     })
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @PostMapping
@@ -99,8 +97,7 @@ public class PostController {
     @ApiOperation(value = "상세 조회")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "조회 성공", response = PostDetailResponseDto.class),
-            @ApiResponse(code = 400, message = "등록되지 않은 게시글", response = ErrorResponse.class),
-            @ApiResponse(code = 400, message = "등록되지 않은 유저", response = ErrorResponse.class)
+            @ApiResponse(code = 400, message = "1.등록되지 않은 게시글 \t\n 2.등록되지 않은 유저", response = ErrorResponse.class)
     })
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @GetMapping("/{postId}")
@@ -128,8 +125,7 @@ public class PostController {
     @ApiOperation(value = "게시글 삭제")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "삭제 성공", response =  Boolean.class),
-            @ApiResponse(code = 400, message = "등록되지 않은 게시글", response = ErrorResponse.class),
-            @ApiResponse(code = 400, message = "등록되지 않은 유저", response = ErrorResponse.class),
+            @ApiResponse(code = 400, message = "1.등록되지 않은 게시글 \t\n 2.등록되지 않은 유저", response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "게시글에 대한 권한 없음", response = ErrorResponse.class)
     })
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
@@ -144,8 +140,7 @@ public class PostController {
     @ApiOperation(value = "게시글 수정")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "수정 성공", response = PostUpdateResponseDto.class),
-            @ApiResponse(code = 400, message = "등록되지 않은 게시글", response = ErrorResponse.class),
-            @ApiResponse(code = 400, message = "등록되지 않은 유저", response = ErrorResponse.class),
+            @ApiResponse(code = 400, message = "1.등록되지 않은 게시글 \t\n 2.등록되지 않은 유저", response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "게시글에 대한 권한 없음", response = ErrorResponse.class)
     })
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
@@ -161,8 +156,7 @@ public class PostController {
     @ApiOperation(value = "게시글 좋아요")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "수정 성공", response = Boolean.class),
-            @ApiResponse(code = 400, message = "등록되지 않은 게시글", response = ErrorResponse.class),
-            @ApiResponse(code = 400, message = "등록되지 않은 유저", response = ErrorResponse.class)
+            @ApiResponse(code = 400, message = "1.등록되지 않은 게시글 \t\n 2.등록되지 않은 유저", response = ErrorResponse.class)
     })
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @PutMapping("/{postId}/thumbsup")

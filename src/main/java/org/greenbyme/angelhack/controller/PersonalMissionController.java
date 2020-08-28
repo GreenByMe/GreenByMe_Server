@@ -36,10 +36,8 @@ public class PersonalMissionController {
     @ApiOperation(value = "개인 미션 등록")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "등록 성공", response = PersonalMissionSaveResponseDto.class),
-            @ApiResponse(code = 400, message = "등록되지 않은 유저", response = ErrorResponse.class),
-            @ApiResponse(code = 400, message = "등록되지 않은 미션", response = ErrorResponse.class),
-            @ApiResponse(code = 409, message = "이미 진행 중인 미션", response = ErrorResponse.class),
-            @ApiResponse(code = 409, message = "동일 기간 내 미션 진행 중", response = ErrorResponse.class)
+            @ApiResponse(code = 400, message = "1.등록되지 않은 유저 \t\n 2.등록되지 않은 미션", response = ErrorResponse.class),
+            @ApiResponse(code = 409, message = "1.이미 진행 중인 미션 \t\n 2.동일 기간 내 미션 진행 중", response = ErrorResponse.class),
     })
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @PostMapping("/missions/{missionId}")
@@ -68,8 +66,7 @@ public class PersonalMissionController {
     @ApiOperation(value = "개인 미션 삭제")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "삭제 성공", response = PersonalMissionDeleteResponseDto.class),
-            @ApiResponse(code = 400, message = "등록되지 않은 개인 미션", response = ErrorResponse.class),
-            @ApiResponse(code = 400, message = "등록되지 않은 유저 정보", response = ErrorResponse.class),
+            @ApiResponse(code = 400, message = "1.등록되지 않은 개인 미션 \t\n 2.등록되지 않은 유저 정보", response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "미션에 대한 권한이 없음", response = ErrorResponse.class)
     })
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
