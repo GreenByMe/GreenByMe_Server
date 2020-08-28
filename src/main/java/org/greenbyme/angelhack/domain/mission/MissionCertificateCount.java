@@ -1,6 +1,7 @@
 package org.greenbyme.angelhack.domain.mission;
 
 public enum MissionCertificateCount {
+
     ONE_DAY(1),
 
     ONE_TIMES_A_WEEK(1),
