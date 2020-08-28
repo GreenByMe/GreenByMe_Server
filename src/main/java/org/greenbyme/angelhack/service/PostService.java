@@ -129,15 +129,17 @@ public class PostService {
     }
 
     @Transactional
-    public void thumbsUp(Long postId, Long userId) {
+    public boolean thumbsUp(Long postId, Long userId) {
         Post post = getPost(postId);
         User user = getUser(userId);
         if (postLikeRepository.findByUserAndPost(user, post).isPresent()) {
             PostLike postLike = postLikeRepository.findByUserAndPost(user, post).get();
             postLike.remove();
             postLikeRepository.delete(postLike);
+            return false;
         } else {
             postLikeRepository.save(new PostLike(post, user));
+            return true;
         }
     }
 
