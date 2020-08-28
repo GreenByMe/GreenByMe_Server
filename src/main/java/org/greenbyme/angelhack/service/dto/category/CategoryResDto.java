@@ -5,15 +5,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.greenbyme.angelhack.domain.Category.Category;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CategoryResDto {
 
-    private List<Category> categories;
+    private HashMap<Category, Integer> categories;
 
-    public CategoryResDto(List<Category> categories){
+    public CategoryResDto(HashMap<Category, Integer> categories){
         this.categories = categories;
     }
 }

@@ -13,15 +13,18 @@ import java.util.*;
 @Service
 public class CategoryService {
 
-    public CategoryResDto findAllCategoryType(){
-        List<Category> categories = new ArrayList<>(Arrays.asList(Category.values()));
+    public CategoryResDto findAllCategoryType() {
+        HashMap<Category, Integer> categories = new HashMap<>();
+        for (Category value : Category.values()) {
+            categories.put(value, value.getIdx());
+        }
         return new CategoryResDto(categories);
     }
 
     public DayCategoryResDto findAllDayCategoryType() {
         HashMap<DayCategory, Integer> dayCategories = new HashMap<>();
         for (DayCategory value : DayCategory.values()) {
-            dayCategories.put(value,value.getDay());
+            dayCategories.put(value, value.getDay());
         }
         return new DayCategoryResDto(dayCategories);
     }
