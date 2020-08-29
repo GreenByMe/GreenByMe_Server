@@ -5,9 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.greenbyme.angelhack.service.CategoryService;
-import org.greenbyme.angelhack.service.dto.category.CategoryResDto;
-import org.greenbyme.angelhack.service.dto.category.DayCategoryResDto;
-import org.greenbyme.angelhack.service.dto.category.MissionCertificateCountResDto;
+import org.greenbyme.angelhack.service.dto.category.EnumWithSingleValueResDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -29,25 +27,25 @@ public class CategoryController {
 
     @ApiOperation(value = "Category Class Type 조회")
     @GetMapping
-    public ResponseEntity<CategoryResDto> findAllCategoryType(){
-        CategoryResDto categoryResDto = categoryService.findAllCategoryType();
+    public ResponseEntity<EnumWithSingleValueResDto> findAllCategoryType(){
+        EnumWithSingleValueResDto categoryResDto = categoryService.findAllCategoryType();
         logger.info("Category values 조회 완료 ");
         return ResponseEntity.status(HttpStatus.OK).body(categoryResDto);
     }
 
     @ApiOperation(value = "DayCategory Class Type 조회")
     @GetMapping("/days")
-    public ResponseEntity<DayCategoryResDto> findAllDayCategoryType(){
-        DayCategoryResDto dayCategoryResDto = categoryService.findAllDayCategoryType();
+    public ResponseEntity<EnumWithSingleValueResDto> findAllDayCategoryType(){
+        EnumWithSingleValueResDto categoryResDto = categoryService.findAllDayCategoryType();
         logger.info("DayCategory values 조회 완료 ");
-        return ResponseEntity.status(HttpStatus.OK).body(dayCategoryResDto);
+        return ResponseEntity.status(HttpStatus.OK).body(categoryResDto);
     }
 
     @ApiOperation(value = "MissionCertificateCount Class Type 조회")
     @GetMapping("/certificate/counts")
-    public ResponseEntity<MissionCertificateCountResDto> findAllMissionCertificateCountType(){
-        MissionCertificateCountResDto missionCertificateCountResDto = categoryService.findAllMissionCertificateCountType();
+    public ResponseEntity<EnumWithSingleValueResDto> findAllMissionCertificateCountType(){
+        EnumWithSingleValueResDto categoryResDto = categoryService.findAllMissionCertificateCountType();
         logger.info("MissionCertificateCount values 조회 완료 ");
-        return ResponseEntity.status(HttpStatus.OK).body(missionCertificateCountResDto);
+        return ResponseEntity.status(HttpStatus.OK).body(categoryResDto);
     }
 }
