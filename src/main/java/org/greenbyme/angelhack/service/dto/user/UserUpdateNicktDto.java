@@ -9,4 +9,8 @@ import lombok.NoArgsConstructor;
 public class UserUpdateNicktDto {
     
     private String nickName;
+
+    public UserUpdateNicktDto(String nickName) {
+        this.nickName = nickName;
+    }
 }

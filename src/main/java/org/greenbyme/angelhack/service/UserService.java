@@ -113,22 +113,19 @@ public class UserService {
     }
 
     @Transactional
-    public UserResponseDto updateNickName(UserUpdateNicktDto dto, Long userId) {
+    public UserResponseDto updateProfile(Long userId, MultipartFile file, UserUpdateNicktDto dto) {
         User user = getUser(userId);
+
+        if(file != null) {
+            String fileName = service.storeFile(file);
+            String filedUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path("/api/users/images/")
+                    .path(fileName)
+                    .toUriString();
+            user.changePhoto(filedUrl);
+        }
+
         user.changeNickName(dto.getNickName());
-        return new UserResponseDto(user.getId());
-    }
-
-    @Transactional
-    public UserResponseDto updatePhotos(Long userId, MultipartFile file) {
-        User user = getUser(userId);
-        String fileName = service.storeFile(file);
-        String filedUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/users/images/")
-                .path(fileName)
-                .toUriString();
-
-        user.changePhoto(filedUrl);
         return new UserResponseDto(user.getId());
     }
 
