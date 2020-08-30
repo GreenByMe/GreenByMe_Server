@@ -5,11 +5,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.exception.ErrorResponse;
-import org.greenbyme.angelhack.exception.UserException;
 import org.greenbyme.angelhack.service.FileUploadDownloadService;
 import org.greenbyme.angelhack.service.UserService;
 import org.greenbyme.angelhack.service.dto.BasicResponseDto;
-import org.greenbyme.angelhack.service.dto.TokenResponse;
 import org.greenbyme.angelhack.service.dto.page.PageDto;
 import org.greenbyme.angelhack.service.dto.personalmission.PersonalMissionByUserDto;
 import org.greenbyme.angelhack.service.dto.post.PostDetailResponseDto;
@@ -32,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.io.IOException;
 
 @Api(tags = "2. User")
@@ -155,32 +154,19 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(new PageDto<>(dto), HttpStatus.OK.value()));
     }
 
-    @ApiOperation(value = "유저 닉네임 수정")
+    @ApiOperation(value = "유저 프로필 수정")
     @ApiResponses(value = {
-            @ApiResponse(code = 202, message = "닉네임 수정 성공", response = UserResponseDto.class),
-            @ApiResponse(code = 400, message = "등록되지 않은 유저", response = ErrorResponse.class),
+            @ApiResponse(code = 202, message = "프로필 수정 성공", response = UserResponseDto.class),
+            @ApiResponse(code = 400, message = "1.등록되지 않은 유저 \t\n 2.반드시 값이 있어야 합니다.", response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "권한 없음", response = ErrorResponse.class)
     })
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
-    @PutMapping("/nickname")
-    public ResponseEntity<BasicResponseDto<UserResponseDto>> updateUserNickName(@ApiIgnore final Authentication authentication,
-                                                                                final UserUpdateNicktDto dto) {
+    @PutMapping
+    public ResponseEntity<BasicResponseDto<UserResponseDto>> updateUserProfile(@ApiIgnore final Authentication authentication,
+                                                                              @Valid final UserUpdateNicktDto dto,
+                                                                              @RequestParam(value = "file", required = false) final MultipartFile file) {
         Long userId = ((User) authentication.getPrincipal()).getId();
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(BasicResponseDto.of(userService.updateNickName(dto, userId), HttpStatus.ACCEPTED.value()));
-    }
-
-    @ApiOperation(value = "유저 이미지 수정")
-    @ApiResponses(value = {
-            @ApiResponse(code = 202, message = "이미지 수정 성공", response = UserResponseDto.class),
-            @ApiResponse(code = 400, message = "등록되지 않은 유저", response = ErrorResponse.class),
-            @ApiResponse(code = 401, message = "권한 없음", response = ErrorResponse.class)
-    })
-    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
-    @PutMapping("/image")
-    public ResponseEntity<BasicResponseDto<UserResponseDto>> updateUserPhotos(@ApiIgnore final Authentication authentication,
-                                                                              @RequestParam("file") MultipartFile file) {
-        Long userId = ((User) authentication.getPrincipal()).getId();
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(BasicResponseDto.of(userService.updatePhotos(userId, file), HttpStatus.ACCEPTED.value()));
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(BasicResponseDto.of(userService.updateProfile(userId, file, dto), HttpStatus.ACCEPTED.value()));
     }
 
     @ApiOperation(value = "토큰 Refresh")
