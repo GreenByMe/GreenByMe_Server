@@ -9,7 +9,6 @@ import org.greenbyme.angelhack.domain.user.User;
 
 import javax.persistence.*;
 
-@Api(tags = "")
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
