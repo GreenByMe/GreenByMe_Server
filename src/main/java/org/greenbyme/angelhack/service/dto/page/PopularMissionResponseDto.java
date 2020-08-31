@@ -30,6 +30,6 @@ public class PopularMissionResponseDto implements Comparable<PopularMissionRespo
 
     @Override
     public int compareTo(PopularMissionResponseDto o) {
-        return this.progressCount.compareTo(o.progressCount);
+        return -this.progressCount.compareTo(o.progressCount);
     }
 }
