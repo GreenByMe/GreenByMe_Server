@@ -60,16 +60,8 @@ public class MissionService {
         return new MissionSaveResponseDto(mission);
     }
 
-    public Page<MissionFindAllResponseDto> findAllMission(Pageable pageable) {
-        return missionRepository.findAll(pageable).map(MissionFindAllResponseDto::new);
-    }
-
     public Page<MissionFindAllByCategoryAndDayCategoryResponseDto> findAllByCategoryAndDayCategory(Category category, DayCategory dayCategory, Pageable pageable) {
-        return missionRepository.findAllByCategoryAndDayCategory(category, dayCategory, pageable).map(MissionFindAllByCategoryAndDayCategoryResponseDto::new);
-    }
-
-    public Page<MissionFindAllByCategoryResponseDto> findAllByCategory(Category category, Pageable pageable) {
-        return missionRepository.findAllByCategory(category, pageable).map(MissionFindAllByCategoryResponseDto::new);
+        return missionRepository.findAllByCategoryAndDayCategory(category, dayCategory, pageable);
     }
 
     @Transactional
