@@ -4,7 +4,6 @@ import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.greenbyme.angelhack.domain.user.User;
-import org.greenbyme.angelhack.exception.ErrorCode;
 import org.greenbyme.angelhack.exception.ErrorResponse;
 import org.greenbyme.angelhack.service.PersonalMissionService;
 import org.greenbyme.angelhack.service.dto.BasicResponseDto;
@@ -19,13 +18,16 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
-import java.util.List;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 @Api(tags = "4. PersonalMission")
 @Slf4j
+@Validated
 @RestController
 @RequestMapping("/api/personalmissions")
 @RequiredArgsConstructor
@@ -42,7 +44,7 @@ public class PersonalMissionController {
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @PostMapping("/missions/{missionId}")
     public ResponseEntity<BasicResponseDto<PersonalMissionSaveResponseDto>> join(@ApiIgnore final Authentication authentication,
-                                                                                 @PathVariable("missionId") final Long missionId) {
+                                                                                 @PathVariable("missionId") @NotNull @Positive final Long missionId) {
         Long userId = ((User) authentication.getPrincipal()).getId();
         PersonalMissionSaveResponseDto personalMissionSaveResponseDto = personalMissionService.save(userId, missionId);
         return ResponseEntity.status(HttpStatus.CREATED).body(BasicResponseDto.of(personalMissionSaveResponseDto, HttpStatus.CREATED.value()));
@@ -57,7 +59,7 @@ public class PersonalMissionController {
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @GetMapping("/{personalMissionId}")
     public ResponseEntity<BasicResponseDto<PersonalMissionDetailResponseDto>> PersonalMissionDetail(@ApiIgnore final Authentication authentication,
-                                                                                                    @PathVariable("personalMissionId") final Long personalMissionId) {
+                                                                                                    @PathVariable("personalMissionId") @NotNull @Positive final Long personalMissionId) {
         Long userId = ((User) authentication.getPrincipal()).getId();
         PersonalMissionDetailResponseDto personalMissionDetailResponseDto = personalMissionService.findPersonalMissionDetails(personalMissionId, userId);
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(personalMissionDetailResponseDto, HttpStatus.OK.value()));
@@ -72,7 +74,7 @@ public class PersonalMissionController {
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @DeleteMapping("/{personalMissionId}")
     public ResponseEntity<BasicResponseDto<PersonalMissionDeleteResponseDto>> personalMissionDelete(@ApiIgnore final Authentication authentication,
-                                                                                                    @PathVariable("personalMissionId") final Long personalMissionId) {
+                                                                                                    @PathVariable("personalMissionId") @NotNull @Positive final Long personalMissionId) {
         Long userId = ((User) authentication.getPrincipal()).getId();
         PersonalMissionDeleteResponseDto personalMissionDeleteResponseDto = personalMissionService.personalMissionDelete(personalMissionId, userId);
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(personalMissionDeleteResponseDto, HttpStatus.OK.value()));

@@ -23,15 +23,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.io.IOException;
 
 @Api(tags = "5. Post")
 @Slf4j
+@Validated
 @RestController
 @RequestMapping("/api/posts")
 @RequiredArgsConstructor
@@ -51,7 +56,7 @@ public class PostController {
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @PostMapping
     public ResponseEntity<BasicResponseDto<PostSaveResponseDto>> savePost(@ApiIgnore final Authentication authentication,
-                                                                          final PostSaveRequestDto requestDto,
+                                                                          @Valid final PostSaveRequestDto requestDto,
                                                                           @RequestParam("file") final MultipartFile file) throws IOException {
         Long userId = ((User) authentication.getPrincipal()).getId();
         PostSaveResponseDto responseDto = postService.savePosts(userId, requestDto, file);
@@ -88,7 +93,7 @@ public class PostController {
             @ApiResponse(code = 400, message = "등록되지 않은 미션", response = ErrorResponse.class)
     })
     @GetMapping("/missions/{missionId}")
-    public ResponseEntity<BasicResponseDto<PageDto<PostResponseDto>>> getPostsByMission(@PathVariable("missionId") final Long missionId,
+    public ResponseEntity<BasicResponseDto<PageDto<PostResponseDto>>> getPostsByMission(@PathVariable("missionId") @NotNull @Positive final Long missionId,
                                                                                         @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<PostResponseDto> responseDtos = postService.getPostsByMission(missionId, pageable);
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(new PageDto<>(responseDtos), HttpStatus.OK.value()));
@@ -102,7 +107,7 @@ public class PostController {
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @GetMapping("/{postId}")
     public ResponseEntity<BasicResponseDto<PostDetailResponseDto>> getPostDetail(@ApiIgnore final Authentication authentication,
-                                                                                 @PathVariable("postId") final Long postId) {
+                                                                                 @PathVariable("postId") @NotNull @Positive final Long postId) {
         Long userId = ((User) authentication.getPrincipal()).getId();
         PostDetailResponseDto responseDto = postService.getPostDetail(postId, userId);
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(responseDto, HttpStatus.OK.value()));
@@ -131,7 +136,7 @@ public class PostController {
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @DeleteMapping("/{postId}")
     public ResponseEntity<BasicResponseDto<Boolean>> deletePost(@ApiIgnore final Authentication authentication,
-                                                                @PathVariable("postId") final Long postId) {
+                                                                @PathVariable("postId") @NotNull @Positive final Long postId) {
         Long userId = ((User) authentication.getPrincipal()).getId();
         postService.deletePost(postId, userId);
         return ResponseEntity.ok().body(BasicResponseDto.of(Boolean.TRUE, HttpStatus.OK.value()));
@@ -145,12 +150,12 @@ public class PostController {
     })
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @PutMapping("/{postId}")
-    public ResponseEntity<PostUpdateResponseDto> updatePost(@ApiIgnore final Authentication authentication,
-                                                            @PathVariable("postId") final Long postId,
-                                                            @RequestBody final PostUpdateRequestDto requestDto) {
+    public ResponseEntity<BasicResponseDto<PostUpdateResponseDto>> updatePost(@ApiIgnore final Authentication authentication,
+                                                            @PathVariable("postId") @NotNull @Positive final Long postId,
+                                                            @Valid @RequestBody final PostUpdateRequestDto requestDto) {
         Long userId = ((User) authentication.getPrincipal()).getId();
         PostUpdateResponseDto responseDto = postService.updatePost(userId, postId, requestDto);
-        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+        return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(responseDto, HttpStatus.OK.value()));
     }
 
     @ApiOperation(value = "게시글 좋아요")
@@ -161,7 +166,7 @@ public class PostController {
     @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @PutMapping("/{postId}/thumbsup")
     public ResponseEntity<BasicResponseDto<Boolean>> thumbsup(@ApiIgnore final Authentication authentication,
-                                                              @PathVariable("postId") final Long postId) {
+                                                              @PathVariable("postId") @NotNull @Positive final Long postId) {
         Long userId = ((User) authentication.getPrincipal()).getId();
         boolean res = postService.thumbsUp(userId, postId);
         return ResponseEntity.ok().body(BasicResponseDto.of(res, HttpStatus.OK.value()));

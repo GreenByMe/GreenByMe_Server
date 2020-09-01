@@ -27,14 +27,19 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.io.IOException;
 
 @Api(tags = "3. Mission")
 @Slf4j
+@Validated
 @RestController
 @RequestMapping("/api/missions")
 @RequiredArgsConstructor
@@ -52,7 +57,7 @@ public class MissionController {
             @ApiResponse(code = 201, message = "미션 저장 성공", response = MissionSaveResponseDto.class)
     )
     @PostMapping
-    public ResponseEntity<BasicResponseDto<MissionSaveResponseDto>> save(MissionSaveRequestDto missionSaveRequestDto, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<BasicResponseDto<MissionSaveResponseDto>> save(@Valid MissionSaveRequestDto missionSaveRequestDto, @RequestParam("file") MultipartFile file) {
         MissionSaveResponseDto missionSaveResponseDto = missionService.save(missionSaveRequestDto, file);
         return ResponseEntity.status(HttpStatus.CREATED).body(BasicResponseDto.of(missionSaveResponseDto, HttpStatus.CREATED.value()));
     }
@@ -89,7 +94,7 @@ public class MissionController {
             @ApiResponse(code = 400, message = "존재하지 않는 미션", response = ErrorResponse.class)
     })
     @GetMapping("/{missionId}")
-    public ResponseEntity<BasicResponseDto<MissionDetailsDto>> findOneDetail(@PathVariable("missionId") final Long id) {
+    public ResponseEntity<BasicResponseDto<MissionDetailsDto>> findOneDetail(@PathVariable("missionId") @NotNull @Positive final Long id) {
         MissionDetailsDto missionDetailsDto = missionService.findById(id);
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(missionDetailsDto, HttpStatus.OK.value()));
     }
@@ -133,7 +138,7 @@ public class MissionController {
             @ApiResponse(code = 400, message = "존재하지 않는 미션", response = ErrorResponse.class)
     })
     @DeleteMapping("/{missionId}")
-    public ResponseEntity<BasicResponseDto<MissionDeleteDto>> missionDelete(@PathVariable("missionId") final Long id) {
+    public ResponseEntity<BasicResponseDto<MissionDeleteDto>> missionDelete(@PathVariable("missionId") @NotNull @Positive final Long id) {
         MissionDeleteDto missionDeleteDto = missionService.delete(id);
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(missionDeleteDto, HttpStatus.OK.value()));
     }

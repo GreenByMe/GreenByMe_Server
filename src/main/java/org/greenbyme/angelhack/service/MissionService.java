@@ -53,6 +53,7 @@ public class MissionService {
                 .dayCategory(missionSaveRequestDto.getDayCategory())
                 .expectCo2(missionSaveRequestDto.getExpectCo2())
                 .pictureUrl(filedUrl)
+                .title(missionSaveRequestDto.getTitle())
                 .missionCertificationMethod(missionCertificationMethod)
                 .build();
 

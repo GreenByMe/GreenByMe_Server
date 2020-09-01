@@ -1,6 +1,7 @@
 package org.greenbyme.angelhack.exception;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import javax.validation.ConstraintViolationException;
 import java.nio.file.AccessDeniedException;
 
 @ControllerAdvice
@@ -77,9 +79,25 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<ErrorResponse> handleException(Exception e) {
-        log.error("handleEntityNotFoundException", e);
+        log.error("handleException", e);
         final ErrorResponse response = ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR);
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(InvalidDataAccessApiUsageException.class)
+    protected ResponseEntity<ErrorResponse> handleApiAccessException(final InvalidDataAccessApiUsageException e) {
+        log.error("handleInvalidDataAccessApiUsageException", e);
+        final ErrorCode errorCode = ErrorCode.INVALID_TYPE_VALUE;
+        final ErrorResponse response = ErrorResponse.of(errorCode);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(errorCode.getStatus()));
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    protected ResponseEntity<ErrorResponse> handleViolationException(final ConstraintViolationException e) {
+        log.error("handleConstraintViolationException", e);
+        final ErrorCode errorCode = ErrorCode.INVALID_INPUT_VALUE;
+        final ErrorResponse response = ErrorResponse.of(errorCode);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(errorCode.getStatus()));
     }
 
     /**
@@ -87,7 +105,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(BusinessException.class)
     protected ResponseEntity<ErrorResponse> handleBusinessException(final BusinessException e) {
-        log.error("handleEntityNotFoundException", e);
+        log.error("handleBusinessException", e);
         final ErrorCode errorCode = e.getErrorCode();
         final ErrorResponse response = ErrorResponse.of(errorCode);
         return new ResponseEntity<>(response, HttpStatus.valueOf(errorCode.getStatus()));
@@ -95,7 +113,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserException.class)
     protected ResponseEntity<ErrorResponse> handleUserException(final UserException e) {
-        log.error("handleEntityNotFoundException", e);
+        log.error("handleUserException", e);
         final ErrorCode errorCode = e.getErrorCode();
         final ErrorResponse response = ErrorResponse.of(errorCode);
         return new ResponseEntity<>(response, HttpStatus.valueOf(errorCode.getStatus()));
@@ -103,7 +121,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(PostException.class)
     protected ResponseEntity<ErrorResponse> handlePostException(final PostException e) {
-        log.error("handleEntityNotFoundException", e);
+        log.error("handlePostException", e);
         final ErrorCode errorCode = e.getErrorCode();
         final ErrorResponse response = ErrorResponse.of(errorCode);
         return new ResponseEntity<>(response, HttpStatus.valueOf(errorCode.getStatus()));
@@ -111,7 +129,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MissionException.class)
     protected ResponseEntity<ErrorResponse> handleMissionException(final MissionException e) {
-        log.error("handleEntityNotFoundException", e);
+        log.error("handleMissionException", e);
         final ErrorCode errorCode = e.getErrorCode();
         final ErrorResponse response = ErrorResponse.of(errorCode);
         return new ResponseEntity<>(response, HttpStatus.valueOf(errorCode.getStatus()));
@@ -119,7 +137,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(PersonalMissionException.class)
     protected ResponseEntity<ErrorResponse> handlePersonalMissionException(final PersonalMissionException e) {
-        log.error("handleEntityNotFoundException", e);
+        log.error("handlePersonalMissionException", e);
         final ErrorCode errorCode = e.getErrorCode();
         final ErrorResponse response = ErrorResponse.of(errorCode);
         return new ResponseEntity<>(response, HttpStatus.valueOf(errorCode.getStatus()));
