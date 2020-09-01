@@ -27,7 +27,6 @@ public class PopularMissionResponseDto implements Comparable<PopularMissionRespo
         this.pictureUrl = mission.getPictureUrl();
     }
 
-
     @Override
     public int compareTo(PopularMissionResponseDto o) {
         return -this.progressCount.compareTo(o.progressCount);
