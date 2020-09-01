@@ -25,16 +25,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import java.io.IOException;
 
 @Api(tags = "2. User")
 @Slf4j
+@Validated
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
@@ -55,7 +59,7 @@ public class UserController {
             @ApiResponse(code = 500, message = "서버 에러", response = ErrorResponse.class)
     })
     @PostMapping("/signup")
-    public ResponseEntity<BasicResponseDto<String>> saveUser(@RequestBody final UserSaveRequestDto requestDto) {
+    public ResponseEntity<BasicResponseDto<String>> saveUser(@Valid @RequestBody final UserSaveRequestDto requestDto) {
         String result = userService.saveUser(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(BasicResponseDto.of(result, HttpStatus.CREATED.value()));
     }
@@ -67,7 +71,7 @@ public class UserController {
             @ApiResponse(code = 500, message = "서버 에러", response = ErrorResponse.class)
     })
     @PostMapping("/signin")
-    public ResponseEntity<BasicResponseDto<String>> signIn(@RequestBody final UserLoginRequestDto userLoginRequestDto) {
+    public ResponseEntity<BasicResponseDto<String>> signIn(@Valid @RequestBody final UserLoginRequestDto userLoginRequestDto) {
         String token = userService.login(userLoginRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(BasicResponseDto.of(token, (HttpStatus.CREATED.value())));
     }
@@ -185,7 +189,7 @@ public class UserController {
             @ApiResponse(code = 500, message = "서버 에러", response = ErrorResponse.class)
     })
     @GetMapping("/email/{email}")
-    public ResponseEntity<BasicResponseDto<Boolean>> checkEmail(@PathVariable("email") String email) {
+    public ResponseEntity<BasicResponseDto<Boolean>> checkEmail(@PathVariable("email") @Email String email) {
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(userService.checkEmail(email), HttpStatus.OK.value()));
     }
 
@@ -195,7 +199,7 @@ public class UserController {
             @ApiResponse(code = 500, message = "서버 에러", response = ErrorResponse.class)
     })
     @GetMapping("/nickname/{nickname}")
-    public ResponseEntity<BasicResponseDto<Boolean>> checkNickName(@PathVariable("nickname") String nickname) {
+    public ResponseEntity<BasicResponseDto<Boolean>> checkNickName(@PathVariable("nickname") @NotEmpty String nickname) {
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(userService.checkNickName(nickname), HttpStatus.OK.value()));
     }
 }

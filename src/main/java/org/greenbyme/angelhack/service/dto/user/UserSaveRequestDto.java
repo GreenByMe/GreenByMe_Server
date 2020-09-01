@@ -5,13 +5,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.greenbyme.angelhack.domain.user.User;
 
+import javax.validation.constraints.NotEmpty;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserSaveRequestDto {
 
+    @NotEmpty
     private String name;
+    @NotEmpty
     private String email;
+    @NotEmpty
     private String password;
+    @NotEmpty
     private String nickname;
 
     public UserSaveRequestDto(String name, String email, String password, String nickname) {
