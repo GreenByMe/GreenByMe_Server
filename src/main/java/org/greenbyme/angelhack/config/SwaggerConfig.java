@@ -30,7 +30,7 @@ public class SwaggerConfig {
       return new ApiInfoBuilder()
                 .title("GreenByMe REST API")
                 .description("Green by me, Green by earth(us)")
-                .version("3.3")
+                .version("0.4.0")
                 .termsOfServiceUrl("Terms of service")
                 .contact(new Contact("Tae Jeong, Da hun", "https://github.com/GreenByMe/GreenByMe_Server", "xowjd41@naver.com"))
                 .license("Apache License Version 2.0")

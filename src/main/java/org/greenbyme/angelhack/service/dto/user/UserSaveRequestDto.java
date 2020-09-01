@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.greenbyme.angelhack.domain.user.User;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
 @Getter
@@ -13,7 +14,7 @@ public class UserSaveRequestDto {
 
     @NotEmpty
     private String name;
-    @NotEmpty
+    @NotEmpty @Email
     private String email;
     @NotEmpty
     private String password;
