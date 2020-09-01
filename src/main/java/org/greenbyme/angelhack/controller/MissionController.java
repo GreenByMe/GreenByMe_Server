@@ -99,9 +99,9 @@ public class MissionController {
             @ApiResponse(code = 200, message = "조회 성공", response = MissionFindAllByCategoryAndDayCategoryResponseDto.class)
     })
     @GetMapping("/categorys/{category}/daycategory/{datCategory}")
-    public ResponseEntity<BasicResponseDto<PageDto<MissionFindAllByCategoryAndDayCategoryResponseDto>>> findAllByCategoryAndDayCategory(@PathVariable(value = "category") final Category category,
-                                                                                                                                        @PathVariable(value = "datCategory") final DayCategory dayCategory,
-                                                                                                                                        @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity<BasicResponseDto<PageDto<MissionFindAllByCategoryAndDayCategoryResponseDto>>> findAllByCategoryAndDayCategory(@PathVariable("category") final Category category,
+                                                                                                                                        @PathVariable("datCategory") final DayCategory dayCategory,
+                                                                                                                                        @PageableDefault(size = 10) Pageable pageable) {
         Page<MissionFindAllByCategoryAndDayCategoryResponseDto> allByCategoryAndDayCategory = missionService.findAllByCategoryAndDayCategory(category, dayCategory, pageable);
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(new PageDto<>(allByCategoryAndDayCategory), HttpStatus.OK.value()));
     }

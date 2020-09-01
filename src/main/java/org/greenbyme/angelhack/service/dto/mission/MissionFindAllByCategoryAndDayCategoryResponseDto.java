@@ -19,8 +19,8 @@ public class MissionFindAllByCategoryAndDayCategoryResponseDto {
     private String title;
     private String subject;
     private String description;
-    private LocalDateTime ifStartDate;
-    private LocalDateTime ifEndDate;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private String pictureUrl;
     private Long passCandidates;
 
@@ -31,8 +31,8 @@ public class MissionFindAllByCategoryAndDayCategoryResponseDto {
         this.title = mission.getTitle();
         this.subject = mission.getSubject();
         this.description = mission.getDescription();
-        this.ifStartDate = LocalDateTime.now();
-        this.ifEndDate = LocalDateTime.now().plusDays(mission.getDayCategory().getDay());
+        this.startDate = LocalDateTime.now();
+        this.endDate = LocalDateTime.now().plusDays(mission.getDayCategory().getDay());
         this.pictureUrl= mission.getPictureUrl();
         this.passCandidates = mission.getPassCandidatesCount();
     }
