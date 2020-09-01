@@ -8,7 +8,6 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.NotEmpty;
 
-
 @Embeddable
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

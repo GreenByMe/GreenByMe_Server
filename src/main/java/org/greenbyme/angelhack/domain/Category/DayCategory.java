@@ -2,6 +2,7 @@ package org.greenbyme.angelhack.domain.Category;
 
 public enum  DayCategory {
 
+    ALL(0),
     DAY(1),
     WEEK(7),
     MONTH(30);

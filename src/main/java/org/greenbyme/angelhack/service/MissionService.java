@@ -8,6 +8,8 @@ import org.greenbyme.angelhack.domain.mission.MissionCertificationMethod;
 import org.greenbyme.angelhack.domain.mission.MissionRepository;
 import org.greenbyme.angelhack.domain.personalmission.PersonalMission;
 import org.greenbyme.angelhack.domain.personalmission.PersonalMissionRepository;
+import org.greenbyme.angelhack.exception.ErrorCode;
+import org.greenbyme.angelhack.exception.MissionException;
 import org.greenbyme.angelhack.service.dto.mission.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.persistence.NoResultException;
 import java.util.List;
 
 @Service
@@ -52,6 +53,7 @@ public class MissionService {
                 .dayCategory(missionSaveRequestDto.getDayCategory())
                 .expectCo2(missionSaveRequestDto.getExpectCo2())
                 .pictureUrl(filedUrl)
+                .title(missionSaveRequestDto.getTitle())
                 .missionCertificationMethod(missionCertificationMethod)
                 .build();
 
@@ -59,21 +61,13 @@ public class MissionService {
         return new MissionSaveResponseDto(mission);
     }
 
-    public Page<MissionFindAllResponseDto> findAllMission(Pageable pageable) {
-        return missionRepository.findAll(pageable).map(MissionFindAllResponseDto::new);
-    }
-
     public Page<MissionFindAllByCategoryAndDayCategoryResponseDto> findAllByCategoryAndDayCategory(Category category, DayCategory dayCategory, Pageable pageable) {
-        return missionRepository.findAllByCategoryAndDayCategory(category, dayCategory, pageable).map(MissionFindAllByCategoryAndDayCategoryResponseDto::new);
-    }
-
-    public Page<MissionFindAllByCategoryResponseDto> findAllByCategory(Category category, Pageable pageable) {
-        return missionRepository.findAllByCategory(category, pageable).map(MissionFindAllByCategoryResponseDto::new);
+        return missionRepository.findAllByCategoryAndDayCategory(category, dayCategory, pageable);
     }
 
     @Transactional
     public MissionDeleteDto delete(Long id) {
-        Mission mission = missionRepository.findById(id).orElseThrow(() -> new NoResultException("등록되지 않은 미션입니다."));
+        Mission mission = findMissionById(id);
         List<PersonalMission> personalMissionsByPersonalMission = personalMissionRepository.findByMission(mission);
         for (PersonalMission personalMission : personalMissionsByPersonalMission) {
             personalMissionRepository.delete(personalMission);
@@ -83,12 +77,17 @@ public class MissionService {
     }
 
     public MissionDetailsDto findById(Long id) {
-        Mission mission = missionRepository.findById(id).orElseThrow(() -> new NoResultException("등록되지 않은 미션입니다."));
+        Mission mission = findMissionById(id);
         Long progressByMissionId = personalMissionRepository.findProgressByMissionId(id);
         return new MissionDetailsDto(mission, progressByMissionId);
     }
 
     public Page<MissionPopularResponseDto> findAllByPopular(Pageable pageable) {
         return missionRepository.findAll(pageable).map(MissionPopularResponseDto::new);
+    }
+
+    private Mission findMissionById(Long missionId) {
+        return missionRepository.findById(missionId)
+                .orElseThrow(() -> new MissionException(ErrorCode.INVALID_MISSION));
     }
 }

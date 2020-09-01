@@ -11,6 +11,7 @@ import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.domain.user.UserRepository;
 import org.greenbyme.angelhack.exception.ErrorCode;
 import org.greenbyme.angelhack.exception.UserException;
+import org.greenbyme.angelhack.service.dto.TokenResponse;
 import org.greenbyme.angelhack.service.dto.personalmission.PersonalMissionByUserDto;
 import org.greenbyme.angelhack.service.dto.post.PostDetailResponseDto;
 import org.greenbyme.angelhack.service.dto.user.*;
@@ -45,7 +46,7 @@ public class UserService {
     private FileUploadDownloadService service;
 
     @Transactional
-    public UserResponseDto saveUser(UserSaveRequestDto requestDto) {
+    public String saveUser(UserSaveRequestDto requestDto) {
         if (userRepository.findByEmail(requestDto.getEmail()).isPresent()) {
             throw new UserException("이미 가입된 메일입니다", ErrorCode.MEMBER_DUPLICATED_EMAIL);
         }
@@ -57,7 +58,7 @@ public class UserService {
         User user = requestDto.toEntity();
         user.changePassword(encodePassword);
         user = userRepository.save(user);
-        return new UserResponseDto(user.getId());
+        return createToken(user);
     }
 
     public UserDetailResponseDto getUserDetail(Long userId) {
@@ -108,26 +109,23 @@ public class UserService {
     public Page<PostDetailResponseDto> getPostList(Long userId, Pageable pageable) {
         User user = getUser(userId);
         return postRepository.findAllByUser(user, pageable)
-                .map(PostDetailResponseDto::new);
+                .map(p -> new PostDetailResponseDto(p, true));
     }
 
     @Transactional
-    public UserResponseDto updateNickName(UserUpdateNicktDto dto, Long userId) {
+    public UserResponseDto updateProfile(Long userId, MultipartFile file, UserUpdateNicktDto dto) {
         User user = getUser(userId);
+
+        if(file != null) {
+            String fileName = service.storeFile(file);
+            String filedUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path("/api/users/images/")
+                    .path(fileName)
+                    .toUriString();
+            user.changePhoto(filedUrl);
+        }
+
         user.changeNickName(dto.getNickName());
-        return new UserResponseDto(user.getId());
-    }
-
-    @Transactional
-    public UserResponseDto updatePhotos(Long userId, MultipartFile file) {
-        User user = getUser(userId);
-        String fileName = service.storeFile(file);
-        String filedUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/users/images/")
-                .path(fileName)
-                .toUriString();
-
-        user.changePhoto(filedUrl);
         return new UserResponseDto(user.getId());
     }
 
@@ -138,7 +136,7 @@ public class UserService {
         if (!passwordEncoder.matches(rawPassword, encodePassword)) {
             throw new UserException("잘못된 비밀번호입니다.", ErrorCode.WRONG_PASSWORD);
         }
-        return jwtTokenProvider.createToken(user.getId(), user.getRoles());
+        return createToken(user);
     }
 
     public String refreshToken(Authentication authentication) throws Exception {
@@ -151,5 +149,9 @@ public class UserService {
 
     public Boolean checkNickName(String nickname) {
         return !userRepository.findByNickname(nickname).isPresent();
+    }
+
+    private String createToken(User user) {
+        return jwtTokenProvider.createToken(user.getId(), user.getRoles());
     }
 }

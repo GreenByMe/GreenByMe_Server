@@ -19,17 +19,15 @@ public class HomePageDto {
     private double expectedCO2;
     private double expectedTree;
     private long progressRates;
-    private List<InProgressResponseDto> progressResponseDtoList;
-    private List<PopularMissionResponseDto> popularMissionResponseDtoList;
+    private PersonalMissionPageDto pageDto;
 
-    public HomePageDto(User user, long progressRates, List<InProgressResponseDto> progressMissions, List<PopularMissionResponseDto> popularMissions) {
+    public HomePageDto(User user, long progressRates, PersonalMissionPageDto pageDto) {
         this.nickName = user.getNickname();
         this.treeSentence = "지금까지 벌써 <br><font color=\"#26B679\">" + Math.round(user.getExpectTree() * 100) / 100.0 + "개의 나무를</font><br>심으셨군요!";
-        this.progressCampaign = progressMissions.size();
+        this.progressCampaign = pageDto.getProgressResponseDtoList().size();
         this.expectedCO2 = user.getExpectCo2();
         this.expectedTree = user.getExpectTree();
         this.progressRates = progressRates;
-        this.progressResponseDtoList = progressMissions;
-        this.popularMissionResponseDtoList = popularMissions;
+        this.pageDto = pageDto;
     }
 }
