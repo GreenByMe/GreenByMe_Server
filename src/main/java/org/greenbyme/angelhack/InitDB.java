@@ -42,7 +42,7 @@ public class InitDB {
         public void dbInit1(){
             User testUser = User.builder()
                     .name("김민석")
-                    .email("test")
+                    .email("test@test.com")
                     .password(passwordEncoder.encode("test"))
                     .nickname("민석굴암")
                     .photo("https://cafecube.iptime.org/api/users/images/e1dc9a1d-215a-4767-b813-d5c10aca3579_testUser.jpg")
