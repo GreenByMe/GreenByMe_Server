@@ -21,6 +21,9 @@ public enum ErrorCode {
 
     //Mission
     INVALID_MISSION(400, "M_001", "등록되지 않은 미션 id"),
+    CAN_NOT_ASSIGN_ALL_IN_CATEGORY(400,"M_002", "Category에 All은 저장할 수 없습니다."),
+    CAN_NOT_ASSIGN_ALL_IN_DAYCATEGORY(400,"M_003", "DayCategory에 All은 저장할 수 없습니다."),
+    NOT_MATCH_VALUE(400, "M_004", "DayCategory와 MissionCertificateCount의 관계가 옳지 않습니다."),
 
     //PersonalMission
     INVALID_PERSONAL_MISSION(400, "PM_001", "등록되지 않은 개인 미션 정보 id"),
