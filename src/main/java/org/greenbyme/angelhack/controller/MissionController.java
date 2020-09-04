@@ -53,8 +53,11 @@ public class MissionController {
     private FileUploadDownloadService service;
 
     @ApiOperation(value = "미션 저장")
-    @ApiResponses(
-            @ApiResponse(code = 201, message = "미션 저장 성공", response = MissionSaveResponseDto.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "미션 저장 성공", response = MissionSaveResponseDto.class),
+            @ApiResponse(code = 400, message = "1.Category에 잘못된 값 \t\n 2.DayCategory에 잘못된 값 \t\n " +
+                    "3.DayCategory와 MissionCertificateCount의 관계가 옳지 않음", response = ErrorResponse.class)
+    }
     )
     @PostMapping
     public ResponseEntity<BasicResponseDto<MissionSaveResponseDto>> save(@Valid MissionSaveRequestDto missionSaveRequestDto, @RequestParam("file") MultipartFile file) {
