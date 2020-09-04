@@ -76,11 +76,9 @@ public class MissionService {
         if (dayCategory.equals(DayCategory.DAY) && !collect.contains("DAY")) {
             throw new MissionException(ErrorCode.NOT_MATCH_VALUE);
         }
-
         if (dayCategory.equals(DayCategory.WEEK) && (collect.contains("DAY") || collect.contains("MONTH"))) {
             throw new MissionException(ErrorCode.NOT_MATCH_VALUE);
         }
-
         if (dayCategory.equals(DayCategory.MONTH) && !collect.contains("MONTH")) {
             throw new MissionException(ErrorCode.NOT_MATCH_VALUE);
         }
