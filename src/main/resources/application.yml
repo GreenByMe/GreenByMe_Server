@@ -31,8 +31,10 @@ spring:
 logging:
   level:
     org:
-      hibernate:
-        type:
+      springframework:
+        web:
+          filter: DEBUG
+
 file:
   upload-dir: ./uploads
 

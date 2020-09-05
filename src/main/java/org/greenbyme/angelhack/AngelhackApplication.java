@@ -9,6 +9,7 @@ import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.filter.CommonsRequestLoggingFilter;
 
 import javax.annotation.PostConstruct;
 import java.util.Optional;
@@ -39,5 +40,10 @@ public class AngelhackApplication {
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+	}
+
+	@Bean
+	public CommonsRequestLoggingFilter requestLoggingFilter() {
+		return new CommonsRequestLoggingFilter();
 	}
 }

@@ -21,8 +21,7 @@ public class PeriodScheduler {
 
     @Scheduled(fixedDelay = 1000*60)
     public void alert(){
-        logger.info("유저 RemainPeriod 변경 완료 / 현재 시간 : {}", new Date());
+        //logger.info("유저 RemainPeriod 변경 완료 / 현재 시간 : {}", new Date());
         personalMissionService.changeRemainPeriod();
-
     }
 }
