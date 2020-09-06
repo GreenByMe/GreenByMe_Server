@@ -36,6 +36,7 @@ public class PageController {
     @GetMapping("/home")
     public ResponseEntity<BasicResponseDto<HomePageDto>> getHomePage(@ApiIgnore final Authentication authentication) {
         Long userId = ((User) authentication.getPrincipal()).getId();
+        log.info("홈 페이지 조회 완료");
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(pageService.getHomepageInfos(userId), HttpStatus.OK.value()));
     }
 
@@ -48,6 +49,7 @@ public class PageController {
     @GetMapping("/cert")
     public ResponseEntity<BasicResponseDto<CertPageDto>> getCertPage(@ApiIgnore final Authentication authentication) {
         Long userId = ((User) authentication.getPrincipal()).getId();
+        log.info("인증 페이지 조회 완료");
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(pageService.getCertPage(userId), HttpStatus.OK.value()));
     }
 
@@ -60,6 +62,7 @@ public class PageController {
     @GetMapping
     public ResponseEntity<BasicResponseDto<MyPageDto>> getMyPage(@ApiIgnore final Authentication authentication) {
         Long userId = ((User) authentication.getPrincipal()).getId();
+        log.info("개인 페이지 조회 완료");
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(pageService.getMyPage(userId), HttpStatus.OK.value()));
     }
 }

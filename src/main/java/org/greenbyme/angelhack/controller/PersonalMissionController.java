@@ -47,6 +47,7 @@ public class PersonalMissionController {
                                                                                  @PathVariable("missionId") @NotNull @Positive final Long missionId) {
         Long userId = ((User) authentication.getPrincipal()).getId();
         PersonalMissionSaveResponseDto personalMissionSaveResponseDto = personalMissionService.save(userId, missionId);
+        log.info("개인 미션 등록 완료");
         return ResponseEntity.status(HttpStatus.CREATED).body(BasicResponseDto.of(personalMissionSaveResponseDto, HttpStatus.CREATED.value()));
     }
 
@@ -62,6 +63,7 @@ public class PersonalMissionController {
                                                                                                     @PathVariable("personalMissionId") @NotNull @Positive final Long personalMissionId) {
         Long userId = ((User) authentication.getPrincipal()).getId();
         PersonalMissionDetailResponseDto personalMissionDetailResponseDto = personalMissionService.findPersonalMissionDetails(personalMissionId, userId);
+        log.info("개인 상세 조회 완료");
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(personalMissionDetailResponseDto, HttpStatus.OK.value()));
     }
 
@@ -77,6 +79,7 @@ public class PersonalMissionController {
                                                                                                     @PathVariable("personalMissionId") @NotNull @Positive final Long personalMissionId) {
         Long userId = ((User) authentication.getPrincipal()).getId();
         PersonalMissionDeleteResponseDto personalMissionDeleteResponseDto = personalMissionService.personalMissionDelete(personalMissionId, userId);
+        log.info("개인 미션 삭제 완료");
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(personalMissionDeleteResponseDto, HttpStatus.OK.value()));
     }
 
@@ -91,6 +94,7 @@ public class PersonalMissionController {
                                                                                                           @PageableDefault(size = 10) Pageable pageable) {
         Long userId = ((User) authentication.getPrincipal()).getId();
         Page<InProgressResponseDto> responseDto = personalMissionService.getPersonalMissionInProgress(userId, pageable);
+        log.info("진행 중인 개인 미션 조회 완료");
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(new PageDto<>(responseDto), HttpStatus.OK.value()));
     }
 }

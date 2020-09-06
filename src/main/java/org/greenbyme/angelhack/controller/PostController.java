@@ -43,7 +43,6 @@ import java.io.IOException;
 public class PostController {
 
     private final PostService postService;
-    private static final Logger logger = LoggerFactory.getLogger(PostController.class);
 
     @Autowired
     private FileUploadDownloadService service;
@@ -60,6 +59,7 @@ public class PostController {
                                                                           @RequestParam("file") final MultipartFile file) throws IOException {
         Long userId = ((User) authentication.getPrincipal()).getId();
         PostSaveResponseDto responseDto = postService.savePosts(userId, requestDto, file);
+        log.info("게시글 저장 완료");
         return ResponseEntity.status(HttpStatus.CREATED).body(BasicResponseDto.of(responseDto, HttpStatus.CREATED.value()));
     }
 
@@ -73,13 +73,14 @@ public class PostController {
         try {
             contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
         } catch (IOException ex) {
-            logger.info("Could not determine file type.");
+            log.info("Could not determine file type.");
         }
 
         // Fallback to the default content type if type could not be determined
         if (contentType == null) {
             contentType = "application/octet-stream";
         }
+        log.info("게시글 이미지 조회 완료");
 
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
@@ -96,10 +97,11 @@ public class PostController {
     public ResponseEntity<BasicResponseDto<PageDto<PostResponseDto>>> getPostsByMission(@PathVariable("missionId") @NotNull @Positive final Long missionId,
                                                                                         @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<PostResponseDto> responseDtos = postService.getPostsByMission(missionId, pageable);
+        log.info("미션 관련 게시글 조회 완료");
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(new PageDto<>(responseDtos), HttpStatus.OK.value()));
     }
 
-    @ApiOperation(value = "상세 조회")
+    @ApiOperation(value = "게시글 상세 조회")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "조회 성공", response = PostDetailResponseDto.class),
             @ApiResponse(code = 400, message = "1.등록되지 않은 게시글 \t\n 2.등록되지 않은 유저", response = ErrorResponse.class)
@@ -110,6 +112,7 @@ public class PostController {
                                                                                  @PathVariable("postId") @NotNull @Positive final Long postId) {
         Long userId = ((User) authentication.getPrincipal()).getId();
         PostDetailResponseDto responseDto = postService.getPostDetail(postId, userId);
+        log.info("게시글 상세 조회 완료");
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(responseDto, HttpStatus.OK.value()));
     }
 
@@ -124,6 +127,7 @@ public class PostController {
                                                                                      @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         Long userId = ((User) authentication.getPrincipal()).getId();
         Page<PostResponseDto> responseDtos = postService.getPostsByUser(userId, pageable);
+        log.info("사용자의 게시글 조회 완료");
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(new PageDto<>(responseDtos), HttpStatus.OK.value()));
     }
 
@@ -139,6 +143,7 @@ public class PostController {
                                                                 @PathVariable("postId") @NotNull @Positive final Long postId) {
         Long userId = ((User) authentication.getPrincipal()).getId();
         postService.deletePost(postId, userId);
+        log.info("게시글 삭제 완료");
         return ResponseEntity.ok().body(BasicResponseDto.of(Boolean.TRUE, HttpStatus.OK.value()));
     }
 
@@ -155,6 +160,7 @@ public class PostController {
                                                             @Valid @RequestBody final PostUpdateRequestDto requestDto) {
         Long userId = ((User) authentication.getPrincipal()).getId();
         PostUpdateResponseDto responseDto = postService.updatePost(userId, postId, requestDto);
+        log.info("게시글 수정 완료");
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(responseDto, HttpStatus.OK.value()));
     }
 
@@ -169,6 +175,7 @@ public class PostController {
                                                               @PathVariable("postId") @NotNull @Positive final Long postId) {
         Long userId = ((User) authentication.getPrincipal()).getId();
         boolean res = postService.thumbsUp(userId, postId);
+        log.info("게시글 좋아요 완료");
         return ResponseEntity.ok().body(BasicResponseDto.of(res, HttpStatus.OK.value()));
     }
 }
