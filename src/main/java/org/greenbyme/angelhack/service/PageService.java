@@ -14,10 +14,7 @@ import org.greenbyme.angelhack.domain.user.UserRepository;
 import org.greenbyme.angelhack.exception.ErrorCode;
 import org.greenbyme.angelhack.exception.UserException;
 import org.greenbyme.angelhack.service.dto.page.*;
-import org.greenbyme.angelhack.service.dto.personalmission.FinishedResponseDto;
-import org.greenbyme.angelhack.service.dto.personalmission.InProgressResponseDto;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.greenbyme.angelhack.service.dto.personalmission.PersonalMissionByPageDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,25 +42,18 @@ public class PageService {
         long missionProgressCount = postRepository.findAllByUser(user).stream()
                 .filter(p -> p.getCreatedDate().getDayOfYear() == LocalDateTime.now().getDayOfYear())
                 .count();
-        List<InProgressResponseDto> inProgressResponseDtos = res.stream()
-                .filter(m -> m.getPersonalMissionStatus().equals(PersonalMissionStatus.IN_PROGRESS))
-                .map(m -> new InProgressResponseDto(m, howManyPeopleInMission(m)))
-                .sorted()
-                .collect(Collectors.toList());
-        List<FinishedResponseDto> finishedResponseDtos = res.stream()
-                .filter(m -> !m.getPersonalMissionStatus().equals(PersonalMissionStatus.IN_PROGRESS))
-                .map(m -> new FinishedResponseDto(m, howManyPeopleInMission(m)))
-                .sorted()
+        List<PersonalMissionByPageDto> personalMissionByPageList = res.stream()
+                .map(m -> new PersonalMissionByPageDto(m, howManyPeopleInMission(m)))
                 .collect(Collectors.toList());
         List<PopularMissionResponseDto> popularMissionResponseDtos = missionRepository.findAll().stream()
                 .map(m -> new PopularMissionResponseDto(m, howManyPeopleInMission(m)))
                 .sorted()
                 .collect(Collectors.toList());
         if (missionCount == 0 || missionProgressCount == 0) {
-            return new HomePageDto(user, 0, new PersonalMissionPageDto(inProgressResponseDtos, finishedResponseDtos, popularMissionResponseDtos));
+            return new HomePageDto(user, 0, new PersonalMissionPageDto(personalMissionByPageList, popularMissionResponseDtos));
         }
         long missionProgressRates = (long) ((double) (missionProgressCount / missionCount) * 100);
-        return new HomePageDto(user, missionProgressRates, new PersonalMissionPageDto(inProgressResponseDtos, finishedResponseDtos, popularMissionResponseDtos));
+        return new HomePageDto(user, missionProgressRates, new PersonalMissionPageDto(personalMissionByPageList, popularMissionResponseDtos));
     }
 
     private Long howManyPeopleInMission(PersonalMission personalMission) {
