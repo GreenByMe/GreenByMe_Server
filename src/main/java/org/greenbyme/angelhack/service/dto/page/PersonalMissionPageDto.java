@@ -3,8 +3,7 @@ package org.greenbyme.angelhack.service.dto.page;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.greenbyme.angelhack.service.dto.personalmission.FinishedResponseDto;
-import org.greenbyme.angelhack.service.dto.personalmission.InProgressResponseDto;
+import org.greenbyme.angelhack.service.dto.personalmission.PersonalMissionByPageDto;
 
 import java.util.List;
 
@@ -12,15 +11,12 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PersonalMissionPageDto {
 
-    private List<InProgressResponseDto> progressResponseDtoList;
-    private List<FinishedResponseDto> finishedResponseDtoList;
+    private List<PersonalMissionByPageDto> personalMissionList;
     private List<PopularMissionResponseDto> popularMissionResponseDtoList;
 
-    public PersonalMissionPageDto(List<InProgressResponseDto> progressResponseDtoList,
-                                  List<FinishedResponseDto> finishedResponseDtoList,
+    public PersonalMissionPageDto(List<PersonalMissionByPageDto> personalMissionList,
                                   List<PopularMissionResponseDto> popularMissionResponseDtoList) {
-        this.progressResponseDtoList = progressResponseDtoList;
-        this.finishedResponseDtoList = finishedResponseDtoList;
+        this.personalMissionList = personalMissionList;
         this.popularMissionResponseDtoList = popularMissionResponseDtoList;
     }
 }
