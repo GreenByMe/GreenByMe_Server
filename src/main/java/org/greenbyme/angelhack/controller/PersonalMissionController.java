@@ -41,7 +41,6 @@ public class PersonalMissionController {
             @ApiResponse(code = 400, message = "1.등록되지 않은 유저 \t\n 2.등록되지 않은 미션", response = ErrorResponse.class),
             @ApiResponse(code = 409, message = "1.이미 진행 중인 미션 \t\n 2.동일 기간 내 미션 진행 중", response = ErrorResponse.class),
     })
-    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @PostMapping("/missions/{missionId}")
     public ResponseEntity<BasicResponseDto<PersonalMissionSaveResponseDto>> join(@ApiIgnore final Authentication authentication,
                                                                                  @PathVariable("missionId") @NotNull @Positive final Long missionId) {
@@ -57,7 +56,6 @@ public class PersonalMissionController {
             @ApiResponse(code = 400, message = "등록되지 않은 개인 미션", response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "미션에 대한 권한이 없음", response = ErrorResponse.class)
     })
-    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @GetMapping("/{personalMissionId}")
     public ResponseEntity<BasicResponseDto<PersonalMissionDetailResponseDto>> PersonalMissionDetail(@ApiIgnore final Authentication authentication,
                                                                                                     @PathVariable("personalMissionId") @NotNull @Positive final Long personalMissionId) {
@@ -73,7 +71,6 @@ public class PersonalMissionController {
             @ApiResponse(code = 400, message = "1.등록되지 않은 개인 미션 \t\n 2.등록되지 않은 유저 정보", response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "미션에 대한 권한이 없음", response = ErrorResponse.class)
     })
-    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @DeleteMapping("/{personalMissionId}")
     public ResponseEntity<BasicResponseDto<PersonalMissionDeleteResponseDto>> personalMissionDelete(@ApiIgnore final Authentication authentication,
                                                                                                     @PathVariable("personalMissionId") @NotNull @Positive final Long personalMissionId) {
@@ -88,7 +85,6 @@ public class PersonalMissionController {
             @ApiResponse(code = 200, message = "조회 성공", response = InProgressResponseDto.class),
             @ApiResponse(code = 400, message = "등록되지 않은 유저 정보", response = ErrorResponse.class)
     })
-    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @GetMapping
     public ResponseEntity<BasicResponseDto<PageDto<InProgressResponseDto>>> getPersonalMissionsInProgress(@ApiIgnore final Authentication authentication,
                                                                                                           @PageableDefault(size = 10) Pageable pageable) {
