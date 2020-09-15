@@ -32,7 +32,6 @@ public class PageController {
             @ApiResponse(code = 200, message = "조회 성공", response = HomePageDto.class),
             @ApiResponse(code = 400, message = "등록되지 않은 유저", response = ErrorResponse.class)
     })
-    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @GetMapping("/home")
     public ResponseEntity<BasicResponseDto<HomePageDto>> getHomePage(@ApiIgnore final Authentication authentication) {
         Long userId = ((User) authentication.getPrincipal()).getId();
@@ -45,7 +44,6 @@ public class PageController {
             @ApiResponse(code = 200, message = "조회 성공", response = CertPageDto.class),
             @ApiResponse(code = 400, message = "등록되지 않은 유저", response = ErrorResponse.class)
     })
-    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @GetMapping("/cert")
     public ResponseEntity<BasicResponseDto<CertPageDto>> getCertPage(@ApiIgnore final Authentication authentication) {
         Long userId = ((User) authentication.getPrincipal()).getId();
@@ -58,7 +56,6 @@ public class PageController {
             @ApiResponse(code = 200, message = "조회 성공", response = MyPageDto.class),
             @ApiResponse(code = 400, message = "등록되지 않은 유저", response = ErrorResponse.class)
     })
-    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @GetMapping
     public ResponseEntity<BasicResponseDto<MyPageDto>> getMyPage(@ApiIgnore final Authentication authentication) {
         Long userId = ((User) authentication.getPrincipal()).getId();
