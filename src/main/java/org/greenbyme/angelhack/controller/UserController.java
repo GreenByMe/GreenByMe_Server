@@ -105,7 +105,6 @@ public class UserController {
             @ApiResponse(code = 400, message = "등록되지 않은 유저", response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "권한 없음", response = ErrorResponse.class)
     })
-    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @GetMapping
     public ResponseEntity<BasicResponseDto<UserDetailResponseDto>> getUserDetail(@ApiIgnore final Authentication authentication) {
         Long userId = ((User) authentication.getPrincipal()).getId();
@@ -120,7 +119,6 @@ public class UserController {
             @ApiResponse(code = 400, message = "등록되지 않은 유저", response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "권한 없음", response = ErrorResponse.class)
     })
-    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @GetMapping("/expectTreeCo2")
     public ResponseEntity<BasicResponseDto<UserExpectTreeCo2ResponseDto>> getUserExpectTreeCo2(@ApiIgnore final Authentication authentication) {
         Long userId = ((User) authentication.getPrincipal()).getId();
@@ -135,7 +133,6 @@ public class UserController {
             @ApiResponse(code = 400, message = "등록되지 않은 유저", response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "권한 없음", response = ErrorResponse.class)
     })
-    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @GetMapping("/personalMissions")
     public ResponseEntity<BasicResponseDto<PageDto<PersonalMissionByUserDto>>> getUserPersonalMissionList(@ApiIgnore final Authentication authentication,
                                                                                                           @PageableDefault(size = 10) final Pageable pageable) {
@@ -151,7 +148,6 @@ public class UserController {
             @ApiResponse(code = 400, message = "등록되지 않은 유저", response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "권한 없음", response = ErrorResponse.class)
     })
-    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @GetMapping("/posts")
     public ResponseEntity<BasicResponseDto<PageDto<PostDetailResponseDto>>> getUserPostList(@ApiIgnore final Authentication authentication,
                                                                                             @PageableDefault final Pageable pageable) {
@@ -167,7 +163,6 @@ public class UserController {
             @ApiResponse(code = 400, message = "1.등록되지 않은 유저 \t\n 2.반드시 값이 있어야 합니다.", response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "권한 없음", response = ErrorResponse.class)
     })
-    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @PutMapping
     public ResponseEntity<BasicResponseDto<UserResponseDto>> updateUserProfile(@ApiIgnore final Authentication authentication,
                                                                               @Valid final UserUpdateNicktDto dto,
@@ -182,7 +177,6 @@ public class UserController {
             @ApiResponse(code = 202, message = "토큰 재발급 성공", response = String.class),
             @ApiResponse(code = 401, message = "권한 없음", response = ErrorResponse.class)
     })
-    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @PostMapping("/refresh")
     public ResponseEntity<BasicResponseDto<String>> refreshToken(@ApiIgnore final Authentication authentication) throws Exception {
         log.info("토큰 Refresh 완료");

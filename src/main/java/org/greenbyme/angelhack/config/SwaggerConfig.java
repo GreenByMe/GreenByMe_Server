@@ -3,7 +3,6 @@ package org.greenbyme.angelhack.config;
 import com.google.common.collect.Lists;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -63,6 +62,4 @@ public class SwaggerConfig {
         authorizationScopes[0] = authorizationScope;
         return Lists.newArrayList(new SecurityReference("JWT", authorizationScopes));
     }
-
-
 }
