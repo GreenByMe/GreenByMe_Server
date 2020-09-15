@@ -52,7 +52,6 @@ public class PostController {
             @ApiResponse(code = 201, message = "저장 성공", response = PostSaveResponseDto.class),
             @ApiResponse(code = 400, message = "1.등록되지 않은 개인 미션 \t\n 2.등록되지 않은 유저 \t\n 3.하루 인증 횟수 초과", response = ErrorResponse.class)
     })
-    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @PostMapping
     public ResponseEntity<BasicResponseDto<PostSaveResponseDto>> savePost(@ApiIgnore final Authentication authentication,
                                                                           @Valid final PostSaveRequestDto requestDto,
@@ -106,7 +105,6 @@ public class PostController {
             @ApiResponse(code = 200, message = "조회 성공", response = PostDetailResponseDto.class),
             @ApiResponse(code = 400, message = "1.등록되지 않은 게시글 \t\n 2.등록되지 않은 유저", response = ErrorResponse.class)
     })
-    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @GetMapping("/{postId}")
     public ResponseEntity<BasicResponseDto<PostDetailResponseDto>> getPostDetail(@ApiIgnore final Authentication authentication,
                                                                                  @PathVariable("postId") @NotNull @Positive final Long postId) {
@@ -121,7 +119,6 @@ public class PostController {
             @ApiResponse(code = 200, message = "조회 성공", response = PostResponseDto.class),
             @ApiResponse(code = 400, message = "등록되지 않은 유저", response = ErrorResponse.class)
     })
-    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @GetMapping
     public ResponseEntity<BasicResponseDto<PageDto<PostResponseDto>>> getPostsByUser(@ApiIgnore final Authentication authentication,
                                                                                      @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
@@ -137,7 +134,6 @@ public class PostController {
             @ApiResponse(code = 400, message = "1.등록되지 않은 게시글 \t\n 2.등록되지 않은 유저", response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "게시글에 대한 권한 없음", response = ErrorResponse.class)
     })
-    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @DeleteMapping("/{postId}")
     public ResponseEntity<BasicResponseDto<Boolean>> deletePost(@ApiIgnore final Authentication authentication,
                                                                 @PathVariable("postId") @NotNull @Positive final Long postId) {
@@ -153,7 +149,6 @@ public class PostController {
             @ApiResponse(code = 400, message = "1.등록되지 않은 게시글 \t\n 2.등록되지 않은 유저", response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "게시글에 대한 권한 없음", response = ErrorResponse.class)
     })
-    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @PutMapping("/{postId}")
     public ResponseEntity<BasicResponseDto<PostUpdateResponseDto>> updatePost(@ApiIgnore final Authentication authentication,
                                                             @PathVariable("postId") @NotNull @Positive final Long postId,
@@ -169,7 +164,6 @@ public class PostController {
             @ApiResponse(code = 200, message = "수정 성공", response = Boolean.class),
             @ApiResponse(code = 400, message = "1.등록되지 않은 게시글 \t\n 2.등록되지 않은 유저", response = ErrorResponse.class)
     })
-    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @PutMapping("/{postId}/thumbsup")
     public ResponseEntity<BasicResponseDto<Boolean>> thumbsup(@ApiIgnore final Authentication authentication,
                                                               @PathVariable("postId") @NotNull @Positive final Long postId) {
