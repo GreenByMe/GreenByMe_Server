@@ -80,21 +80,21 @@ public class UserService {
     public UserExpectTreeCo2ResponseDto getUserExpectTreeCo2(Long userId) {
         User user = getUser(userId);
         long missionProgressRates = 0L;
-        List<PersonalMission> res = personalMissionRepository.findAllByUser(user);
-        long missionCount = res.stream()
+        long progressMissions = user.getPersonalMissionList().stream()
                 .filter(m -> m.getPersonalMissionStatus().equals(PersonalMissionStatus.IN_PROGRESS))
                 .count();
-        long missionProgressCount = postRepository.findAllByUser(user).stream()
+
+        long missionProgressedCount = postRepository.findAllByUser(user).stream()
                 .filter(p -> p.getCreatedDate().getDayOfYear() == LocalDateTime.now().getDayOfYear())
                 .count();
 
-        if (missionCount == 0 || missionProgressCount == 0) {
+        if (progressMissions == 0 || missionProgressedCount == 0) {
             missionProgressRates = 0L;
         } else {
-            missionProgressRates = (long) ((double) (missionProgressCount / missionCount) * 100);
+            missionProgressRates = (long) ((double) (missionProgressedCount / progressMissions) * 100);
         }
 
-        return new UserExpectTreeCo2ResponseDto(user, missionCount, missionProgressRates);
+        return new UserExpectTreeCo2ResponseDto(user, progressMissions, missionProgressRates);
     }
 
     public Page<PersonalMissionByUserDto> getPersonalMissionList(Long userId, Pageable pageable) {
