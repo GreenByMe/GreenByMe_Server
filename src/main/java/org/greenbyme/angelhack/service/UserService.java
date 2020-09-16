@@ -63,7 +63,7 @@ public class UserService {
 
     public UserDetailResponseDto getUserDetail(Long userId) {
         User user = getUser(userId);
-        List<Post> posts = postRepository.findAllByUser(user);
+        List<Post> posts = postRepository.findAllByUserId(userId);
         return new UserDetailResponseDto(user, posts);
     }
 
@@ -73,7 +73,7 @@ public class UserService {
     }
 
     private User getUser(final Long userId) {
-        return userRepository.findById(userId)
+        return userRepository.findUser(userId)
                 .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
     }
 
@@ -88,11 +88,8 @@ public class UserService {
                 .filter(p -> p.getCreatedDate().getDayOfYear() == LocalDateTime.now().getDayOfYear())
                 .count();
 
-        if (missionProgressCount == 0) {
-            missionProgressRates = 0L;
-        }
-        if (missionCount == 0) {
-            missionCount = 0;
+        if (missionCount == 0 || missionProgressCount == 0) {
+            missionProgressRates = 0;
         } else {
             missionProgressRates = (long) ((double) (missionProgressCount / missionCount) * 100);
         }
