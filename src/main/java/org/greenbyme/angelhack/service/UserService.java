@@ -89,7 +89,7 @@ public class UserService {
                 .count();
 
         if (missionCount == 0 || missionProgressCount == 0) {
-            missionProgressRates = 0;
+            missionProgressRates = 0L;
         } else {
             missionProgressRates = (long) ((double) (missionProgressCount / missionCount) * 100);
         }

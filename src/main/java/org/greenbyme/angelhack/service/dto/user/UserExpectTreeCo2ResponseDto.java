@@ -19,7 +19,7 @@ public class UserExpectTreeCo2ResponseDto {
   
     public UserExpectTreeCo2ResponseDto(User user, long progressMissions, long progressRates) {
         nickNameSentence = user.getNickname();
-        expectTreeSentence = "지금까지 벌써 <br><font color=\"#26B679\">" + Math.round(user.getExpectTree()*100)/100.0 +"개의 나무를</font><br>심으셨군요!";
+        expectTreeSentence = "지금까지 벌써 <br><font color=\"#26B679\">" + Math.round(user.getExpectTree()*100.0)/100.0 +"개의 나무를</font><br>심으셨군요!";
         this.expectCo2 = user.getExpectCo2();
         this.expectTree = user.getExpectTree();
         this.progressMissions = progressMissions;

@@ -79,6 +79,7 @@ public class PostService {
             personalMission.getMission().addPassCandidates();
         }
         double expectTree = personalMission.getMission().getExpectTree();
+        user.addExpectCo2(personalMission.getMission().getExpectTree());
         int finishCount = personalMission.getFinishCount();
         return new PostSaveResponseDto(savedPost.getId(), user.getNickname(), expectTree, finishCount);
     }
