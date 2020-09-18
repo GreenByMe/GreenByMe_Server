@@ -5,7 +5,5 @@ import java.util.Optional;
 
 public interface PersonalMissionJPQL {
 
-    Optional<PersonalMission> findDetailsById(Long id);
-
     List<PersonalMission> findPersonalMissionByUserIdAndWhereInProgress(Long userId);
 }

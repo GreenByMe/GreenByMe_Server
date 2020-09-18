@@ -47,8 +47,7 @@ public class PostService {
     public PostSaveResponseDto savePosts(Long userId, PostSaveRequestDto requestDto, MultipartFile file) {
         PersonalMission personalMission = personalMissionRepository.findDetailsById(requestDto.getPersonalMission_id())
                 .orElseThrow(() -> new MissionException(ErrorCode.INVALID_PERSONAL_MISSION));
-        User user = getUser(userId);
-        if (!personalMission.getUser().getId().equals(user.getId())) {
+        if (!personalMission.getUser().getId().equals(userId)) {
             throw new PostException(ErrorCode.WRONG_ACCESS);
         }
         List<Post> posts = postRepository.findAllByPersonalMission(personalMission);
@@ -66,7 +65,7 @@ public class PostService {
                 .toUriString();
 
         Post savePost = Post.builder()
-                .user(user)
+                .user(personalMission.getUser())
                 .personalMission(personalMission)
                 .text(requestDto.getText())
                 .title(requestDto.getTitle())
@@ -79,9 +78,9 @@ public class PostService {
             personalMission.getMission().addPassCandidates();
         }
         double expectTree = personalMission.getMission().getExpectTree();
-        user.addExpectCo2(personalMission.getMission().getExpectTree());
+        personalMission.getUser().addExpectCo2(personalMission.getMission().getExpectTree());
         int finishCount = personalMission.getFinishCount();
-        return new PostSaveResponseDto(savedPost.getId(), user.getNickname(), expectTree, finishCount);
+        return new PostSaveResponseDto(savedPost.getId(), personalMission.getUser().getNickname(), expectTree, finishCount);
     }
 
     public Page<PostResponseDto> getPostsByMission(Long missionId, Pageable pageable) {

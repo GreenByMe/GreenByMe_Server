@@ -4,6 +4,8 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.greenbyme.angelhack.domain.mission.QMission;
+import org.greenbyme.angelhack.domain.user.QUser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.support.PageableExecutionUtils;
@@ -12,6 +14,7 @@ import org.springframework.util.ObjectUtils;
 import javax.persistence.EntityManager;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.greenbyme.angelhack.domain.personalmission.QPersonalMission.*;
 
@@ -21,6 +24,16 @@ public class PersonalMissionQueryDslImpl implements PersonalMissionQueryDsl {
 
     public PersonalMissionQueryDslImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
+    }
+
+    @Override
+    public Optional<PersonalMission> findDetailsById(Long id) {
+        return Optional.of(queryFactory
+                .selectFrom(personalMission)
+                .leftJoin(personalMission.user, QUser.user).fetchJoin()
+                .leftJoin(personalMission.mission, QMission.mission).fetchJoin()
+                .where(missionIdEq(id))
+                .fetchOne());
     }
 
     @Override

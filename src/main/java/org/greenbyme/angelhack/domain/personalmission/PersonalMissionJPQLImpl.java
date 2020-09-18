@@ -12,17 +12,6 @@ public class PersonalMissionJPQLImpl implements PersonalMissionJPQL {
     private final EntityManager em;
 
     @Override
-    public Optional<PersonalMission> findDetailsById(Long id) {
-        return em.createQuery("select mi from PersonalMission mi" +
-                " join fetch mi.mission m" +
-                " join fetch mi.user u" +
-                " where mi.id =: id", PersonalMission.class)
-                .setParameter("id", id)
-                .getResultStream()
-                .findFirst();
-    }
-
-    @Override
     public List<PersonalMission> findPersonalMissionByUserIdAndWhereInProgress(Long userId) {
         return em.createQuery("select mi from PersonalMission mi"+
                 " join fetch mi.user u"+
