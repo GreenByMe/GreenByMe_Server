@@ -23,16 +23,6 @@ public class PersonalMissionJPQLImpl implements PersonalMissionJPQL {
     }
 
     @Override
-    public Long findProgressByMissionId(Long missionId) {
-        return em.createQuery("select count(mi) from PersonalMission  mi" +
-                " join mi.mission m" +
-                " where m.id =:id and mi.personalMissionStatus =:personalMissionStatus", Long.class)
-                .setParameter("id", missionId)
-                .setParameter("personalMissionStatus", PersonalMissionStatus.IN_PROGRESS)
-                .getSingleResult();
-    }
-
-    @Override
     public List<PersonalMission> findPersonalMissionByUserIdAndWhereInProgress(Long userId) {
         return em.createQuery("select mi from PersonalMission mi"+
                 " join fetch mi.user u"+

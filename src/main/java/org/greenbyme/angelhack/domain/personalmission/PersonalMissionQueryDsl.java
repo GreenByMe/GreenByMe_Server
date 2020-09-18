@@ -6,4 +6,6 @@ import org.springframework.data.domain.Pageable;
 public interface PersonalMissionQueryDsl {
 
     Page<PersonalMission> findInProgressPersonalMissionsByUserId(Long id , Pageable pageable);
+
+    Long findProgressByMissionId(Long missionId);
 }

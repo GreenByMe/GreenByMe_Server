@@ -24,6 +24,13 @@ public class PersonalMissionQueryDslImpl implements PersonalMissionQueryDsl {
     }
 
     @Override
+    public Long findProgressByMissionId(Long missionId) {
+        return queryFactory.selectFrom(personalMission)
+                .where(missionIdEq(missionId), personalMissionStatusEq(PersonalMissionStatus.IN_PROGRESS))
+                .fetchCount();
+    }
+
+    @Override
     public Page<PersonalMission> findInProgressPersonalMissionsByUserId(Long id, Pageable pageable) {
         List<PersonalMission> content = queryFactory
                 .selectFrom(personalMission)
@@ -41,14 +48,18 @@ public class PersonalMissionQueryDslImpl implements PersonalMissionQueryDsl {
                 .where(userIdEq(id));
 
 
-        return PageableExecutionUtils.getPage(content, pageable, () ->countQuery.fetchCount());
+        return PageableExecutionUtils.getPage(content, pageable, () -> countQuery.fetchCount());
     }
 
-    private BooleanExpression userIdEq(Long userId){
-        return userId != null? personalMission.user.id.eq(userId) : null;
+    private BooleanExpression userIdEq(Long userId) {
+        return userId != null ? personalMission.user.id.eq(userId) : null;
     }
 
-    private BooleanExpression personalMissionStatusEq(PersonalMissionStatus personalMissionStatus){
+    private BooleanExpression personalMissionStatusEq(PersonalMissionStatus personalMissionStatus) {
         return !ObjectUtils.isEmpty(personalMissionStatus) ? personalMission.personalMissionStatus.eq(personalMissionStatus) : null;
+    }
+
+    private BooleanExpression missionIdEq(Long missionId) {
+        return missionId != null ? personalMission.mission.id.eq(missionId) : null;
     }
 }
