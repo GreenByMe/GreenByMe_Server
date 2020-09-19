@@ -27,6 +27,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -86,9 +88,9 @@ public class PostService {
     public Page<PostResponseDto> getPostsByMission(Long missionId, Pageable pageable) {
         Mission mission = missionRepository.findById(missionId)
                 .orElseThrow(() -> new MissionException(ErrorCode.INVALID_MISSION));
-        return personalMissionRepository.findAllByMission(mission, pageable)
-                .map(postRepository::findByPersonalMission)
-                .map(p -> new PostResponseDto(p.getId(), p.getUser().getNickname(), p.getPicture(), p.getPostLikes().size()));
+        return personalMissionRepository.findAllByMissionId(mission.getId(), pageable)
+                .map(p -> postRepository.findByPersonalMissionId(p.getId()))
+                .map(post -> new PostResponseDto(post.getId(), post.getUser().getNickname(), post.getPicture(), post.getPostLikes().size()));
     }
 
     public PostDetailResponseDto getPostDetail(Long postId, Long userId) {

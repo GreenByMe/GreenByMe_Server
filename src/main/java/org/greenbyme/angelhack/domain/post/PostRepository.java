@@ -10,13 +10,9 @@ import java.util.List;
 
 public interface PostRepository extends JpaRepository<Post, Long>, PostQueryDsl {
 
-    Post findByPersonalMission(PersonalMission personalMission);
-
     List<Post> findAllByUser(User user);
 
     Page<Post> findAllByUser(User user, Pageable pageable);
-
-    List<Post> findAllByUserAndPersonalMission(User user, PersonalMission personalMission);
 
     List<Post> findAllByPersonalMission(PersonalMission personalMission);
 }

@@ -1,6 +1,8 @@
 package org.greenbyme.angelhack.domain.post;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.greenbyme.angelhack.domain.personalmission.PersonalMission;
 import org.greenbyme.angelhack.domain.postlike.QPostLike;
 
 import javax.persistence.EntityManager;
@@ -20,6 +22,17 @@ public class PostQueryDslImpl implements PostQueryDsl {
     }
 
     @Override
+    public Post findByPersonalMissionId(Long personalMissionId) {
+        return queryFactory
+                .selectFrom(post)
+                .where(personMissionIdEq(personalMissionId))
+                .leftJoin(post.postLikes, postLike).fetchJoin()
+                .leftJoin(post.user, user).fetchJoin()
+                .orderBy(post.id.desc())
+                .fetchFirst();
+    }
+
+    @Override
     public List<Post> findAllByUserId(Long userId) {
         return queryFactory
                 .selectFrom(post)
@@ -28,5 +41,9 @@ public class PostQueryDslImpl implements PostQueryDsl {
                 .leftJoin(post.postLikes, postLike).fetchJoin()
                 .where(post.user.id.eq(userId))
                 .fetch();
+    }
+
+    private BooleanExpression personMissionIdEq(Long id) {
+        return id != null ? post.personalMission.id.eq(id) : null;
     }
 }
