@@ -2,16 +2,15 @@ package org.greenbyme.angelhack.domain.post;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.greenbyme.angelhack.domain.personalmission.PersonalMission;
-import org.greenbyme.angelhack.domain.postlike.QPostLike;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 
-import static org.greenbyme.angelhack.domain.personalmission.QPersonalMission.*;
-import static org.greenbyme.angelhack.domain.post.QPost.*;
-import static org.greenbyme.angelhack.domain.postlike.QPostLike.*;
-import static org.greenbyme.angelhack.domain.user.QUser.*;
+import static org.greenbyme.angelhack.domain.personalmission.QPersonalMission.personalMission;
+import static org.greenbyme.angelhack.domain.post.QPost.post;
+import static org.greenbyme.angelhack.domain.postlike.QPostLike.postLike;
+import static org.greenbyme.angelhack.domain.user.QUser.user;
 
 public class PostQueryDslImpl implements PostQueryDsl {
 
@@ -19,6 +18,16 @@ public class PostQueryDslImpl implements PostQueryDsl {
 
     public PostQueryDslImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
+    }
+
+    @Override
+    public Optional<Post> findByIdWithFetch(Long postId) {
+        return Optional.ofNullable(queryFactory
+                .selectFrom(post)
+                .leftJoin(post.postLikes, postLike).fetchJoin()
+                .leftJoin(post.user, user).fetchJoin()
+                .where(postIdEq(postId))
+                .fetchOne());
     }
 
     @Override
@@ -45,5 +54,9 @@ public class PostQueryDslImpl implements PostQueryDsl {
 
     private BooleanExpression personMissionIdEq(Long id) {
         return id != null ? post.personalMission.id.eq(id) : null;
+    }
+
+    private BooleanExpression postIdEq(Long id) {
+        return id != null ? post.id.eq(id) : null;
     }
 }

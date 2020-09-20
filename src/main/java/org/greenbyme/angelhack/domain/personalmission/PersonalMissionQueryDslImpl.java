@@ -46,7 +46,7 @@ public class PersonalMissionQueryDslImpl implements PersonalMissionQueryDsl {
 
     @Override
     public Optional<PersonalMission> findDetailsById(Long id) {
-        return Optional.of(queryFactory
+        return Optional.ofNullable(queryFactory
                 .selectFrom(personalMission)
                 .leftJoin(personalMission.user, QUser.user).fetchJoin()
                 .leftJoin(personalMission.mission, QMission.mission).fetchJoin()

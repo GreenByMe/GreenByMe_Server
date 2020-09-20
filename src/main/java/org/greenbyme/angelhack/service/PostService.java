@@ -27,8 +27,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -95,9 +93,9 @@ public class PostService {
 
     public PostDetailResponseDto getPostDetail(Long postId, Long userId) {
         Post post = getPost(postId);
-        User user = getUser(userId);
+
         boolean mine = false;
-        if (post.getUser().equals(user)) {
+        if (post.getUser().getId() == userId) {
             mine = true;
         }
         return new PostDetailResponseDto(post, mine);
@@ -146,7 +144,7 @@ public class PostService {
     }
 
     private Post getPost(Long postId) {
-        return postRepository.findById(postId)
+        return postRepository.findByIdWithFetch(postId)
                 .orElseThrow(() -> new PostException(ErrorCode.INVALID_POST));
     }
 
