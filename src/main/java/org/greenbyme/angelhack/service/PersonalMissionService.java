@@ -60,7 +60,7 @@ public class PersonalMissionService {
     public PersonalMissionDetailResponseDto findPersonalMissionDetails(Long personalMissionId, Long userId) {
         PersonalMission personalMission = personalMissionRepository.findDetailsById(personalMissionId)
                 .orElseThrow(() -> new PersonalMissionException(ErrorCode.INVALID_PERSONAL_MISSION));
-        if (!personalMission.getUser().equals(findByUserId(userId))) {
+        if (personalMission.getUser().getId() != userId) {
             throw new UserException(ErrorCode.INVALID_USER_ACCESS);
         }
         return new PersonalMissionDetailResponseDto(personalMission);
