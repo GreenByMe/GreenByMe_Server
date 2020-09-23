@@ -110,8 +110,7 @@ public class PostService {
     @Transactional
     public void deletePost(Long postId, Long userId) {
         Post post = getPost(postId);
-        User user = getUser(userId);
-        if (!post.getUser().equals(user)) {
+        if (post.getUser().getId()!= userId) {
             throw new PostException(ErrorCode.INVALID_POST_ACCESS);
         }
         postRepository.deleteById(postId);
@@ -120,8 +119,7 @@ public class PostService {
     @Transactional
     public PostUpdateResponseDto updatePost(Long userId, Long postId, PostUpdateRequestDto requestDto) {
         Post post = getPost(postId);
-        User user = getUser(userId);
-        if (!post.getUser().equals(user)) {
+        if (post.getUser().getId()!= userId) {
             throw new PostException(ErrorCode.INVALID_POST_ACCESS);
         }
         post.update(requestDto);
