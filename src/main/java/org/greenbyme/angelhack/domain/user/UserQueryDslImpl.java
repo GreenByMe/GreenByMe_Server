@@ -20,7 +20,7 @@ public class UserQueryDslImpl implements UserQueryDsl {
     }
 
     @Override
-    public Optional<User> findUser(Long id) {
+    public Optional<User> findByIdFetch(Long id) {
         return Optional.ofNullable(queryFactory
                 .selectFrom(user)
                 .leftJoin(user.personalMissionList, QPersonalMission.personalMission).fetchJoin()

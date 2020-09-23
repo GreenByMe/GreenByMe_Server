@@ -29,6 +29,15 @@ public class PersonalMissionQueryDslImpl implements PersonalMissionQueryDsl {
     }
 
     @Override
+    public List<PersonalMission> findPersonalMissionByUserIdAndWhereInProgress(Long userId) {
+        return queryFactory
+                .selectFrom(personalMission)
+                .leftJoin(personalMission.mission, QMission.mission).fetchJoin()
+                .where(userIdEq(userId), personalMissionStatusEq(PersonalMissionStatus.IN_PROGRESS))
+                .fetch();
+    }
+
+    @Override
     public Page<PersonalMission> findAllByMissionId(Long id, Pageable pageable) {
         List<PersonalMission> content = queryFactory
                 .selectFrom(personalMission)
@@ -41,7 +50,7 @@ public class PersonalMissionQueryDslImpl implements PersonalMissionQueryDsl {
                 .selectFrom(personalMission)
                 .where(missionIdEq(id));
 
-        return PageableExecutionUtils.getPage(content,pageable,() -> countQuery.fetchCount());
+        return PageableExecutionUtils.getPage(content, pageable, () -> countQuery.fetchCount());
     }
 
     @Override

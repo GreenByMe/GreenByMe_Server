@@ -21,9 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.NoResultException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -40,16 +38,13 @@ public class PersonalMissionService {
         Mission mission = missionRepository.findById(missionId)
                 .orElseThrow(() -> new MissionException(ErrorCode.INVALID_MISSION));
 
-        List<PersonalMission> personalMissionByUserIdAndPersonalMissionId = personalMissionRepository.findPersonalMissionByUserIdAndMissionId(userId, missionId);
-        for (PersonalMission personalMission : personalMissionByUserIdAndPersonalMissionId) {
-            if (personalMission.getPersonalMissionStatus() == PersonalMissionStatus.IN_PROGRESS) {
-                throw new PersonalMissionException(ErrorCode.ALREADY_EXISTS_MISSION);
-            }
-        }
         List<PersonalMission> personalMissionByUserIdAndWhereInProgresses = personalMissionRepository.findPersonalMissionByUserIdAndWhereInProgress(userId);
 
-        for (PersonalMission infoByUserIdAndWhereInProgress : personalMissionByUserIdAndWhereInProgresses) {
-            if (infoByUserIdAndWhereInProgress.getMission().getDayCategory() == mission.getDayCategory()) {
+        for (PersonalMission personalMissionInProgress : personalMissionByUserIdAndWhereInProgresses) {
+            if (personalMissionInProgress.getMission().getId() == mission.getId()) {
+                throw new PersonalMissionException(ErrorCode.ALREADY_EXISTS_MISSION);
+            }
+            if (personalMissionInProgress.getMission().getDayCategory() == mission.getDayCategory()) {
                 throw new PersonalMissionException(ErrorCode.ALREADY_EXISTS_SAME_DAY_MISSION);
             }
         }
@@ -103,7 +98,7 @@ public class PersonalMissionService {
     }
 
     private User findByUserId(Long userId) {
-        return userRepository.findById(userId)
+        return userRepository.findByIdFetch(userId)
                 .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
     }
 

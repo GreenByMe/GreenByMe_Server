@@ -4,6 +4,7 @@ import org.greenbyme.angelhack.domain.mission.Mission;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface PersonalMissionQueryDsl {
@@ -16,4 +17,5 @@ public interface PersonalMissionQueryDsl {
 
     Page<PersonalMission> findAllByMissionId(Long id, Pageable pageable);
 
+    List<PersonalMission> findPersonalMissionByUserIdAndWhereInProgress(Long userId);
 }
