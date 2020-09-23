@@ -6,6 +6,10 @@ import org.greenbyme.angelhack.domain.mission.MissionRepository;
 import org.greenbyme.angelhack.domain.personalmission.PersonalMission;
 import org.greenbyme.angelhack.domain.personalmission.PersonalMissionRepository;
 import org.greenbyme.angelhack.domain.personalmission.PersonalMissionStatus;
+import org.greenbyme.angelhack.domain.post.Post;
+import org.greenbyme.angelhack.domain.post.PostRepository;
+import org.greenbyme.angelhack.domain.postlike.PostLike;
+import org.greenbyme.angelhack.domain.postlike.PostLikeRepository;
 import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.domain.user.UserRepository;
 import org.greenbyme.angelhack.exception.ErrorCode;
@@ -21,6 +25,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 
 @Service
@@ -31,6 +36,8 @@ public class PersonalMissionService {
     private final PersonalMissionRepository personalMissionRepository;
     private final UserRepository userRepository;
     private final MissionRepository missionRepository;
+    private final PostRepository postRepository;
+    private final PostLikeRepository postLikeRepository;
 
     @Transactional
     public PersonalMissionSaveResponseDto save(Long userId, Long missionId) {
@@ -67,12 +74,31 @@ public class PersonalMissionService {
     }
 
     @Transactional
-    public PersonalMissionDeleteResponseDto personalMissionDelete(Long personalMissionId, Long userId) {
-        PersonalMission personalMission = findByPersonalMissionId(personalMissionId);
+    public PersonalMissionDeleteResponseDto deletePersonalMission(Long personalMissionId, Long userId) {
+        PersonalMission personalMission = findById(personalMissionId);
         User user = findByUserId(userId);
         if (!personalMission.getUser().equals(user)) {
             throw new PersonalMissionException(ErrorCode.INVALID_USER_ACCESS);
         }
+        List<PersonalMission> personalMissionList = user.getPersonalMissionList();
+
+        for (PersonalMission findedPersonalMission : personalMissionList) {
+            if (findedPersonalMission.getId() == personalMissionId) {
+                user.getPersonalMissionList().remove(personalMission);
+                break;
+            }
+        }
+
+        List<Post> allByPersonalMissionId = postRepository.findAllByPersonalMissionId(personalMissionId);
+        for (Post post : allByPersonalMissionId) {
+            List<PostLike> allByPost = postLikeRepository.findAllByPostId(post.getId());
+            for (PostLike postLike : allByPost) {
+                postLike.remove();
+                postLikeRepository.delete(postLike);
+            }
+            postRepository.delete(post);
+        }
+
         personalMissionRepository.deleteById(personalMissionId);
         return new PersonalMissionDeleteResponseDto(personalMission);
     }
@@ -102,7 +128,7 @@ public class PersonalMissionService {
                 .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
     }
 
-    private PersonalMission findByPersonalMissionId(Long id) {
+    private PersonalMission findById(Long id) {
         return personalMissionRepository.findById(id)
                 .orElseThrow(() -> new PersonalMissionException(ErrorCode.INVALID_PERSONAL_MISSION));
     }

@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface PersonalMissionQueryDsl {
 
-    Page<PersonalMission> findInProgressPersonalMissionsByUserId(Long id , Pageable pageable);
+    Page<PersonalMission> findInProgressPersonalMissionsByUserId(Long userId , Pageable pageable);
 
     Long findProgressByMissionId(Long missionId);
 

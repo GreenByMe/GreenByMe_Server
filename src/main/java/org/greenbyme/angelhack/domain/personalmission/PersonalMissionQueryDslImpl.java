@@ -59,7 +59,7 @@ public class PersonalMissionQueryDslImpl implements PersonalMissionQueryDsl {
                 .selectFrom(personalMission)
                 .leftJoin(personalMission.user, QUser.user).fetchJoin()
                 .leftJoin(personalMission.mission, QMission.mission).fetchJoin()
-                .where(missionIdEq(id))
+                .where(personalMissionIdEq(id))
                 .fetchOne());
     }
 
@@ -71,10 +71,10 @@ public class PersonalMissionQueryDslImpl implements PersonalMissionQueryDsl {
     }
 
     @Override
-    public Page<PersonalMission> findInProgressPersonalMissionsByUserId(Long id, Pageable pageable) {
+    public Page<PersonalMission> findInProgressPersonalMissionsByUserId(Long userId, Pageable pageable) {
         List<PersonalMission> content = queryFactory
                 .selectFrom(personalMission)
-                .where(userIdEq(id),
+                .where(userIdEq(userId),
                         personalMissionStatusEq(PersonalMissionStatus.IN_PROGRESS)
                 )
                 .leftJoin(personalMission.mission, QMission.mission).fetchJoin()
@@ -85,7 +85,7 @@ public class PersonalMissionQueryDslImpl implements PersonalMissionQueryDsl {
 
         JPAQuery<PersonalMission> countQuery = queryFactory
                 .selectFrom(personalMission)
-                .where(userIdEq(id));
+                .where(userIdEq(userId));
 
 
         return PageableExecutionUtils.getPage(content, pageable, () -> countQuery.fetchCount());
@@ -101,5 +101,9 @@ public class PersonalMissionQueryDslImpl implements PersonalMissionQueryDsl {
 
     private BooleanExpression missionIdEq(Long missionId) {
         return missionId != null ? personalMission.mission.id.eq(missionId) : null;
+    }
+
+    private BooleanExpression personalMissionIdEq(Long personalMissionId) {
+        return personalMissionId != null ? personalMission.id.eq(personalMissionId) : null;
     }
 }

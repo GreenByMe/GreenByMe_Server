@@ -21,6 +21,17 @@ public class PostQueryDslImpl implements PostQueryDsl {
     }
 
     @Override
+    public List<Post> findAllByPersonalMissionId(Long personalMissionId) {
+        return queryFactory
+                .selectFrom(post)
+                .where(personMissionIdEq(personalMissionId))
+                .leftJoin(post.postLikes, postLike).fetchJoin()
+                .leftJoin(post.user, user).fetchJoin()
+                .fetch();
+    }
+
+
+    @Override
     public Optional<Post> findByIdWithFetch(Long postId) {
         return Optional.ofNullable(queryFactory
                 .selectFrom(post)
@@ -53,7 +64,7 @@ public class PostQueryDslImpl implements PostQueryDsl {
     }
 
     private BooleanExpression personMissionIdEq(Long id) {
-        return id != null ? post.personalMission.id.eq(id) : null;
+        return id != null ? post.personalMission.id.eq(id)  : null;
     }
 
     private BooleanExpression postIdEq(Long id) {
