@@ -24,6 +24,11 @@ public class Post extends BaseEntity {
     @Column(name = "post_id")
     private Long id;
 
+    private String picture;
+    private String title;
+    private String text;
+    private Boolean open;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -34,12 +39,6 @@ public class Post extends BaseEntity {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<PostLike> postLikes = new ArrayList<>();
-
-    private String picture;
-
-    private String title;
-    private String text;
-    private Boolean open;
 
     @Builder
     public Post(User user, PersonalMission personalMission, String text, String title, String picture, Boolean open) {
