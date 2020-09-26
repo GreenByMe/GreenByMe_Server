@@ -1,6 +1,5 @@
 package org.greenbyme.angelhack.domain.personalmission;
 
-import org.greenbyme.angelhack.domain.mission.Mission;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -18,4 +17,8 @@ public interface PersonalMissionQueryDsl {
     Page<PersonalMission> findAllByMissionId(Long id, Pageable pageable);
 
     List<PersonalMission> findPersonalMissionByUserIdAndWhereInProgress(Long userId);
+
+    List<PersonalMission> findAllByUserIdFetch(Long userId);
+
+    Long countHowManyPeopleInMission(Long missionId);
 }

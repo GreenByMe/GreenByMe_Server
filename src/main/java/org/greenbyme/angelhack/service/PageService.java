@@ -15,6 +15,8 @@ import org.greenbyme.angelhack.exception.ErrorCode;
 import org.greenbyme.angelhack.exception.UserException;
 import org.greenbyme.angelhack.service.dto.page.*;
 import org.greenbyme.angelhack.service.dto.personalmission.PersonalMissionByPageDto;
+import org.greenbyme.angelhack.service.dto.personalmission.PersonalMissionHomePageDto;
+import org.greenbyme.angelhack.service.dto.user.UserHomePageDetailDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,39 +35,36 @@ public class PageService {
     private final MissionRepository missionRepository;
     private final PersonalMissionRepository personalMissionRepository;
 
-    public HomePageDto getHomepageInfos(Long userId) {
+    public HomePageDto getHomePageInfos(Long userId) {
         User user = findByUserId(userId);
-        List<PersonalMission> res = personalMissionRepository.findAllByUser(user);
-        long missionCount = res.stream()
+        long missionProgressRates=0L;
+
+        List<PersonalMission> personalMissionAllByUserIdFetch = personalMissionRepository.findAllByUserIdFetch(userId);
+        long missionCount = personalMissionAllByUserIdFetch.stream()
                 .filter(m -> m.getPersonalMissionStatus().equals(PersonalMissionStatus.IN_PROGRESS))
-                .count();
-        long missionProgressCount = postRepository.findAllByUser(user).stream()
-                .filter(p -> p.getCreatedDate().getDayOfYear() == LocalDateTime.now().getDayOfYear())
-                .count();
-        List<PersonalMissionByPageDto> personalMissionByPageList = res.stream()
-                .map(m -> new PersonalMissionByPageDto(m, howManyPeopleInMission(m)))
-                .collect(Collectors.toList());
-        List<PopularMissionResponseDto> popularMissionResponseDtos = missionRepository.findAll().stream()
-                .map(m -> new PopularMissionResponseDto(m, howManyPeopleInMission(m)))
-                .sorted()
-                .collect(Collectors.toList());
-        if (missionCount == 0 || missionProgressCount == 0) {
-            return new HomePageDto(user, 0, new PersonalMissionPageDto(personalMissionByPageList, popularMissionResponseDtos));
+                .mapToLong( m -> m.getFinishCount())
+                .sum();
+        long missionProgressCount = personalMissionAllByUserIdFetch.stream()
+                .filter(m -> m.getPersonalMissionStatus().equals(PersonalMissionStatus.IN_PROGRESS))
+                .mapToLong(m -> m.getProgress())
+                .sum();
+        if (missionProgressCount == 0 && missionCount == 0) {
+             missionProgressRates = 0L;
+        } else {
+             missionProgressRates = (long) (((double) missionProgressCount / missionCount) * 100);
         }
-        long missionProgressRates = (long) ((double) (missionProgressCount / missionCount) * 100);
-        return new HomePageDto(user, missionProgressRates, new PersonalMissionPageDto(personalMissionByPageList, popularMissionResponseDtos));
-    }
+        UserHomePageDetailDto userHomePageDetailDto = new UserHomePageDetailDto(user, missionProgressRates);
 
-    private Long howManyPeopleInMission(PersonalMission personalMission) {
-        return personalMissionRepository.findAllByMission(personalMission.getMission()).stream()
+        List<PersonalMission> inProgressPersonalMission = personalMissionAllByUserIdFetch.stream()
                 .filter(m -> m.getPersonalMissionStatus().equals(PersonalMissionStatus.IN_PROGRESS))
-                .count();
-    }
+                .collect(Collectors.toList());
+        List<PersonalMissionHomePageDto> personalMissionHomePageDtos = inProgressPersonalMission.stream()
+                .map(pm -> new PersonalMissionHomePageDto(pm, personalMissionRepository.countHowManyPeopleInMission(pm.getMission().getId())))
+                .collect(Collectors.toList());
 
-    private Long howManyPeopleInMission(Mission mission) {
-        return personalMissionRepository.findAllByMission(mission).stream()
-                .filter(m -> m.getPersonalMissionStatus().equals(PersonalMissionStatus.IN_PROGRESS))
-                .count();
+        List<PopularMissionHomePageResponseDto> popularMissionDtos = missionRepository.findPopularMission();
+
+        return new HomePageDto(userHomePageDetailDto, personalMissionHomePageDtos, popularMissionDtos);
     }
 
     public CertPageDto getCertPage(Long userId) {
@@ -84,7 +83,7 @@ public class PageService {
     }
 
     private User findByUserId(Long userId) {
-        return userRepository.findById(userId)
+        return userRepository.findByIdFetch(userId)
                 .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
     }
 }

@@ -3,11 +3,8 @@ package org.greenbyme.angelhack.domain.personalmission;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.greenbyme.angelhack.domain.mission.Mission;
 import org.greenbyme.angelhack.domain.mission.QMission;
-import org.greenbyme.angelhack.domain.post.QPost;
 import org.greenbyme.angelhack.domain.user.QUser;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.support.PageableExecutionUtils;
@@ -26,6 +23,24 @@ public class PersonalMissionQueryDslImpl implements PersonalMissionQueryDsl {
 
     public PersonalMissionQueryDslImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
+    }
+
+    @Override
+    public List<PersonalMission> findAllByUserIdFetch(Long userId) {
+        return queryFactory
+                .selectFrom(personalMission)
+                .leftJoin(personalMission.mission, QMission.mission).fetchJoin()
+                .leftJoin(personalMission.user, QUser.user).fetchJoin()
+                .where(userIdEq(userId))
+                .fetch();
+    }
+
+    @Override
+    public Long countHowManyPeopleInMission(Long missionId) {
+        return queryFactory
+                .selectFrom(personalMission)
+                .where(missionIdEq(missionId))
+                .fetchCount();
     }
 
     @Override

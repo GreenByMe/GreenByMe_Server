@@ -36,7 +36,7 @@ public class PageController {
     public ResponseEntity<BasicResponseDto<HomePageDto>> getHomePage(@ApiIgnore final Authentication authentication) {
         Long userId = ((User) authentication.getPrincipal()).getId();
         log.info("홈 페이지 조회 완료");
-        return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(pageService.getHomepageInfos(userId), HttpStatus.OK.value()));
+        return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(pageService.getHomePageInfos(userId), HttpStatus.OK.value()));
     }
 
     @ApiOperation(value = "인증 페이지 조회")
