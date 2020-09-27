@@ -12,9 +12,9 @@ public interface PersonalMissionQueryDsl {
 
     Long findProgressByMissionId(Long missionId);
 
-    Optional<PersonalMission> findDetailsById(Long id);
+    Optional<PersonalMission> findDetailsById(Long personalMissionId);
 
-    Page<PersonalMission> findAllByMissionId(Long id, Pageable pageable);
+    Page<PersonalMission> findAllByMissionId(Long missionId, Pageable pageable);
 
     List<PersonalMission> findPersonalMissionByUserIdAndWhereInProgress(Long userId);
 

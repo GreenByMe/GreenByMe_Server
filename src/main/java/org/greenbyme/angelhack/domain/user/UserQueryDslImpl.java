@@ -20,12 +20,12 @@ public class UserQueryDslImpl implements UserQueryDsl {
     }
 
     @Override
-    public Optional<User> findByIdFetch(Long id) {
+    public Optional<User> findByIdFetch(Long userId) {
         return Optional.ofNullable(queryFactory
                 .selectFrom(user)
                 .leftJoin(user.personalMissionList, QPersonalMission.personalMission).fetchJoin()
                 .leftJoin(user.postLikes, QPostLike.postLike)
-                .where(user.id.eq(id))
+                .where(user.id.eq(userId))
                 .fetchOne());
     }
 }

@@ -4,5 +4,5 @@ import java.util.Optional;
 
 public interface UserQueryDsl {
 
-    Optional<User> findByIdFetch(Long id);
+    Optional<User> findByIdFetch(Long userId);
 }

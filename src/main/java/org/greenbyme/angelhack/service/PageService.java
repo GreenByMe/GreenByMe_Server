@@ -39,12 +39,12 @@ public class PageService {
         User user = findByUserId(userId);
         long missionProgressRates=0L;
 
-        List<PersonalMission> personalMissionAllByUserIdFetch = personalMissionRepository.findAllByUserIdFetch(userId);
-        long missionCount = personalMissionAllByUserIdFetch.stream()
+        List<PersonalMission> personalMissionList = personalMissionRepository.findAllByUserIdFetch(userId);
+        long missionCount = personalMissionList.stream()
                 .filter(m -> m.getPersonalMissionStatus().equals(PersonalMissionStatus.IN_PROGRESS))
                 .mapToLong( m -> m.getFinishCount())
                 .sum();
-        long missionProgressCount = personalMissionAllByUserIdFetch.stream()
+        long missionProgressCount = personalMissionList.stream()
                 .filter(m -> m.getPersonalMissionStatus().equals(PersonalMissionStatus.IN_PROGRESS))
                 .mapToLong(m -> m.getProgress())
                 .sum();
@@ -55,10 +55,10 @@ public class PageService {
         }
         UserHomePageDetailDto userHomePageDetailDto = new UserHomePageDetailDto(user, missionProgressRates);
 
-        List<PersonalMission> inProgressPersonalMission = personalMissionAllByUserIdFetch.stream()
+        List<PersonalMission> inProgressPersonalMissions = personalMissionList.stream()
                 .filter(m -> m.getPersonalMissionStatus().equals(PersonalMissionStatus.IN_PROGRESS))
                 .collect(Collectors.toList());
-        List<PersonalMissionHomePageDto> personalMissionHomePageDtos = inProgressPersonalMission.stream()
+        List<PersonalMissionHomePageDto> personalMissionHomePageDtos = inProgressPersonalMissions.stream()
                 .map(pm -> new PersonalMissionHomePageDto(pm, personalMissionRepository.countHowManyPeopleInMission(pm.getMission().getId())))
                 .collect(Collectors.toList());
 

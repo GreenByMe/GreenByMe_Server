@@ -30,7 +30,6 @@ public class PostQueryDslImpl implements PostQueryDsl {
                 .fetch();
     }
 
-
     @Override
     public Optional<Post> findByIdWithFetch(Long postId) {
         return Optional.ofNullable(queryFactory
@@ -63,11 +62,11 @@ public class PostQueryDslImpl implements PostQueryDsl {
                 .fetch();
     }
 
-    private BooleanExpression personMissionIdEq(Long id) {
-        return id != null ? post.personalMission.id.eq(id)  : null;
+    private BooleanExpression personMissionIdEq(Long personalMissionId) {
+        return personalMissionId != null ? post.personalMission.id.eq(personalMissionId)  : null;
     }
 
-    private BooleanExpression postIdEq(Long id) {
-        return id != null ? post.id.eq(id) : null;
+    private BooleanExpression postIdEq(Long postId) {
+        return postId != null ? post.id.eq(postId) : null;
     }
 }

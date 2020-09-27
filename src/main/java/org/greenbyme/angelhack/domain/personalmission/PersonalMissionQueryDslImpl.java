@@ -53,28 +53,28 @@ public class PersonalMissionQueryDslImpl implements PersonalMissionQueryDsl {
     }
 
     @Override
-    public Page<PersonalMission> findAllByMissionId(Long id, Pageable pageable) {
+    public Page<PersonalMission> findAllByMissionId(Long missionId, Pageable pageable) {
         List<PersonalMission> content = queryFactory
                 .selectFrom(personalMission)
-                .where(missionIdEq(id))
+                .where(missionIdEq(missionId))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
         JPAQuery<PersonalMission> countQuery = queryFactory
                 .selectFrom(personalMission)
-                .where(missionIdEq(id));
+                .where(missionIdEq(missionId));
 
         return PageableExecutionUtils.getPage(content, pageable, () -> countQuery.fetchCount());
     }
 
     @Override
-    public Optional<PersonalMission> findDetailsById(Long id) {
+    public Optional<PersonalMission> findDetailsById(Long personalMissionId) {
         return Optional.ofNullable(queryFactory
                 .selectFrom(personalMission)
                 .leftJoin(personalMission.user, QUser.user).fetchJoin()
                 .leftJoin(personalMission.mission, QMission.mission).fetchJoin()
-                .where(personalMissionIdEq(id))
+                .where(personalMissionIdEq(personalMissionId))
                 .fetchOne());
     }
 
@@ -101,7 +101,6 @@ public class PersonalMissionQueryDslImpl implements PersonalMissionQueryDsl {
         JPAQuery<PersonalMission> countQuery = queryFactory
                 .selectFrom(personalMission)
                 .where(userIdEq(userId));
-
 
         return PageableExecutionUtils.getPage(content, pageable, () -> countQuery.fetchCount());
     }

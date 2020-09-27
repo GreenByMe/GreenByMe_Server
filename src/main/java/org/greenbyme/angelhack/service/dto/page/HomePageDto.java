@@ -11,9 +11,9 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class HomePageDto {
-    UserHomePageDetailDto userHomePageDetailDto;
-    List<PersonalMissionHomePageDto> personalMissionHomePageDtos;
-    List<PopularMissionHomePageResponseDto> popularMissionHomePageResponseDtos;
+    private UserHomePageDetailDto userHomePageDetailDto;
+    private List<PersonalMissionHomePageDto> personalMissionHomePageDtos;
+    private List<PopularMissionHomePageResponseDto> popularMissionHomePageResponseDtos;
 
     public HomePageDto(UserHomePageDetailDto userHomePageDetailDto, List<PersonalMissionHomePageDto> personalMissionHomePageDtos, List<PopularMissionHomePageResponseDto> popularMissionHomePageResponseDtos) {
         this.userHomePageDetailDto = userHomePageDetailDto;
