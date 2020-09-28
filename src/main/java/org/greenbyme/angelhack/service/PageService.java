@@ -2,7 +2,6 @@ package org.greenbyme.angelhack.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.greenbyme.angelhack.domain.mission.Mission;
 import org.greenbyme.angelhack.domain.mission.MissionRepository;
 import org.greenbyme.angelhack.domain.personalmission.PersonalMission;
 import org.greenbyme.angelhack.domain.personalmission.PersonalMissionRepository;
@@ -14,13 +13,11 @@ import org.greenbyme.angelhack.domain.user.UserRepository;
 import org.greenbyme.angelhack.exception.ErrorCode;
 import org.greenbyme.angelhack.exception.UserException;
 import org.greenbyme.angelhack.service.dto.page.*;
-import org.greenbyme.angelhack.service.dto.personalmission.PersonalMissionByPageDto;
 import org.greenbyme.angelhack.service.dto.personalmission.PersonalMissionHomePageDto;
 import org.greenbyme.angelhack.service.dto.user.UserHomePageDetailDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -74,10 +71,10 @@ public class PageService {
 
     public MyPageDto getMyPage(Long userId) {
         User user = findByUserId(userId);
-        long passMissionCount = personalMissionRepository.findAllByUser(user).stream()
+        long passMissionCount = personalMissionRepository.findAllByUserIdFetch(user.getId()).stream()
                 .filter(m -> m.getPersonalMissionStatus().equals(PersonalMissionStatus.FINISH))
                 .count();
-        List<Post> posts = postRepository.findAllByUser(user);
+        List<Post> posts = postRepository.findAllByUserId(user.getId());
         return new MyPageDto(user, passMissionCount, posts);
     }
 
