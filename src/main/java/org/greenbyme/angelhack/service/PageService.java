@@ -68,8 +68,7 @@ public class PageService {
     }
 
     public CertPageDto getCertPage(Long userId) {
-        User user = findByUserId(userId);
-        List<PersonalMission> personalMissions = personalMissionRepository.findAllByUser(user);
+        List<PersonalMission> personalMissions = personalMissionRepository.findAllByUserIdFetch(userId);
         return new CertPageDto(userId, personalMissions);
     }
 
