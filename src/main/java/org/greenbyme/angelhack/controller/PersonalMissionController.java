@@ -75,7 +75,7 @@ public class PersonalMissionController {
     public ResponseEntity<BasicResponseDto<PersonalMissionDeleteResponseDto>> personalMissionDelete(@ApiIgnore final Authentication authentication,
                                                                                                     @PathVariable("personalMissionId") @NotNull @Positive final Long personalMissionId) {
         Long userId = ((User) authentication.getPrincipal()).getId();
-        PersonalMissionDeleteResponseDto personalMissionDeleteResponseDto = personalMissionService.personalMissionDelete(personalMissionId, userId);
+        PersonalMissionDeleteResponseDto personalMissionDeleteResponseDto = personalMissionService.deletePersonalMission(personalMissionId, userId);
         log.info("개인 미션 삭제 완료");
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(personalMissionDeleteResponseDto, HttpStatus.OK.value()));
     }

@@ -2,7 +2,6 @@ package org.greenbyme.angelhack.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.greenbyme.angelhack.domain.personalmission.PersonalMission;
 import org.greenbyme.angelhack.domain.personalmission.PersonalMissionRepository;
 import org.greenbyme.angelhack.domain.personalmission.PersonalMissionStatus;
 import org.greenbyme.angelhack.domain.post.Post;
@@ -11,7 +10,6 @@ import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.domain.user.UserRepository;
 import org.greenbyme.angelhack.exception.ErrorCode;
 import org.greenbyme.angelhack.exception.UserException;
-import org.greenbyme.angelhack.service.dto.TokenResponse;
 import org.greenbyme.angelhack.service.dto.personalmission.PersonalMissionByUserDto;
 import org.greenbyme.angelhack.service.dto.post.PostDetailResponseDto;
 import org.greenbyme.angelhack.service.dto.user.*;
@@ -28,7 +26,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -63,7 +60,7 @@ public class UserService {
 
     public UserDetailResponseDto getUserDetail(Long userId) {
         User user = getUser(userId);
-        List<Post> posts = postRepository.findAllByUser(user);
+        List<Post> posts = postRepository.findAllByUserId(userId);
         return new UserDetailResponseDto(user, posts);
     }
 
@@ -73,36 +70,32 @@ public class UserService {
     }
 
     private User getUser(final Long userId) {
-        return userRepository.findById(userId)
+        return userRepository.findByIdFetch(userId)
                 .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
     }
 
     public UserExpectTreeCo2ResponseDto getUserExpectTreeCo2(Long userId) {
         User user = getUser(userId);
         long missionProgressRates = 0L;
-        List<PersonalMission> res = personalMissionRepository.findAllByUser(user);
-        long missionCount = res.stream()
+        long progressMissions = user.getPersonalMissionList().stream()
                 .filter(m -> m.getPersonalMissionStatus().equals(PersonalMissionStatus.IN_PROGRESS))
                 .count();
-        long missionProgressCount = postRepository.findAllByUser(user).stream()
+
+        long missionProgressedCount = postRepository.findAllByUser(user).stream()
                 .filter(p -> p.getCreatedDate().getDayOfYear() == LocalDateTime.now().getDayOfYear())
                 .count();
 
-        if (missionProgressCount == 0) {
+        if (progressMissions == 0 || missionProgressedCount == 0) {
             missionProgressRates = 0L;
-        }
-        if (missionCount == 0) {
-            missionCount = 0;
         } else {
-            missionProgressRates = (long) ((double) (missionProgressCount / missionCount) * 100);
+            missionProgressRates = (long) ((double) (missionProgressedCount / progressMissions) * 100);
         }
 
-        return new UserExpectTreeCo2ResponseDto(user, missionCount, missionProgressRates);
+        return new UserExpectTreeCo2ResponseDto(user, progressMissions, missionProgressRates);
     }
 
     public Page<PersonalMissionByUserDto> getPersonalMissionList(Long userId, Pageable pageable) {
-        User user = getUser(userId);
-        return personalMissionRepository.findAllByUser(user, pageable)
+          return personalMissionRepository.findInProgressPersonalMissionsByUserId(userId, pageable)
                 .map(PersonalMissionByUserDto::new);
     }
 

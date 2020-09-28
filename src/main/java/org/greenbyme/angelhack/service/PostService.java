@@ -47,8 +47,7 @@ public class PostService {
     public PostSaveResponseDto savePosts(Long userId, PostSaveRequestDto requestDto, MultipartFile file) {
         PersonalMission personalMission = personalMissionRepository.findDetailsById(requestDto.getPersonalMission_id())
                 .orElseThrow(() -> new MissionException(ErrorCode.INVALID_PERSONAL_MISSION));
-        User user = getUser(userId);
-        if (!personalMission.getUser().getId().equals(user.getId())) {
+        if (!personalMission.getUser().getId().equals(userId)) {
             throw new PostException(ErrorCode.WRONG_ACCESS);
         }
         List<Post> posts = postRepository.findAllByPersonalMission(personalMission);
@@ -66,7 +65,7 @@ public class PostService {
                 .toUriString();
 
         Post savePost = Post.builder()
-                .user(user)
+                .user(personalMission.getUser())
                 .personalMission(personalMission)
                 .text(requestDto.getText())
                 .title(requestDto.getTitle())
@@ -79,23 +78,24 @@ public class PostService {
             personalMission.getMission().addPassCandidates();
         }
         double expectTree = personalMission.getMission().getExpectTree();
+        personalMission.getUser().addExpectCo2(personalMission.getMission().getExpectTree());
         int finishCount = personalMission.getFinishCount();
-        return new PostSaveResponseDto(savedPost.getId(), user.getNickname(), expectTree, finishCount);
+        return new PostSaveResponseDto(savedPost.getId(), personalMission.getUser().getNickname(), expectTree, finishCount);
     }
 
     public Page<PostResponseDto> getPostsByMission(Long missionId, Pageable pageable) {
         Mission mission = missionRepository.findById(missionId)
                 .orElseThrow(() -> new MissionException(ErrorCode.INVALID_MISSION));
-        return personalMissionRepository.findAllByMission(mission, pageable)
-                .map(postRepository::findByPersonalMission)
-                .map(p -> new PostResponseDto(p.getId(), p.getUser().getNickname(), p.getPicture(), p.getPostLikes().size()));
+        return personalMissionRepository.findAllByMissionId(mission.getId(), pageable)
+                .map(p -> postRepository.findByPersonalMissionId(p.getId()))
+                .map(post -> new PostResponseDto(post.getId(), post.getUser().getNickname(), post.getPicture(), post.getPostLikes().size()));
     }
 
     public PostDetailResponseDto getPostDetail(Long postId, Long userId) {
         Post post = getPost(postId);
-        User user = getUser(userId);
+
         boolean mine = false;
-        if (post.getUser().equals(user)) {
+        if (post.getUser().getId() == userId) {
             mine = true;
         }
         return new PostDetailResponseDto(post, mine);
@@ -110,8 +110,7 @@ public class PostService {
     @Transactional
     public void deletePost(Long postId, Long userId) {
         Post post = getPost(postId);
-        User user = getUser(userId);
-        if (!post.getUser().equals(user)) {
+        if (post.getUser().getId()!= userId) {
             throw new PostException(ErrorCode.INVALID_POST_ACCESS);
         }
         postRepository.deleteById(postId);
@@ -120,8 +119,7 @@ public class PostService {
     @Transactional
     public PostUpdateResponseDto updatePost(Long userId, Long postId, PostUpdateRequestDto requestDto) {
         Post post = getPost(postId);
-        User user = getUser(userId);
-        if (!post.getUser().equals(user)) {
+        if (post.getUser().getId()!= userId) {
             throw new PostException(ErrorCode.INVALID_POST_ACCESS);
         }
         post.update(requestDto);
@@ -144,7 +142,7 @@ public class PostService {
     }
 
     private Post getPost(Long postId) {
-        return postRepository.findById(postId)
+        return postRepository.findByIdWithFetch(postId)
                 .orElseThrow(() -> new PostException(ErrorCode.INVALID_POST));
     }
 
