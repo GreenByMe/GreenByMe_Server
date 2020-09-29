@@ -130,7 +130,7 @@ public class PostController {
 
     @ApiOperation(value = "게시글 삭제")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "삭제 성공", response =  Boolean.class),
+            @ApiResponse(code = 200, message = "삭제 성공", response = Boolean.class),
             @ApiResponse(code = 400, message = "1.등록되지 않은 게시글 \t\n 2.등록되지 않은 유저", response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "게시글에 대한 권한 없음", response = ErrorResponse.class)
     })
@@ -151,8 +151,8 @@ public class PostController {
     })
     @PutMapping("/{postId}")
     public ResponseEntity<BasicResponseDto<PostUpdateResponseDto>> updatePost(@ApiIgnore final Authentication authentication,
-                                                            @PathVariable("postId") @NotNull @Positive final Long postId,
-                                                            @Valid @RequestBody final PostUpdateRequestDto requestDto) {
+                                                                              @PathVariable("postId") @NotNull @Positive final Long postId,
+                                                                              @Valid @RequestBody final PostUpdateRequestDto requestDto) {
         Long userId = ((User) authentication.getPrincipal()).getId();
         PostUpdateResponseDto responseDto = postService.updatePost(userId, postId, requestDto);
         log.info("게시글 수정 완료");
@@ -170,6 +170,17 @@ public class PostController {
         Long userId = ((User) authentication.getPrincipal()).getId();
         boolean res = postService.thumbsUp(userId, postId);
         log.info("게시글 좋아요 완료");
+        return ResponseEntity.ok().body(BasicResponseDto.of(res, HttpStatus.OK.value()));
+    }
+
+    @ApiOperation(value = "태그로 게시글 검색")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "조회 성공"),
+            @ApiResponse(code = 400, message = "1.없는 태그")
+    })
+    @GetMapping("/{tagName}")
+    public ResponseEntity<BasicResponseDto<PostByTagResponseDto>> getPostByTag(@PathVariable("tagName") @NotNull final String tagName) {
+        PostByTagResponseDto res = postService.getPostsByTag(tagName);
         return ResponseEntity.ok().body(BasicResponseDto.of(res, HttpStatus.OK.value()));
     }
 }

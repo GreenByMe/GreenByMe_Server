@@ -10,12 +10,13 @@ import org.greenbyme.angelhack.domain.post.Post;
 import org.greenbyme.angelhack.domain.post.PostRepository;
 import org.greenbyme.angelhack.domain.postlike.PostLike;
 import org.greenbyme.angelhack.domain.postlike.PostLikeRepository;
+import org.greenbyme.angelhack.domain.posttag.PostTag;
+import org.greenbyme.angelhack.domain.posttag.PostTagRepository;
+import org.greenbyme.angelhack.domain.tag.Tag;
+import org.greenbyme.angelhack.domain.tag.TagRepository;
 import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.domain.user.UserRepository;
-import org.greenbyme.angelhack.exception.ErrorCode;
-import org.greenbyme.angelhack.exception.MissionException;
-import org.greenbyme.angelhack.exception.PostException;
-import org.greenbyme.angelhack.exception.UserException;
+import org.greenbyme.angelhack.exception.*;
 import org.greenbyme.angelhack.service.dto.post.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,6 +28,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -39,6 +41,8 @@ public class PostService {
     private final PostLikeRepository postLikeRepository;
     private final PersonalMissionRepository personalMissionRepository;
     private final MissionRepository missionRepository;
+    private final PostTagRepository postTagRepository;
+    private final TagRepository tagRepository;
 
     @Autowired
     private FileUploadDownloadService service;
@@ -77,6 +81,15 @@ public class PostService {
         personalMission.addProgress();
         if (personalMission.isEnd()) {
             personalMission.getMission().addPassCandidates();
+        }
+        if (!requestDto.getTags().isEmpty()) {
+            List<Tag> tags = requestDto.getTags().stream()
+                    .map(this::saveTag)
+                    .collect(Collectors.toList());
+            List<PostTag> postTags = tags.stream()
+                    .map(t -> savePostTag(savedPost, t))
+                    .collect(Collectors.toList());
+            savedPost.addTags(postTags);
         }
         double expectTree = personalMission.getMission().getExpectTree();
         int finishCount = personalMission.getFinishCount();
@@ -151,5 +164,32 @@ public class PostService {
     private User getUser(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
+    }
+
+    @Transactional
+    public Tag saveTag(String tagName) {
+        if (tagRepository.findByTagName(tagName).isPresent()) {
+            return tagRepository.findByTagName(tagName).get();
+        }
+        return tagRepository.save(new Tag(tagName));
+    }
+
+    @Transactional
+    public PostTag savePostTag(Post post, Tag tag) {
+        if (postTagRepository.findByPostAndTag(post, tag).isPresent()) {
+            return postTagRepository.findByPostAndTag(post, tag).get();
+        }
+        return postTagRepository.save(new PostTag(post, tag));
+    }
+
+    public PostByTagResponseDto getPostsByTag(String tagName) {
+        Tag tag = tagRepository.findByTagName(tagName)
+                .orElseThrow(() -> new TagException(ErrorCode.INVALID_TAG));
+        List<PostTag> postTags = postTagRepository.findAllByTag(tag);
+        List<PostResponseDto> res = postTags.stream()
+                .map(PostTag::getPost)
+                .map(PostResponseDto::new)
+                .collect(Collectors.toList());
+        return new PostByTagResponseDto(tagName, res);
     }
 }

@@ -35,7 +35,7 @@ dependencies {
 	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
 	compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
 	compile 'org.flywaydb:flyway-core'
-//	compile group: 'org.flywaydb', name: 'flyway-core', version: '6.4.1'
+	compile group: 'org.flywaydb', name: 'flyway-core', version: '6.4.1'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.h2database:h2'

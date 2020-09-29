@@ -27,4 +27,8 @@ public class Tag {
 
     @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL)
     private List<PostTag> postTagList = new ArrayList<>();
+
+    public Tag(String tagName) {
+        this.tagName = tagName;
+    }
 }
