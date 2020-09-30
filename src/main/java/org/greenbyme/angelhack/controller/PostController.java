@@ -168,7 +168,7 @@ public class PostController {
     public ResponseEntity<BasicResponseDto<Boolean>> thumbsup(@ApiIgnore final Authentication authentication,
                                                               @PathVariable("postId") @NotNull @Positive final Long postId) {
         Long userId = ((User) authentication.getPrincipal()).getId();
-        boolean res = postService.thumbsUp(userId, postId);
+        boolean res = postService.thumbsUp(postId, userId);
         log.info("게시글 좋아요 완료");
         return ResponseEntity.ok().body(BasicResponseDto.of(res, HttpStatus.OK.value()));
     }

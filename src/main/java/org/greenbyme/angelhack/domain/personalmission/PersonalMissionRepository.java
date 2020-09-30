@@ -9,13 +9,11 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface PersonalMissionRepository extends JpaRepository<PersonalMission, Long>, PersonalMissionJPQL {
-
-    List<PersonalMission> findAllByMission(Mission mission);
+public interface PersonalMissionRepository extends JpaRepository<PersonalMission, Long>, PersonalMissionQueryDsl {
 
     List<PersonalMission> findByMission(Mission mission);
 
-    Page<PersonalMission> findAllByMission(Mission mission, Pageable pageable);
+    List<PersonalMission> findAllByMission(Mission mission);
 
     List<PersonalMission> findAllByUser(User user);
 

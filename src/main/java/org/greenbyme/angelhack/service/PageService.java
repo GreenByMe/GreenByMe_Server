@@ -2,7 +2,6 @@ package org.greenbyme.angelhack.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.greenbyme.angelhack.domain.mission.Mission;
 import org.greenbyme.angelhack.domain.mission.MissionRepository;
 import org.greenbyme.angelhack.domain.personalmission.PersonalMission;
 import org.greenbyme.angelhack.domain.personalmission.PersonalMissionRepository;
@@ -14,11 +13,11 @@ import org.greenbyme.angelhack.domain.user.UserRepository;
 import org.greenbyme.angelhack.exception.ErrorCode;
 import org.greenbyme.angelhack.exception.UserException;
 import org.greenbyme.angelhack.service.dto.page.*;
-import org.greenbyme.angelhack.service.dto.personalmission.PersonalMissionByPageDto;
+import org.greenbyme.angelhack.service.dto.personalmission.PersonalMissionHomePageDto;
+import org.greenbyme.angelhack.service.dto.user.UserHomePageDetailDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,58 +32,54 @@ public class PageService {
     private final MissionRepository missionRepository;
     private final PersonalMissionRepository personalMissionRepository;
 
-    public HomePageDto getHomepageInfos(Long userId) {
+    public HomePageDto getHomePageInfos(Long userId) {
         User user = findByUserId(userId);
-        List<PersonalMission> res = personalMissionRepository.findAllByUser(user);
-        long missionCount = res.stream()
+        long missionProgressRates=0L;
+
+        List<PersonalMission> personalMissionList = personalMissionRepository.findAllByUserIdFetch(userId);
+        long missionCount = personalMissionList.stream()
                 .filter(m -> m.getPersonalMissionStatus().equals(PersonalMissionStatus.IN_PROGRESS))
-                .count();
-        long missionProgressCount = postRepository.findAllByUser(user).stream()
-                .filter(p -> p.getCreatedDate().getDayOfYear() == LocalDateTime.now().getDayOfYear())
-                .count();
-        List<PersonalMissionByPageDto> personalMissionByPageList = res.stream()
-                .map(m -> new PersonalMissionByPageDto(m, howManyPeopleInMission(m)))
-                .collect(Collectors.toList());
-        List<PopularMissionResponseDto> popularMissionResponseDtos = missionRepository.findAll().stream()
-                .map(m -> new PopularMissionResponseDto(m, howManyPeopleInMission(m)))
-                .sorted()
-                .collect(Collectors.toList());
-        if (missionCount == 0 || missionProgressCount == 0) {
-            return new HomePageDto(user, 0, new PersonalMissionPageDto(personalMissionByPageList, popularMissionResponseDtos));
+                .mapToLong( m -> m.getFinishCount())
+                .sum();
+        long missionProgressCount = personalMissionList.stream()
+                .filter(m -> m.getPersonalMissionStatus().equals(PersonalMissionStatus.IN_PROGRESS))
+                .mapToLong(m -> m.getProgress())
+                .sum();
+        if (missionProgressCount == 0 && missionCount == 0) {
+             missionProgressRates = 0L;
+        } else {
+             missionProgressRates = (long) (((double) missionProgressCount / missionCount) * 100);
         }
-        long missionProgressRates = (long) ((double) (missionProgressCount / missionCount) * 100);
-        return new HomePageDto(user, missionProgressRates, new PersonalMissionPageDto(personalMissionByPageList, popularMissionResponseDtos));
-    }
+        UserHomePageDetailDto userHomePageDetailDto = new UserHomePageDetailDto(user, missionProgressRates);
 
-    private Long howManyPeopleInMission(PersonalMission personalMission) {
-        return personalMissionRepository.findAllByMission(personalMission.getMission()).stream()
+        List<PersonalMission> inProgressPersonalMissions = personalMissionList.stream()
                 .filter(m -> m.getPersonalMissionStatus().equals(PersonalMissionStatus.IN_PROGRESS))
-                .count();
-    }
+                .collect(Collectors.toList());
+        List<PersonalMissionHomePageDto> personalMissionHomePageDtos = inProgressPersonalMissions.stream()
+                .map(pm -> new PersonalMissionHomePageDto(pm, personalMissionRepository.countHowManyPeopleInMission(pm.getMission().getId())))
+                .collect(Collectors.toList());
 
-    private Long howManyPeopleInMission(Mission mission) {
-        return personalMissionRepository.findAllByMission(mission).stream()
-                .filter(m -> m.getPersonalMissionStatus().equals(PersonalMissionStatus.IN_PROGRESS))
-                .count();
+        List<PopularMissionHomePageResponseDto> popularMissionDtos = missionRepository.findPopularMission();
+
+        return new HomePageDto(userHomePageDetailDto, personalMissionHomePageDtos, popularMissionDtos);
     }
 
     public CertPageDto getCertPage(Long userId) {
-        User user = findByUserId(userId);
-        List<PersonalMission> personalMissions = personalMissionRepository.findAllByUser(user);
+        List<PersonalMission> personalMissions = personalMissionRepository.findAllByUserIdFetch(userId);
         return new CertPageDto(userId, personalMissions);
     }
 
     public MyPageDto getMyPage(Long userId) {
         User user = findByUserId(userId);
-        long passMissionCount = personalMissionRepository.findAllByUser(user).stream()
+        long passMissionCount = personalMissionRepository.findAllByUserIdFetch(user.getId()).stream()
                 .filter(m -> m.getPersonalMissionStatus().equals(PersonalMissionStatus.FINISH))
                 .count();
-        List<Post> posts = postRepository.findAllByUser(user);
+        List<Post> posts = postRepository.findAllByUserId(user.getId());
         return new MyPageDto(user, passMissionCount, posts);
     }
 
     private User findByUserId(Long userId) {
-        return userRepository.findById(userId)
+        return userRepository.findByIdFetch(userId)
                 .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
     }
 }

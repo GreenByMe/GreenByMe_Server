@@ -6,6 +6,10 @@ import org.greenbyme.angelhack.domain.mission.MissionRepository;
 import org.greenbyme.angelhack.domain.personalmission.PersonalMission;
 import org.greenbyme.angelhack.domain.personalmission.PersonalMissionRepository;
 import org.greenbyme.angelhack.domain.personalmission.PersonalMissionStatus;
+import org.greenbyme.angelhack.domain.post.Post;
+import org.greenbyme.angelhack.domain.post.PostRepository;
+import org.greenbyme.angelhack.domain.postlike.PostLike;
+import org.greenbyme.angelhack.domain.postlike.PostLikeRepository;
 import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.domain.user.UserRepository;
 import org.greenbyme.angelhack.exception.ErrorCode;
@@ -21,9 +25,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.NoResultException;
+import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -33,6 +36,8 @@ public class PersonalMissionService {
     private final PersonalMissionRepository personalMissionRepository;
     private final UserRepository userRepository;
     private final MissionRepository missionRepository;
+    private final PostRepository postRepository;
+    private final PostLikeRepository postLikeRepository;
 
     @Transactional
     public PersonalMissionSaveResponseDto save(Long userId, Long missionId) {
@@ -40,16 +45,13 @@ public class PersonalMissionService {
         Mission mission = missionRepository.findById(missionId)
                 .orElseThrow(() -> new MissionException(ErrorCode.INVALID_MISSION));
 
-        List<PersonalMission> personalMissionByUserIdAndPersonalMissionId = personalMissionRepository.findPersonalMissionByUserIdAndMissionId(userId, missionId);
-        for (PersonalMission personalMission : personalMissionByUserIdAndPersonalMissionId) {
-            if (personalMission.getPersonalMissionStatus() == PersonalMissionStatus.IN_PROGRESS) {
-                throw new PersonalMissionException(ErrorCode.ALREADY_EXISTS_MISSION);
-            }
-        }
         List<PersonalMission> personalMissionByUserIdAndWhereInProgresses = personalMissionRepository.findPersonalMissionByUserIdAndWhereInProgress(userId);
 
-        for (PersonalMission infoByUserIdAndWhereInProgress : personalMissionByUserIdAndWhereInProgresses) {
-            if (infoByUserIdAndWhereInProgress.getMission().getDayCategory() == mission.getDayCategory()) {
+        for (PersonalMission personalMissionInProgress : personalMissionByUserIdAndWhereInProgresses) {
+            if (personalMissionInProgress.getMission().getId() == mission.getId()) {
+                throw new PersonalMissionException(ErrorCode.ALREADY_EXISTS_MISSION);
+            }
+            if (personalMissionInProgress.getMission().getDayCategory() == mission.getDayCategory()) {
                 throw new PersonalMissionException(ErrorCode.ALREADY_EXISTS_SAME_DAY_MISSION);
             }
         }
@@ -65,19 +67,38 @@ public class PersonalMissionService {
     public PersonalMissionDetailResponseDto findPersonalMissionDetails(Long personalMissionId, Long userId) {
         PersonalMission personalMission = personalMissionRepository.findDetailsById(personalMissionId)
                 .orElseThrow(() -> new PersonalMissionException(ErrorCode.INVALID_PERSONAL_MISSION));
-        if (!personalMission.getUser().equals(findByUserId(userId))) {
+        if (personalMission.getUser().getId() != userId) {
             throw new UserException(ErrorCode.INVALID_USER_ACCESS);
         }
         return new PersonalMissionDetailResponseDto(personalMission);
     }
 
     @Transactional
-    public PersonalMissionDeleteResponseDto personalMissionDelete(Long personalMissionId, Long userId) {
-        PersonalMission personalMission = findByPersonalMissionId(personalMissionId);
+    public PersonalMissionDeleteResponseDto deletePersonalMission(Long personalMissionId, Long userId) {
+        PersonalMission personalMission = findById(personalMissionId);
         User user = findByUserId(userId);
         if (!personalMission.getUser().equals(user)) {
             throw new PersonalMissionException(ErrorCode.INVALID_USER_ACCESS);
         }
+        List<PersonalMission> personalMissionList = user.getPersonalMissionList();
+
+        for (PersonalMission findedPersonalMission : personalMissionList) {
+            if (findedPersonalMission.getId() == personalMissionId) {
+                user.getPersonalMissionList().remove(personalMission);
+                break;
+            }
+        }
+
+        List<Post> allByPersonalMissionId = postRepository.findAllByPersonalMissionId(personalMissionId);
+        for (Post post : allByPersonalMissionId) {
+            List<PostLike> allByPost = postLikeRepository.findAllByPostId(post.getId());
+            for (PostLike postLike : allByPost) {
+                postLike.remove();
+                postLikeRepository.delete(postLike);
+            }
+            postRepository.delete(post);
+        }
+
         personalMissionRepository.deleteById(personalMissionId);
         return new PersonalMissionDeleteResponseDto(personalMission);
     }
@@ -103,11 +124,11 @@ public class PersonalMissionService {
     }
 
     private User findByUserId(Long userId) {
-        return userRepository.findById(userId)
+        return userRepository.findByIdFetch(userId)
                 .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
     }
 
-    private PersonalMission findByPersonalMissionId(Long id) {
+    private PersonalMission findById(Long id) {
         return personalMissionRepository.findById(id)
                 .orElseThrow(() -> new PersonalMissionException(ErrorCode.INVALID_PERSONAL_MISSION));
     }

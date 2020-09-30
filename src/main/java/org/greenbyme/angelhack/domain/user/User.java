@@ -106,8 +106,8 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     public void addExpectCo2(double expectCo2){
-       this.expectCo2 = expectCo2;
-       this.expectTree = expectCo2/3.17;
+       this.expectCo2 += expectCo2;
+       this.expectTree += expectCo2/3.17;
     }
 
     public boolean checkPassword(String password) {
