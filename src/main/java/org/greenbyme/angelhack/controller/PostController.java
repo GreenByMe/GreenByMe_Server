@@ -172,4 +172,15 @@ public class PostController {
         log.info("게시글 좋아요 완료");
         return ResponseEntity.ok().body(BasicResponseDto.of(res, HttpStatus.OK.value()));
     }
+
+    @ApiOperation(value = "태그로 게시글 검색")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "조회 성공"),
+            @ApiResponse(code = 400, message = "1.없는 태그")
+    })
+    @GetMapping("/{tagName}")
+    public ResponseEntity<BasicResponseDto<PostByTagResponseDto>> getPostByTag(@PathVariable("tagName") @NotNull final String tagName) {
+        PostByTagResponseDto res = postService.getPostsByTag(tagName);
+        return ResponseEntity.ok().body(BasicResponseDto.of(res, HttpStatus.OK.value()));
+    }
 }

@@ -25,14 +25,6 @@ public class PersonalMission extends BaseTimeEntity {
     @Column(name = "personal_mission_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "mission_id")
-    private Mission mission;
-
     @Enumerated(EnumType.STRING)
     private PersonalMissionStatus personalMissionStatus;
 
@@ -41,6 +33,14 @@ public class PersonalMission extends BaseTimeEntity {
 
     @Embedded
     private RemainPeriod remainPeriod;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "mission_id")
+    private Mission mission;
 
     @Builder
     public PersonalMission(User user, Mission mission){

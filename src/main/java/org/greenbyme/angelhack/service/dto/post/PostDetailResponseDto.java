@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import org.greenbyme.angelhack.domain.post.Post;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -20,6 +22,7 @@ public class PostDetailResponseDto {
     private Boolean isMine;
     private LocalDateTime createDate;
     private LocalDateTime lastModifiedDate;
+    private List<String> tags;
 
     public PostDetailResponseDto(Post post, boolean mine) {
         this.postId = post.getId();
@@ -31,5 +34,8 @@ public class PostDetailResponseDto {
         this.isMine = mine;
         this.createDate = post.getCreatedDate();
         this.lastModifiedDate = post.getLastModifiedDate();
+        this.tags = post.getPostTagList().stream()
+                .map(p -> p.getTag().getTagName())
+                .collect(Collectors.toList());
     }
 }

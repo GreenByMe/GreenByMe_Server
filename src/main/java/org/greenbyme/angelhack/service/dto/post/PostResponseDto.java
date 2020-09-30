@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.greenbyme.angelhack.domain.post.Post;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -20,6 +21,13 @@ public class PostResponseDto {
         this.nickName = nickName;
         this.picture = picture;
         this.thumbsUp = thumbsUp;
+    }
+
+    public PostResponseDto(Post post) {
+        this.postId = post.getId();
+        this.nickName = post.getUser().getNickname();
+        this.picture = post.getPicture();
+        this.thumbsUp = post.getPostLikes().size();
     }
 
     public int compareTo(PostResponseDto o) { // 나이를 기준으로 오름차순
