@@ -44,8 +44,6 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class UserController {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-
     private final UserService userService;
 
     @Autowired
@@ -61,6 +59,7 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<BasicResponseDto<String>> saveUser(@Valid @RequestBody final UserSaveRequestDto requestDto) {
         String result = userService.saveUser(requestDto);
+        log.info("유저 가입 완료");
         return ResponseEntity.status(HttpStatus.CREATED).body(BasicResponseDto.of(result, HttpStatus.CREATED.value()));
     }
 
@@ -73,6 +72,7 @@ public class UserController {
     @PostMapping("/signin")
     public ResponseEntity<BasicResponseDto<String>> signIn(@Valid @RequestBody final UserLoginRequestDto userLoginRequestDto) {
         String token = userService.login(userLoginRequestDto);
+        log.info("유저 로그인 완료");
         return ResponseEntity.status(HttpStatus.CREATED).body(BasicResponseDto.of(token, (HttpStatus.CREATED.value())));
     }
 
@@ -88,7 +88,7 @@ public class UserController {
         try {
             contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
         } catch (IOException ex) {
-            logger.info("Could not determine file type.");
+            log.info("Could not determine file type.");
         }
         if (contentType == null) {
             contentType = "application/octet-stream";
@@ -105,11 +105,11 @@ public class UserController {
             @ApiResponse(code = 400, message = "등록되지 않은 유저", response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "권한 없음", response = ErrorResponse.class)
     })
-    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @GetMapping
     public ResponseEntity<BasicResponseDto<UserDetailResponseDto>> getUserDetail(@ApiIgnore final Authentication authentication) {
         Long userId = ((User) authentication.getPrincipal()).getId();
         UserDetailResponseDto dto = userService.getUserDetail(userId);
+        log.info("유저 정보 상세 조회 완료");
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(dto, HttpStatus.OK.value()));
     }
 
@@ -119,11 +119,11 @@ public class UserController {
             @ApiResponse(code = 400, message = "등록되지 않은 유저", response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "권한 없음", response = ErrorResponse.class)
     })
-    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @GetMapping("/expectTreeCo2")
     public ResponseEntity<BasicResponseDto<UserExpectTreeCo2ResponseDto>> getUserExpectTreeCo2(@ApiIgnore final Authentication authentication) {
         Long userId = ((User) authentication.getPrincipal()).getId();
         UserExpectTreeCo2ResponseDto userExpectTreeCo2 = userService.getUserExpectTreeCo2(userId);
+        log.info("유저 감소량 조회 완료");
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(userExpectTreeCo2, HttpStatus.OK.value()));
     }
 
@@ -133,12 +133,12 @@ public class UserController {
             @ApiResponse(code = 400, message = "등록되지 않은 유저", response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "권한 없음", response = ErrorResponse.class)
     })
-    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @GetMapping("/personalMissions")
     public ResponseEntity<BasicResponseDto<PageDto<PersonalMissionByUserDto>>> getUserPersonalMissionList(@ApiIgnore final Authentication authentication,
                                                                                                           @PageableDefault(size = 10) final Pageable pageable) {
         Long userId = ((User) authentication.getPrincipal()).getId();
         Page<PersonalMissionByUserDto> dto = userService.getPersonalMissionList(userId, pageable);
+        log.info("유저 진행 미션 조회 완료");
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(new PageDto<>(dto), HttpStatus.OK.value()));
     }
 
@@ -148,12 +148,12 @@ public class UserController {
             @ApiResponse(code = 400, message = "등록되지 않은 유저", response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "권한 없음", response = ErrorResponse.class)
     })
-    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @GetMapping("/posts")
     public ResponseEntity<BasicResponseDto<PageDto<PostDetailResponseDto>>> getUserPostList(@ApiIgnore final Authentication authentication,
                                                                                             @PageableDefault final Pageable pageable) {
         Long userId = ((User) authentication.getPrincipal()).getId();
         Page<PostDetailResponseDto> dto = userService.getPostList(userId, pageable);
+        log.info("유저 게시글 조회 완료");
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(new PageDto<>(dto), HttpStatus.OK.value()));
     }
 
@@ -163,12 +163,12 @@ public class UserController {
             @ApiResponse(code = 400, message = "1.등록되지 않은 유저 \t\n 2.반드시 값이 있어야 합니다.", response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "권한 없음", response = ErrorResponse.class)
     })
-    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @PutMapping
     public ResponseEntity<BasicResponseDto<UserResponseDto>> updateUserProfile(@ApiIgnore final Authentication authentication,
                                                                               @Valid final UserUpdateNicktDto dto,
                                                                               @RequestParam(value = "file", required = false) final MultipartFile file) {
         Long userId = ((User) authentication.getPrincipal()).getId();
+        log.info("유저 프로필 수정 완료");
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(BasicResponseDto.of(userService.updateProfile(userId, file, dto), HttpStatus.ACCEPTED.value()));
     }
 
@@ -177,9 +177,9 @@ public class UserController {
             @ApiResponse(code = 202, message = "토큰 재발급 성공", response = String.class),
             @ApiResponse(code = 401, message = "권한 없음", response = ErrorResponse.class)
     })
-    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @PostMapping("/refresh")
     public ResponseEntity<BasicResponseDto<String>> refreshToken(@ApiIgnore final Authentication authentication) throws Exception {
+        log.info("토큰 Refresh 완료");
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(BasicResponseDto.of(userService.refreshToken(authentication), HttpStatus.CREATED.value()));
     }
 
@@ -190,6 +190,7 @@ public class UserController {
     })
     @GetMapping("/email/{email}")
     public ResponseEntity<BasicResponseDto<Boolean>> checkEmail(@PathVariable("email") @Email String email) {
+        log.info("이메일 중복 체크 완료");
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(userService.checkEmail(email), HttpStatus.OK.value()));
     }
 
@@ -200,6 +201,7 @@ public class UserController {
     })
     @GetMapping("/nickname/{nickname}")
     public ResponseEntity<BasicResponseDto<Boolean>> checkNickName(@PathVariable("nickname") @NotEmpty String nickname) {
+        log.info("닉네임 중복 체크 완료");
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(userService.checkNickName(nickname), HttpStatus.OK.value()));
     }
 }

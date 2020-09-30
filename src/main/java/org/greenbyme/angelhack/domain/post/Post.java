@@ -5,6 +5,7 @@ import org.greenbyme.angelhack.domain.DomainListener;
 import org.greenbyme.angelhack.domain.baseEntity.BaseEntity;
 import org.greenbyme.angelhack.domain.personalmission.PersonalMission;
 import org.greenbyme.angelhack.domain.postlike.PostLike;
+import org.greenbyme.angelhack.domain.posttag.PostTag;
 import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.service.dto.post.PostUpdateRequestDto;
 
@@ -24,6 +25,11 @@ public class Post extends BaseEntity {
     @Column(name = "post_id")
     private Long id;
 
+    private String picture;
+    private String title;
+    private String text;
+    private Boolean open;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -35,11 +41,8 @@ public class Post extends BaseEntity {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<PostLike> postLikes = new ArrayList<>();
 
-    private String picture;
-
-    private String title;
-    private String text;
-    private Boolean open;
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<PostTag> postTagList = new ArrayList<>();
 
     @Builder
     public Post(User user, PersonalMission personalMission, String text, String title, String picture, Boolean open) {
@@ -71,5 +74,9 @@ public class Post extends BaseEntity {
 
     public void addLikes(PostLike postLike) {
         this.postLikes.add(postLike);
+    }
+
+    public void addTags(List<PostTag> postTags) {
+        this.postTagList = postTags;
     }
 }

@@ -35,7 +35,10 @@ public enum ErrorCode {
     OVER_PROGRESS(400, "P_001", "전체 인증 횟수 초과"),
     OVER_CERIFICATION(400, "P_002", "하루 인증 횟수를 초과"),
     INVALID_POST(400, "P_003", "등록되지 않은 Post id"),
-    INVALID_POST_ACCESS(401, "P_004", "게시글에 대한 올바르지 않은 접근입니다");
+    INVALID_POST_ACCESS(401, "P_004", "게시글에 대한 올바르지 않은 접근입니다"),
+
+    //Tag
+    INVALID_TAG(400, "T_001", "존재하지 않는 태그");
 
     private final Integer status;
     private final String code;

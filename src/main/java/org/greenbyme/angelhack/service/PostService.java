@@ -10,12 +10,13 @@ import org.greenbyme.angelhack.domain.post.Post;
 import org.greenbyme.angelhack.domain.post.PostRepository;
 import org.greenbyme.angelhack.domain.postlike.PostLike;
 import org.greenbyme.angelhack.domain.postlike.PostLikeRepository;
+import org.greenbyme.angelhack.domain.posttag.PostTag;
+import org.greenbyme.angelhack.domain.posttag.PostTagRepository;
+import org.greenbyme.angelhack.domain.tag.Tag;
+import org.greenbyme.angelhack.domain.tag.TagRepository;
 import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.domain.user.UserRepository;
-import org.greenbyme.angelhack.exception.ErrorCode;
-import org.greenbyme.angelhack.exception.MissionException;
-import org.greenbyme.angelhack.exception.PostException;
-import org.greenbyme.angelhack.exception.UserException;
+import org.greenbyme.angelhack.exception.*;
 import org.greenbyme.angelhack.service.dto.post.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,6 +28,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -39,6 +41,8 @@ public class PostService {
     private final PostLikeRepository postLikeRepository;
     private final PersonalMissionRepository personalMissionRepository;
     private final MissionRepository missionRepository;
+    private final PostTagRepository postTagRepository;
+    private final TagRepository tagRepository;
 
     @Autowired
     private FileUploadDownloadService service;
@@ -47,8 +51,7 @@ public class PostService {
     public PostSaveResponseDto savePosts(Long userId, PostSaveRequestDto requestDto, MultipartFile file) {
         PersonalMission personalMission = personalMissionRepository.findDetailsById(requestDto.getPersonalMission_id())
                 .orElseThrow(() -> new MissionException(ErrorCode.INVALID_PERSONAL_MISSION));
-        User user = getUser(userId);
-        if (!personalMission.getUser().getId().equals(user.getId())) {
+        if (!personalMission.getUser().getId().equals(userId)) {
             throw new PostException(ErrorCode.WRONG_ACCESS);
         }
         List<Post> posts = postRepository.findAllByPersonalMission(personalMission);
@@ -66,7 +69,7 @@ public class PostService {
                 .toUriString();
 
         Post savePost = Post.builder()
-                .user(user)
+                .user(personalMission.getUser())
                 .personalMission(personalMission)
                 .text(requestDto.getText())
                 .title(requestDto.getTitle())
@@ -78,24 +81,34 @@ public class PostService {
         if (personalMission.isEnd()) {
             personalMission.getMission().addPassCandidates();
         }
+        if (!requestDto.getTags().isEmpty()) {
+            List<Tag> tags = requestDto.getTags().stream()
+                    .map(this::saveTag)
+                    .collect(Collectors.toList());
+            List<PostTag> postTags = tags.stream()
+                    .map(t -> savePostTag(savedPost, t))
+                    .collect(Collectors.toList());
+            savedPost.addTags(postTags);
+        }
         double expectTree = personalMission.getMission().getExpectTree();
+        personalMission.getUser().addExpectCo2(personalMission.getMission().getExpectTree());
         int finishCount = personalMission.getFinishCount();
-        return new PostSaveResponseDto(savedPost.getId(), user.getNickname(), expectTree, finishCount);
+        return new PostSaveResponseDto(savedPost.getId(), personalMission.getUser().getNickname(), expectTree, finishCount);
     }
 
     public Page<PostResponseDto> getPostsByMission(Long missionId, Pageable pageable) {
         Mission mission = missionRepository.findById(missionId)
                 .orElseThrow(() -> new MissionException(ErrorCode.INVALID_MISSION));
-        return personalMissionRepository.findAllByMission(mission, pageable)
-                .map(postRepository::findByPersonalMission)
-                .map(p -> new PostResponseDto(p.getId(), p.getUser().getNickname(), p.getPicture(), p.getPostLikes().size()));
+        return personalMissionRepository.findAllByMissionId(mission.getId(), pageable)
+                .map(p -> postRepository.findByPersonalMissionId(p.getId()))
+                .map(post -> new PostResponseDto(post.getId(), post.getUser().getNickname(), post.getPicture(), post.getPostLikes().size()));
     }
 
     public PostDetailResponseDto getPostDetail(Long postId, Long userId) {
         Post post = getPost(postId);
-        User user = getUser(userId);
+
         boolean mine = false;
-        if (post.getUser().equals(user)) {
+        if (post.getUser().getId() == userId) {
             mine = true;
         }
         return new PostDetailResponseDto(post, mine);
@@ -110,8 +123,7 @@ public class PostService {
     @Transactional
     public void deletePost(Long postId, Long userId) {
         Post post = getPost(postId);
-        User user = getUser(userId);
-        if (!post.getUser().equals(user)) {
+        if (post.getUser().getId()!= userId) {
             throw new PostException(ErrorCode.INVALID_POST_ACCESS);
         }
         postRepository.deleteById(postId);
@@ -120,8 +132,7 @@ public class PostService {
     @Transactional
     public PostUpdateResponseDto updatePost(Long userId, Long postId, PostUpdateRequestDto requestDto) {
         Post post = getPost(postId);
-        User user = getUser(userId);
-        if (!post.getUser().equals(user)) {
+        if (post.getUser().getId()!= userId) {
             throw new PostException(ErrorCode.INVALID_POST_ACCESS);
         }
         post.update(requestDto);
@@ -144,12 +155,39 @@ public class PostService {
     }
 
     private Post getPost(Long postId) {
-        return postRepository.findById(postId)
+        return postRepository.findByIdWithFetch(postId)
                 .orElseThrow(() -> new PostException(ErrorCode.INVALID_POST));
     }
 
     private User getUser(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(ErrorCode.UNSIGNED_USER));
+    }
+
+    @Transactional
+    public Tag saveTag(String tagName) {
+        if (tagRepository.findByTagName(tagName).isPresent()) {
+            return tagRepository.findByTagName(tagName).get();
+        }
+        return tagRepository.save(new Tag(tagName));
+    }
+
+    @Transactional
+    public PostTag savePostTag(Post post, Tag tag) {
+        if (postTagRepository.findByPostAndTag(post, tag).isPresent()) {
+            return postTagRepository.findByPostAndTag(post, tag).get();
+        }
+        return postTagRepository.save(new PostTag(post, tag));
+    }
+
+    public PostByTagResponseDto getPostsByTag(String tagName) {
+        Tag tag = tagRepository.findByTagName(tagName)
+                .orElseThrow(() -> new TagException(ErrorCode.INVALID_TAG));
+        List<PostTag> postTags = postTagRepository.findAllByTag(tag);
+        List<PostResponseDto> res = postTags.stream()
+                .map(PostTag::getPost)
+                .map(PostResponseDto::new)
+                .collect(Collectors.toList());
+        return new PostByTagResponseDto(tagName, res);
     }
 }

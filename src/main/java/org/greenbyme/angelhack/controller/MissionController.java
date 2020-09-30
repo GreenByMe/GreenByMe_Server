@@ -45,8 +45,6 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class MissionController {
 
-    private static final Logger logger = LoggerFactory.getLogger(MissionController.class);
-
     private final MissionService missionService;
 
     @Autowired
@@ -62,6 +60,7 @@ public class MissionController {
     @PostMapping
     public ResponseEntity<BasicResponseDto<MissionSaveResponseDto>> save(@Valid MissionSaveRequestDto missionSaveRequestDto, @RequestParam("file") MultipartFile file) {
         MissionSaveResponseDto missionSaveResponseDto = missionService.save(missionSaveRequestDto, file);
+        log.info("미션 저장 완료");
         return ResponseEntity.status(HttpStatus.CREATED).body(BasicResponseDto.of(missionSaveResponseDto, HttpStatus.CREATED.value()));
     }
 
@@ -79,12 +78,13 @@ public class MissionController {
         try {
             contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
         } catch (IOException ex) {
-            logger.info("Could not determine file type.");
+            log.info("Could not determine file type.");
         }
         // Fallback to the default content type if type could not be determined
         if (contentType == null) {
             contentType = "application/octet-stream";
         }
+        log.info("미션 이미지 조회 완료");
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
@@ -99,6 +99,7 @@ public class MissionController {
     @GetMapping("/{missionId}")
     public ResponseEntity<BasicResponseDto<MissionDetailsDto>> findOneDetail(@PathVariable("missionId") @NotNull @Positive final Long id) {
         MissionDetailsDto missionDetailsDto = missionService.findById(id);
+        log.info("미션 상세정보 조회 완료");
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(missionDetailsDto, HttpStatus.OK.value()));
     }
 
@@ -111,6 +112,7 @@ public class MissionController {
                                                                                                                                         @PathVariable("datCategory") final DayCategory dayCategory,
                                                                                                                                         @PageableDefault(size = 10) Pageable pageable) {
         Page<MissionFindAllByCategoryAndDayCategoryResponseDto> allByCategoryAndDayCategory = missionService.findAllByCategoryAndDayCategory(category, dayCategory, pageable);
+        log.info("카테고리, 기간 내 미션 조회 완료");
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(new PageDto<>(allByCategoryAndDayCategory), HttpStatus.OK.value()));
     }
 
@@ -122,6 +124,7 @@ public class MissionController {
     @DeleteMapping("/{missionId}")
     public ResponseEntity<BasicResponseDto<MissionDeleteDto>> missionDelete(@PathVariable("missionId") @NotNull @Positive final Long id) {
         MissionDeleteDto missionDeleteDto = missionService.delete(id);
+        log.info("미션 삭제 완료");
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(missionDeleteDto, HttpStatus.OK.value()));
     }
 
@@ -132,6 +135,7 @@ public class MissionController {
     @GetMapping("/populars")
     public ResponseEntity<BasicResponseDto<PageDto<MissionPopularResponseDto>>> getPopularMission(@PageableDefault(size = 10, sort = "passCandidatesCount", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<MissionPopularResponseDto> allByPopular = missionService.findAllByPopular(pageable);
+        log.info("인기 미션 조회 완료");
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(new PageDto<>(allByPopular), HttpStatus.OK.value()));
     }
 }

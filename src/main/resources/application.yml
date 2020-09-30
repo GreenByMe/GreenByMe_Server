@@ -12,12 +12,13 @@ spring:
     driver-class-name: org.h2.Driver
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
     properties:
       hibernate:
         show_sql: true
         format_sql: true
         default_batch_fetch_size: 100
+    open-in-view: true
   data:
     web:
       pageable:
@@ -28,11 +29,16 @@ spring:
       enabled: true
       max-file-size: 30MB
       max-request-size: 30MB
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
 logging:
   level:
     org:
-      hibernate:
-        type:
+      springframework:
+        web:
+          filter: DEBUG
+
 file:
   upload-dir: ./uploads
 

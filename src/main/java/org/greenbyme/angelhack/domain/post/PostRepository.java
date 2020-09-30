@@ -8,15 +8,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface PostRepository extends JpaRepository<Post, Long> {
-
-    Post findByPersonalMission(PersonalMission personalMission);
+public interface PostRepository extends JpaRepository<Post, Long>, PostQueryDsl {
 
     List<Post> findAllByUser(User user);
 
     Page<Post> findAllByUser(User user, Pageable pageable);
-
-    List<Post> findAllByUserAndPersonalMission(User user, PersonalMission personalMission);
 
     List<Post> findAllByPersonalMission(PersonalMission personalMission);
 }

@@ -36,14 +36,13 @@ public class User extends BaseEntity implements UserDetails {
     private String photo;
     private double expectTree;
     private double expectCo2;
+    private String platformId;
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private PlatformType platformType;
-
-    private String platformId;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<PersonalMission> personalMissionList = new ArrayList<>();
@@ -107,8 +106,8 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     public void addExpectCo2(double expectCo2){
-       this.expectCo2 = expectCo2;
-       this.expectTree = expectCo2/3.17;
+       this.expectCo2 += expectCo2;
+       this.expectTree += expectCo2/3.17;
     }
 
     public boolean checkPassword(String password) {

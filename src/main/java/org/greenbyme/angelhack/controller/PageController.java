@@ -32,11 +32,11 @@ public class PageController {
             @ApiResponse(code = 200, message = "조회 성공", response = HomePageDto.class),
             @ApiResponse(code = 400, message = "등록되지 않은 유저", response = ErrorResponse.class)
     })
-    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @GetMapping("/home")
     public ResponseEntity<BasicResponseDto<HomePageDto>> getHomePage(@ApiIgnore final Authentication authentication) {
         Long userId = ((User) authentication.getPrincipal()).getId();
-        return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(pageService.getHomepageInfos(userId), HttpStatus.OK.value()));
+        log.info("홈 페이지 조회 완료");
+        return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(pageService.getHomePageInfos(userId), HttpStatus.OK.value()));
     }
 
     @ApiOperation(value = "인증 페이지 조회")
@@ -44,10 +44,10 @@ public class PageController {
             @ApiResponse(code = 200, message = "조회 성공", response = CertPageDto.class),
             @ApiResponse(code = 400, message = "등록되지 않은 유저", response = ErrorResponse.class)
     })
-    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @GetMapping("/cert")
     public ResponseEntity<BasicResponseDto<CertPageDto>> getCertPage(@ApiIgnore final Authentication authentication) {
         Long userId = ((User) authentication.getPrincipal()).getId();
+        log.info("인증 페이지 조회 완료");
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(pageService.getCertPage(userId), HttpStatus.OK.value()));
     }
 
@@ -56,10 +56,10 @@ public class PageController {
             @ApiResponse(code = 200, message = "조회 성공", response = MyPageDto.class),
             @ApiResponse(code = 400, message = "등록되지 않은 유저", response = ErrorResponse.class)
     })
-    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
     @GetMapping
     public ResponseEntity<BasicResponseDto<MyPageDto>> getMyPage(@ApiIgnore final Authentication authentication) {
         Long userId = ((User) authentication.getPrincipal()).getId();
+        log.info("개인 페이지 조회 완료");
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(pageService.getMyPage(userId), HttpStatus.OK.value()));
     }
 }
