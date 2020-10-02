@@ -1,4 +1,4 @@
-package org.greenbyme.angelhack.service.dto.personalmission;
+package org.greenbyme.angelhack.service.dto.page;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PersonalMissionHomePageDto {
+public class PersonalMissionByPageDto implements Comparable<PersonalMissionByPageDto> {
 
     private Long personalMissionId;
     private Long missionId;
@@ -25,7 +25,7 @@ public class PersonalMissionHomePageDto {
     private String pictureUrl;
     private String status;
 
-    public PersonalMissionHomePageDto(PersonalMission personalMission, Long manyPeople) {
+    public PersonalMissionByPageDto(PersonalMission personalMission, Long manyPeople) {
         this.personalMissionId = personalMission.getId();
         this.missionId = personalMission.getMission().getId();
         this.missionTitle = personalMission.getMission().getTitle();
@@ -39,5 +39,10 @@ public class PersonalMissionHomePageDto {
             this.progress = personalMission.getProgress();
             this.remainPeriod = personalMission.getRemainPeriod();
         }
+    }
+
+    @Override
+    public int compareTo(PersonalMissionByPageDto o) {
+        return -this.startDate.compareTo(o.startDate);
     }
 }

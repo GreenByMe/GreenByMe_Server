@@ -3,8 +3,6 @@ package org.greenbyme.angelhack.service.dto.page;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.greenbyme.angelhack.service.dto.personalmission.PersonalMissionHomePageDto;
-import org.greenbyme.angelhack.service.dto.user.UserHomePageDetailDto;
 
 import java.util.List;
 
@@ -12,10 +10,10 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class HomePageDto {
     private UserHomePageDetailDto userHomePageDetailDto;
-    private List<PersonalMissionHomePageDto> personalMissionHomePageDtos;
+    private List<PersonalMissionByPageDto> personalMissionHomePageDtos;
     private List<PopularMissionHomePageResponseDto> popularMissionHomePageResponseDtos;
 
-    public HomePageDto(UserHomePageDetailDto userHomePageDetailDto, List<PersonalMissionHomePageDto> personalMissionHomePageDtos, List<PopularMissionHomePageResponseDto> popularMissionHomePageResponseDtos) {
+    public HomePageDto(UserHomePageDetailDto userHomePageDetailDto, List<PersonalMissionByPageDto> personalMissionHomePageDtos, List<PopularMissionHomePageResponseDto> popularMissionHomePageResponseDtos) {
         this.userHomePageDetailDto = userHomePageDetailDto;
         this.personalMissionHomePageDtos = personalMissionHomePageDtos;
         this.popularMissionHomePageResponseDtos = popularMissionHomePageResponseDtos;
