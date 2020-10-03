@@ -3,7 +3,6 @@ package org.greenbyme.angelhack.service.dto.page;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.greenbyme.angelhack.service.dto.personalmission.PersonalMissionByPageDto;
 
 import java.util.List;
 
