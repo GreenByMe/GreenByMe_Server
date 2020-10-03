@@ -9,6 +9,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class HomePageDto {
+
     private UserHomePageDetailDto userHomePageDetailDto;
     private List<PersonalMissionByPageDto> personalMissionHomePageDtos;
     private List<PopularMissionHomePageResponseDto> popularMissionHomePageResponseDtos;

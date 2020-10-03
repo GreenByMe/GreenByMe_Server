@@ -40,14 +40,14 @@ public class PageService {
                 .filter(m -> m.getPersonalMissionStatus().equals(PersonalMissionStatus.IN_PROGRESS))
                 .mapToLong(PersonalMission::getFinishCount)
                 .sum();
-        long missionProgressCount = personalMissionList.stream()
+        long progressCampaign = personalMissionList.stream()
                 .filter(m -> m.getPersonalMissionStatus().equals(PersonalMissionStatus.IN_PROGRESS))
                 .mapToLong(PersonalMission::getProgress)
                 .sum();
-        if (missionProgressCount != 0 && missionCount != 0) {
-            missionProgressRates = (long) (((double) missionProgressCount / missionCount) * 100);
+        if (progressCampaign != 0 && missionCount != 0) {
+            missionProgressRates = (long) (((double) progressCampaign / missionCount) * 100);
         }
-        UserHomePageDetailDto userHomePageDetailDto = new UserHomePageDetailDto(user, missionProgressCount, missionProgressRates);
+        UserHomePageDetailDto userHomePageDetailDto = new UserHomePageDetailDto(user, progressCampaign, missionProgressRates);
         List<PersonalMissionByPageDto> personalMissionHomePageDtos = personalMissionList.stream()
                 .map(pm -> new PersonalMissionByPageDto(pm, personalMissionRepository.countHowManyPeopleInMission(pm.getMission().getId())))
                 .sorted()
