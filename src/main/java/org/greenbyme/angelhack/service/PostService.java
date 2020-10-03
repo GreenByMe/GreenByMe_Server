@@ -81,7 +81,7 @@ public class PostService {
         if (personalMission.isEnd()) {
             personalMission.getMission().addPassCandidates();
         }
-        if (!requestDto.getTags().isEmpty()) {
+        if (requestDto.getTags() != null) {
             List<Tag> tags = requestDto.getTags().stream()
                     .map(this::saveTag)
                     .collect(Collectors.toList());

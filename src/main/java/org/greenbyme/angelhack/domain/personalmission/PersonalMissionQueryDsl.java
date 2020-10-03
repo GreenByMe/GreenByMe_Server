@@ -20,5 +20,7 @@ public interface PersonalMissionQueryDsl {
 
     List<PersonalMission> findAllByUserIdFetch(Long userId);
 
+    Page<PersonalMission> findAllByUserIdPageable(Long userId, Pageable pageable);
+
     Long countHowManyPeopleInMission(Long missionId);
 }

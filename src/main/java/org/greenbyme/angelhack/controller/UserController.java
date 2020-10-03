@@ -127,7 +127,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(userExpectTreeCo2, HttpStatus.OK.value()));
     }
 
-    @ApiOperation(value = "유저 진행 미션 조회")
+    @ApiOperation(value = "유저 전체 개인 미션 조회")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "조회 성공", response = PersonalMissionByUserDto.class),
             @ApiResponse(code = 400, message = "등록되지 않은 유저", response = ErrorResponse.class),
