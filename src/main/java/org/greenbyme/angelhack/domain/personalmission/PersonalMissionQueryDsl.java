@@ -8,13 +8,15 @@ import java.util.Optional;
 
 public interface PersonalMissionQueryDsl {
 
+    Page<PersonalMission> findInProgressPersonalMissionsByUserId(Long userId , Pageable pageable);
+
+    List<PersonalMission> findInProgressPersonalMissionsByUserId(Long userId);
+
     Long findProgressByMissionId(Long missionId);
 
     Optional<PersonalMission> findDetailsById(Long personalMissionId);
 
     Page<PersonalMission> findAllByMissionId(Long missionId, Pageable pageable);
-
-    List<PersonalMission> findPersonalMissionByUserIdAndWhereInProgress(Long userId);
 
     List<PersonalMission> findAllByUserIdFetch(Long userId);
 
