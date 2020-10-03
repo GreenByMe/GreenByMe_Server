@@ -1,4 +1,3 @@
-/*
 package org.greenbyme.angelhack;
 
 import lombok.RequiredArgsConstructor;
@@ -107,4 +106,3 @@ public class InitDB {
         }
     }
 }
-*/
