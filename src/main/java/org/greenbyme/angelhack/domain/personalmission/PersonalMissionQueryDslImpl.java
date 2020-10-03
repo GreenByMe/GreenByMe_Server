@@ -11,11 +11,10 @@ import org.springframework.data.repository.support.PageableExecutionUtils;
 import org.springframework.util.ObjectUtils;
 
 import javax.persistence.EntityManager;
-
 import java.util.List;
 import java.util.Optional;
 
-import static org.greenbyme.angelhack.domain.personalmission.QPersonalMission.*;
+import static org.greenbyme.angelhack.domain.personalmission.QPersonalMission.personalMission;
 
 public class PersonalMissionQueryDslImpl implements PersonalMissionQueryDsl {
 
@@ -23,6 +22,23 @@ public class PersonalMissionQueryDslImpl implements PersonalMissionQueryDsl {
 
     public PersonalMissionQueryDslImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
+    }
+
+    @Override
+    public Page<PersonalMission> findAllByUserIdPageable(Long userId, Pageable pageable) {
+        List<PersonalMission> content = queryFactory
+                .selectFrom(personalMission)
+                .where(userIdEq(userId))
+                .orderBy(personalMission.personalMissionStatus.desc(), personalMission.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<PersonalMission> count = queryFactory
+                .selectFrom(personalMission)
+                .where(userIdEq(userId));
+
+        return PageableExecutionUtils.getPage(content, pageable, () -> count.fetchCount());
     }
 
     @Override
@@ -83,26 +99,6 @@ public class PersonalMissionQueryDslImpl implements PersonalMissionQueryDsl {
         return queryFactory.selectFrom(personalMission)
                 .where(missionIdEq(missionId), personalMissionStatusEq(PersonalMissionStatus.IN_PROGRESS))
                 .fetchCount();
-    }
-
-    @Override
-    public Page<PersonalMission> findInProgressPersonalMissionsByUserId(Long userId, Pageable pageable) {
-        List<PersonalMission> content = queryFactory
-                .selectFrom(personalMission)
-                .where(userIdEq(userId),
-                        personalMissionStatusEq(PersonalMissionStatus.IN_PROGRESS)
-                )
-                .leftJoin(personalMission.mission, QMission.mission).fetchJoin()
-                .orderBy(personalMission.id.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-
-        JPAQuery<PersonalMission> countQuery = queryFactory
-                .selectFrom(personalMission)
-                .where(userIdEq(userId));
-
-        return PageableExecutionUtils.getPage(content, pageable, () -> countQuery.fetchCount());
     }
 
     private BooleanExpression userIdEq(Long userId) {

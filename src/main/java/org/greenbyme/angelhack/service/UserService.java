@@ -95,7 +95,7 @@ public class UserService {
     }
 
     public Page<PersonalMissionByUserDto> getPersonalMissionList(Long userId, Pageable pageable) {
-          return personalMissionRepository.findInProgressPersonalMissionsByUserId(userId, pageable)
+          return personalMissionRepository.findAllByUserIdPageable(userId, pageable)
                 .map(PersonalMissionByUserDto::new);
     }
 
