@@ -21,7 +21,7 @@ public class InProgressResponseDto implements Comparable<InProgressResponseDto> 
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private RemainPeriod remainPeriod;
-    private String pictureUrl;
+    private String missionPictureUrl;
 
     public InProgressResponseDto(PersonalMission personalMission, Long manyPeople) {
         this.personalMissionId = personalMission.getId();
@@ -33,7 +33,7 @@ public class InProgressResponseDto implements Comparable<InProgressResponseDto> 
         this.startDate = personalMission.getCreatedDate();
         this.endDate = personalMission.getCreatedDate().plusDays(personalMission.getMission().getDayCategory().getDay());
         this.remainPeriod = personalMission.getRemainPeriod();
-        this.pictureUrl = personalMission.getMission().getPictureUrl();
+        this.missionPictureUrl = personalMission.getMission().getPictureUrl();
     }
 
     @Override
