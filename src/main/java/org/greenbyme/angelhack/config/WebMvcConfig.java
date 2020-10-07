@@ -18,7 +18,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
             "/api/users/nickname/**",
             "/api/missions/**",
             "/api/categorys/**",
-            "/api/post/images/**",
+            "/api/post/images/{fileName}",
             "/api/post/missions/**"
             };
 
