@@ -57,8 +57,11 @@ public class PersonalMission extends BaseTimeEntity {
         remainPeriod.setRemainHour(LocalDateTime.now().until(getCreatedDate().plusDays(getMission().getDayCategory().getDay()), ChronoUnit.HOURS)%24);
         remainPeriod.setRemainMin(LocalDateTime.now().until(getCreatedDate().plusDays(getMission().getDayCategory().getDay()), ChronoUnit.MINUTES)%60);
 
-        if(remainPeriod.getRemainDay()==0 &&remainPeriod.getRemainHour()==0 && remainPeriod.getRemainMin()==0){
+        if(remainPeriod.getRemainDay()<=0){
             changeToFailStatus();
+
+            remainPeriod.setRemainHour(0L);
+            remainPeriod.setRemainMin(0L);
         }
     }
 
