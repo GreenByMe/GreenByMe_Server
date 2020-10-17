@@ -19,41 +19,38 @@ import javax.persistence.*;
 @Slf4j
 public class DomainListener {
 
-    @Autowired
-    private static final Logger logger = LoggerFactory.getLogger(DomainListener.class);
-
-    @PostLoad
+/*    @PostLoad
     public void postLoad(Object obj) {
-        logger.info("post load: {}", obj);
-    }
+        log.info("post load: {}", obj);
+    }*/
 
-    @PrePersist
+/*    @PrePersist
     public void prePersist(Object obj) {
-        logger.info("pre persist: {}", obj);
-    }
+        log.info("pre persist: {}", obj);
+    }*/
 
     @PostPersist
     public void postPersist(Object obj) {
-        logger.info("post persist: {}", obj);
+        log.info("post persist: {}", obj);
     }
 
     @PreUpdate
     public void preUpdate(Object obj) {
-        logger.info("pre update: {}", obj);
+        log.info("pre update: {}", obj);
     }
 
     @PostUpdate
     public void postUpdate(Object obj) {
-        logger.info("post update: {}", obj);
+        log.info("post update: {}", obj);
     }
 
     @PreRemove
     public void preRemove(Object obj) {
-        logger.info("pre remove: {}", obj);
+        log.info("pre remove: {}", obj);
     }
 
     @PostRemove
     public void postRemove(Object obj) {
-        logger.info("post remove: {}", obj);
+        log.info("post remove: {}", obj);
     }
 }
