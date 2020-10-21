@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProgressPersonalMissionDto {
 
-    private Long personalMission_id;
+    private Long personalMissionId;
     private String subject;
     private Category category;
     private String certifiaciontTest;
@@ -24,7 +24,7 @@ public class ProgressPersonalMissionDto {
     private String pictureUrl;
 
     public ProgressPersonalMissionDto(PersonalMission personalMission) {
-        this.personalMission_id = personalMission.getId();
+        this.personalMissionId = personalMission.getId();
         this.subject = personalMission.getMission().getSubject();
         this.category = personalMission.getMission().getCategory();
         this.certifiaciontTest = personalMission.getMission().getMissionCertificationMethod().getText();
