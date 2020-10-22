@@ -58,6 +58,20 @@ public class UserService {
         return createToken(user);
     }
 
+    @Transactional
+    public String saveSocialUser(SocialUserSaveRequestDto requestDto) {
+        if (userRepository.findByEmail(requestDto.getEmail()).isPresent()) {
+            throw new UserException("이미 가입된 메일입니다", ErrorCode.MEMBER_DUPLICATED_EMAIL);
+        }
+
+        if (userRepository.findByNickname(requestDto.getNickname()).isPresent()) {
+            throw new UserException("이미 가입된 닉네임 입니다.", ErrorCode.MEMBER_DUPLICATED_NICKNAME);
+        }
+
+        User user = userRepository.save(requestDto.toEntity());
+        return createToken(user);
+    }
+
     public UserDetailResponseDto getUserDetail(Long userId) {
         User user = getUser(userId);
         List<Post> posts = postRepository.findAllByUserId(userId);

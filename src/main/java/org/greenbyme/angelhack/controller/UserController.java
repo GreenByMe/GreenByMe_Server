@@ -63,6 +63,19 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(BasicResponseDto.of(result, HttpStatus.CREATED.value()));
     }
 
+    @ApiOperation(value = "소셜 연동 가입")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "소셜 가입 성공", response = BasicResponseDto.class),
+            @ApiResponse(code = 409, message = "중복된 이메일", response = ErrorResponse.class),
+            @ApiResponse(code = 409, message = "중복된 닉네임", response = ErrorResponse.class),
+            @ApiResponse(code = 500, message = "서버 에러", response = ErrorResponse.class)
+    })
+    @PostMapping("/signup/social")
+    public ResponseEntity<BasicResponseDto<String>> saveSocialUser(@Valid @RequestBody final SocialUserSaveRequestDto requestDto) {
+        String token = userService.saveSocialUser(requestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(BasicResponseDto.of(token, HttpStatus.CREATED.value()));
+    }
+
     @ApiOperation(value = "이메일, 패스워드를 받아서 로그인하여 토큰을 반환한다")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "로그인 성공", response = BasicResponseDto.class),
