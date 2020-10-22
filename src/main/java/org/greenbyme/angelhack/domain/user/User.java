@@ -51,7 +51,7 @@ public class User extends BaseEntity implements UserDetails {
     private List<PostLike> postLikes = new ArrayList<>();
 
     @Builder
-    public User(String name, String email, String password, String nickname, String photo, List<String> roles) {
+    public User(String name, String email, String password, String nickname, String photo, List<String> roles, PlatformType platformType, String platformId) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -60,6 +60,12 @@ public class User extends BaseEntity implements UserDetails {
         this.photo = photo;
         this.expectCo2 = 0;
         this.expectTree = 0;
+        if (platformType == null) {
+            this.platformType = PlatformType.NONE;
+        } else {
+            this.platformType = platformType;
+        }
+        this.platformId = platformId;
     }
 
     @Override
@@ -106,8 +112,8 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     public void addExpectCo2(double expectCo2){
-       this.expectCo2 += expectCo2;
-       this.expectTree += expectCo2/3.17;
+        this.expectCo2 += expectCo2;
+        this.expectTree += expectCo2/3.17;
     }
 
     public boolean checkPassword(String password) {
@@ -128,5 +134,11 @@ public class User extends BaseEntity implements UserDetails {
 
     public void addLikes(PostLike postLike) {
         this.postLikes.add(postLike);
+    }
+
+    public User update(String name, String picture) {
+        this.name = name;
+        this.photo = picture;
+        return this;
     }
 }
