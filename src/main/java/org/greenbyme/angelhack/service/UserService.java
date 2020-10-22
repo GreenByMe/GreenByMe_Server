@@ -146,6 +146,12 @@ public class UserService {
         return createToken(user);
     }
 
+    public String socialLogin(SocialUserLoginRequestDto socialUserLoginRequestDto) {
+        User user = userRepository.findByPlatformId(socialUserLoginRequestDto.getPlatformId())
+                .orElseThrow(() -> new UserException("등록되지 않은 소셜 유저입니다", ErrorCode.UNSIGNED_SOCIAL));
+        return createToken(user);
+    }
+
     public String refreshToken(Authentication authentication) throws Exception {
         return jwtTokenProvider.makeReToken(authentication);
     }

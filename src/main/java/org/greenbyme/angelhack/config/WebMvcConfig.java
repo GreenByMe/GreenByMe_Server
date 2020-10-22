@@ -12,6 +12,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     private static final String[] EXCLUDE_PATHS = {
             "/api/users/signin",
+            "/api/users/signin/social",
             "/api/users/signup",
             "/api/users/signup/social",
             "/api/users/images/{fileName}",

@@ -18,6 +18,7 @@ public enum ErrorCode {
     WRONG_PASSWORD(400, "U_004", "잘못된 패스워드"),
     UNSIGNED_USER(400, "U_005", "등록되지 않은 유저 idx"),
     INVALID_ACCESS(401, "U_006", "권한이 없습니다"),
+    UNSIGNED_SOCIAL(400, "U_007", "등록되지 않은 소셜 유저"),
 
     //Mission
     INVALID_MISSION(400, "M_001", "등록되지 않은 미션 id"),

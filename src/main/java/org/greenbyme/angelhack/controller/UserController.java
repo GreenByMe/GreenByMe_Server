@@ -86,7 +86,19 @@ public class UserController {
     public ResponseEntity<BasicResponseDto<String>> signIn(@Valid @RequestBody final UserLoginRequestDto userLoginRequestDto) {
         String token = userService.login(userLoginRequestDto);
         log.info("유저 로그인 완료");
-        return ResponseEntity.status(HttpStatus.CREATED).body(BasicResponseDto.of(token, (HttpStatus.CREATED.value())));
+        return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(token, (HttpStatus.OK.value())));
+    }
+
+    @ApiOperation(value = "소셜 유저 로그인")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "로그인 성공", response = BasicResponseDto.class),
+            @ApiResponse(code = 400, message = "등록되지 않은 소셜 유저", response = ErrorResponse.class),
+            @ApiResponse(code = 500, message = "서버 에러", response = ErrorResponse.class)
+    })
+    @PostMapping("/signin/social")
+    public ResponseEntity<BasicResponseDto<String>> socialSignIn(@Valid @RequestBody final SocialUserLoginRequestDto socialUserLoginRequestDto) {
+        String token = userService.socialLogin(socialUserLoginRequestDto);
+        return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(token, HttpStatus.OK.value()));
     }
 
     @ApiOperation(value = "이미지 불러 오기")
