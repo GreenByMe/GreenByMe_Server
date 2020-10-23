@@ -51,9 +51,8 @@ public class UserController {
 
     @ApiOperation(value = "유저 가입")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "가입 성공", response = String.class),
-            @ApiResponse(code = 409, message = "중복된 이메일", response = ErrorResponse.class),
-            @ApiResponse(code = 409, message = "중복된 닉네임", response = ErrorResponse.class),
+            @ApiResponse(code = 201, message = "가입 성공", response = BasicResponseDto.class),
+            @ApiResponse(code = 409, message = "1.중복된 이메일 \t\n 2.중복된 닉네임", response = ErrorResponse.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ErrorResponse.class)
     })
     @PostMapping("/signup")
@@ -63,9 +62,22 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(BasicResponseDto.of(result, HttpStatus.CREATED.value()));
     }
 
+    @ApiOperation(value = "소셜 연동 가입")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "소셜 가입 성공", response = BasicResponseDto.class),
+            @ApiResponse(code = 409, message = "1.중복된 이메일 \t\n 2.중복된 닉네임", response = ErrorResponse.class),
+            @ApiResponse(code = 500, message = "서버 에러", response = ErrorResponse.class)
+    })
+    @PostMapping("/signup/social")
+    public ResponseEntity<BasicResponseDto<String>> saveSocialUser(@Valid @RequestBody final SocialUserSaveRequestDto requestDto) {
+        String token = userService.saveSocialUser(requestDto);
+        log.info("소셜 유저 로그인 완료");
+        return ResponseEntity.status(HttpStatus.CREATED).body(BasicResponseDto.of(token, HttpStatus.CREATED.value()));
+    }
+
     @ApiOperation(value = "이메일, 패스워드를 받아서 로그인하여 토큰을 반환한다")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "로그인 성공", response = String.class),
+            @ApiResponse(code = 201, message = "로그인 성공", response = BasicResponseDto.class),
             @ApiResponse(code = 400, message = "1.등록되지 않은 이메일 \t\n 2.틀린 암호", response = ErrorResponse.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ErrorResponse.class)
     })
@@ -73,7 +85,20 @@ public class UserController {
     public ResponseEntity<BasicResponseDto<String>> signIn(@Valid @RequestBody final UserLoginRequestDto userLoginRequestDto) {
         String token = userService.login(userLoginRequestDto);
         log.info("유저 로그인 완료");
-        return ResponseEntity.status(HttpStatus.CREATED).body(BasicResponseDto.of(token, (HttpStatus.CREATED.value())));
+        return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(token, (HttpStatus.OK.value())));
+    }
+
+    @ApiOperation(value = "소셜 유저 로그인")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "로그인 성공", response = BasicResponseDto.class),
+            @ApiResponse(code = 400, message = "등록되지 않은 소셜 유저", response = ErrorResponse.class),
+            @ApiResponse(code = 500, message = "서버 에러", response = ErrorResponse.class)
+    })
+    @PostMapping("/signin/social")
+    public ResponseEntity<BasicResponseDto<String>> socialSignIn(@Valid @RequestBody final SocialUserLoginRequestDto socialUserLoginRequestDto) {
+        String token = userService.socialLogin(socialUserLoginRequestDto);
+        log.info("소셜 로그인 완료");
+        return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(token, HttpStatus.OK.value()));
     }
 
     @ApiOperation(value = "이미지 불러 오기")
@@ -174,7 +199,7 @@ public class UserController {
 
     @ApiOperation(value = "토큰 Refresh")
     @ApiResponses(value = {
-            @ApiResponse(code = 202, message = "토큰 재발급 성공", response = String.class),
+            @ApiResponse(code = 202, message = "토큰 재발급 성공", response = BasicResponseDto.class),
             @ApiResponse(code = 401, message = "권한 없음", response = ErrorResponse.class)
     })
     @PostMapping("/refresh")
@@ -183,9 +208,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(BasicResponseDto.of(userService.refreshToken(authentication), HttpStatus.CREATED.value()));
     }
 
-    @ApiOperation(value = "이메일 중복 체크", response = Boolean.class)
+    @ApiOperation(value = "이메일 중복 체크")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "체크 성공", response = Boolean.class),
+            @ApiResponse(code = 200, message = "체크 성공", response = BasicResponseDto.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ErrorResponse.class)
     })
     @GetMapping("/email/{email}")
@@ -196,7 +221,7 @@ public class UserController {
 
     @ApiOperation(value = "닉네임 중복 체크", response = Boolean.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "체크 성공", response = Boolean.class),
+            @ApiResponse(code = 200, message = "체크 성공", response = BasicResponseDto.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ErrorResponse.class)
     })
     @GetMapping("/nickname/{nickname}")

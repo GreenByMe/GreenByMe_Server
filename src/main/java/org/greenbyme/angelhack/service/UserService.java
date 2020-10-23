@@ -58,6 +58,20 @@ public class UserService {
         return createToken(user);
     }
 
+    @Transactional
+    public String saveSocialUser(SocialUserSaveRequestDto requestDto) {
+        if (userRepository.findByEmail(requestDto.getEmail()).isPresent()) {
+            throw new UserException("이미 가입된 메일입니다", ErrorCode.MEMBER_DUPLICATED_EMAIL);
+        }
+
+        if (userRepository.findByNickname(requestDto.getNickname()).isPresent()) {
+            throw new UserException("이미 가입된 닉네임 입니다.", ErrorCode.MEMBER_DUPLICATED_NICKNAME);
+        }
+
+        User user = userRepository.save(requestDto.toEntity());
+        return createToken(user);
+    }
+
     public UserDetailResponseDto getUserDetail(Long userId) {
         User user = getUser(userId);
         List<Post> posts = postRepository.findAllByUserId(userId);
@@ -129,6 +143,12 @@ public class UserService {
         if (!passwordEncoder.matches(rawPassword, encodePassword)) {
             throw new UserException("잘못된 비밀번호입니다.", ErrorCode.WRONG_PASSWORD);
         }
+        return createToken(user);
+    }
+
+    public String socialLogin(SocialUserLoginRequestDto socialUserLoginRequestDto) {
+        User user = userRepository.findByPlatformId(socialUserLoginRequestDto.getPlatformId())
+                .orElseThrow(() -> new UserException("등록되지 않은 소셜 유저입니다", ErrorCode.UNSIGNED_SOCIAL));
         return createToken(user);
     }
 
