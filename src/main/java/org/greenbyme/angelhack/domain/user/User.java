@@ -5,7 +5,6 @@ import lombok.*;
 import org.greenbyme.angelhack.domain.DomainListener;
 import org.greenbyme.angelhack.domain.baseEntity.BaseEntity;
 import org.greenbyme.angelhack.domain.personalmission.PersonalMission;
-import org.greenbyme.angelhack.domain.post.Post;
 import org.greenbyme.angelhack.domain.postlike.PostLike;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -60,12 +59,15 @@ public class User extends BaseEntity implements UserDetails {
         this.photo = photo;
         this.expectCo2 = 0;
         this.expectTree = 0;
-        if (platformType == null) {
-            this.platformType = PlatformType.NONE;
-        } else {
-            this.platformType = platformType;
-        }
+        this.platformType = checkPlatformType(platformType);
         this.platformId = platformId;
+    }
+
+    private PlatformType checkPlatformType(PlatformType platformType) {
+        if (platformType != null) {
+            return platformType;
+        }
+        return PlatformType.NONE;
     }
 
     @Override

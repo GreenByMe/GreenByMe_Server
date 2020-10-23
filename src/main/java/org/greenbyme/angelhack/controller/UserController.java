@@ -52,8 +52,7 @@ public class UserController {
     @ApiOperation(value = "유저 가입")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "가입 성공", response = BasicResponseDto.class),
-            @ApiResponse(code = 409, message = "중복된 이메일", response = ErrorResponse.class),
-            @ApiResponse(code = 409, message = "중복된 닉네임", response = ErrorResponse.class),
+            @ApiResponse(code = 409, message = "1.중복된 이메일 \t\n 2.중복된 닉네임", response = ErrorResponse.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ErrorResponse.class)
     })
     @PostMapping("/signup")
@@ -66,13 +65,13 @@ public class UserController {
     @ApiOperation(value = "소셜 연동 가입")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "소셜 가입 성공", response = BasicResponseDto.class),
-            @ApiResponse(code = 409, message = "중복된 이메일", response = ErrorResponse.class),
-            @ApiResponse(code = 409, message = "중복된 닉네임", response = ErrorResponse.class),
+            @ApiResponse(code = 409, message = "1.중복된 이메일 \t\n 2.중복된 닉네임", response = ErrorResponse.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ErrorResponse.class)
     })
     @PostMapping("/signup/social")
     public ResponseEntity<BasicResponseDto<String>> saveSocialUser(@Valid @RequestBody final SocialUserSaveRequestDto requestDto) {
         String token = userService.saveSocialUser(requestDto);
+        log.info("소셜 유저 로그인 완료");
         return ResponseEntity.status(HttpStatus.CREATED).body(BasicResponseDto.of(token, HttpStatus.CREATED.value()));
     }
 
@@ -98,6 +97,7 @@ public class UserController {
     @PostMapping("/signin/social")
     public ResponseEntity<BasicResponseDto<String>> socialSignIn(@Valid @RequestBody final SocialUserLoginRequestDto socialUserLoginRequestDto) {
         String token = userService.socialLogin(socialUserLoginRequestDto);
+        log.info("소셜 로그인 완료");
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(token, HttpStatus.OK.value()));
     }
 
