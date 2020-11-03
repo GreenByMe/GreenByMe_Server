@@ -49,8 +49,10 @@
 ## Backend
 - buil tool: Gradle 7.0
 - IDE: InteliJ  
-- springboot-framework 2.3.1
+- spring-framework 5.2.7
+- springboot 2.3.1
 - spring data jpa
+- queryDsl
 - aws ec2
 - aws RDS_MySQL 8.0.17
 
