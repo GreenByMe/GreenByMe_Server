@@ -44,13 +44,14 @@ public class UserService {
 
     @Transactional
     public String saveUser(UserSaveRequestDto requestDto) {
-        if (userRepository.findByEmail(requestDto.getEmail()).isPresent()) {
-            throw new UserException("이미 가입된 메일입니다", ErrorCode.MEMBER_DUPLICATED_EMAIL);
+        if (!checkEmail(requestDto.getEmail())) {
+            throw new UserException(ErrorCode.MEMBER_DUPLICATED_EMAIL);
         }
 
-        if (userRepository.findByNickname(requestDto.getNickname()).isPresent()) {
-            throw new UserException("이미 가입된 닉네임 입니다.", ErrorCode.MEMBER_DUPLICATED_NICKNAME);
+        if (!checkNickName(requestDto.getNickname())) {
+            throw new UserException(ErrorCode.MEMBER_DUPLICATED_NICKNAME);
         }
+
         String encodePassword = passwordEncoder.encode(requestDto.getPassword());
         User user = requestDto.toEntity();
         user.changePassword(encodePassword);
@@ -60,12 +61,16 @@ public class UserService {
 
     @Transactional
     public String saveSocialUser(SocialUserSaveRequestDto requestDto) {
-        if (userRepository.findByEmail(requestDto.getEmail()).isPresent()) {
-            throw new UserException("이미 가입된 메일입니다", ErrorCode.MEMBER_DUPLICATED_EMAIL);
+        if (!checkEmail(requestDto.getEmail())) {
+            throw new UserException(ErrorCode.MEMBER_DUPLICATED_EMAIL);
         }
 
-        if (userRepository.findByNickname(requestDto.getNickname()).isPresent()) {
-            throw new UserException("이미 가입된 닉네임 입니다.", ErrorCode.MEMBER_DUPLICATED_NICKNAME);
+        if (!checkNickName(requestDto.getNickname())) {
+            throw new UserException(ErrorCode.MEMBER_DUPLICATED_NICKNAME);
+        }
+
+        if (!checkPlatformId(requestDto.getPlatformId())) {
+            throw new UserException(ErrorCode.ALREADY_SIGNUP_PLATFORMID);
         }
 
         User user = userRepository.save(requestDto.toEntity());
@@ -162,6 +167,10 @@ public class UserService {
 
     public Boolean checkNickName(String nickname) {
         return !userRepository.findByNickname(nickname).isPresent();
+    }
+
+    public Boolean checkPlatformId(String platformId) {
+        return !userRepository.findByPlatformId(platformId).isPresent();
     }
 
     private String createToken(User user) {
