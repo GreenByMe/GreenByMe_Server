@@ -44,11 +44,11 @@ public class UserService {
 
     @Transactional
     public String saveUser(UserSaveRequestDto requestDto) {
-        if (!checkEmail(requestDto.getEmail())) {
+        if (isPresentEmail(requestDto.getEmail())) {
             throw new UserException(ErrorCode.MEMBER_DUPLICATED_EMAIL);
         }
 
-        if (!checkNickName(requestDto.getNickname())) {
+        if (isPresentNickname(requestDto.getNickname())) {
             throw new UserException(ErrorCode.MEMBER_DUPLICATED_NICKNAME);
         }
 
@@ -61,15 +61,15 @@ public class UserService {
 
     @Transactional
     public String saveSocialUser(SocialUserSaveRequestDto requestDto) {
-        if (!checkEmail(requestDto.getEmail())) {
+        if (isPresentEmail(requestDto.getEmail())) {
             throw new UserException(ErrorCode.MEMBER_DUPLICATED_EMAIL);
         }
 
-        if (!checkNickName(requestDto.getNickname())) {
+        if (isPresentNickname(requestDto.getNickname())) {
             throw new UserException(ErrorCode.MEMBER_DUPLICATED_NICKNAME);
         }
 
-        if (!checkPlatformId(requestDto.getPlatformId())) {
+        if (isPresentPlatformId(requestDto.getPlatformId())) {
             throw new UserException(ErrorCode.ALREADY_SIGNUP_PLATFORMID);
         }
 
@@ -161,16 +161,16 @@ public class UserService {
         return jwtTokenProvider.makeReToken(authentication);
     }
 
-    public Boolean checkEmail(String email) {
-        return !userRepository.findByEmail(email).isPresent();
+    public Boolean isPresentEmail(String email) {
+        return userRepository.findByEmail(email).isPresent();
     }
 
-    public Boolean checkNickName(String nickname) {
-        return !userRepository.findByNickname(nickname).isPresent();
+    public Boolean isPresentNickname(String nickname) {
+        return userRepository.findByNickname(nickname).isPresent();
     }
 
-    public Boolean checkPlatformId(String platformId) {
-        return !userRepository.findByPlatformId(platformId).isPresent();
+    public Boolean isPresentPlatformId(String platformId) {
+        return userRepository.findByPlatformId(platformId).isPresent();
     }
 
     private String createToken(User user) {
