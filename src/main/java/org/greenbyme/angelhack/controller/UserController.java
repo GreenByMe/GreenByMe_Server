@@ -13,8 +13,6 @@ import org.greenbyme.angelhack.service.dto.personalmission.PersonalMissionByUser
 import org.greenbyme.angelhack.service.dto.post.PostDetailResponseDto;
 import org.greenbyme.angelhack.service.dto.user.*;
 import org.greenbyme.angelhack.util.FileDownloadException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
@@ -214,9 +212,9 @@ public class UserController {
             @ApiResponse(code = 500, message = "서버 에러", response = ErrorResponse.class)
     })
     @GetMapping("/email/{email}")
-    public ResponseEntity<BasicResponseDto<Boolean>> checkEmail(@PathVariable("email") @Email String email) {
+    public ResponseEntity<BasicResponseDto<Boolean>> isPresentEmail(@PathVariable("email") @Email String email) {
         log.info("이메일 중복 체크 완료");
-        return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(userService.checkEmail(email), HttpStatus.OK.value()));
+        return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(userService.isPresentEmail(email), HttpStatus.OK.value()));
     }
 
     @ApiOperation(value = "닉네임 중복 체크", response = Boolean.class)
@@ -225,8 +223,8 @@ public class UserController {
             @ApiResponse(code = 500, message = "서버 에러", response = ErrorResponse.class)
     })
     @GetMapping("/nickname/{nickname}")
-    public ResponseEntity<BasicResponseDto<Boolean>> checkNickName(@PathVariable("nickname") @NotEmpty String nickname) {
+    public ResponseEntity<BasicResponseDto<Boolean>> isPresentNickname(@PathVariable("nickname") @NotEmpty String nickname) {
         log.info("닉네임 중복 체크 완료");
-        return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(userService.checkNickName(nickname), HttpStatus.OK.value()));
+        return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(userService.isPresentNickname(nickname), HttpStatus.OK.value()));
     }
 }
