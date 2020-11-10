@@ -54,12 +54,14 @@ public class MissionService {
                 .missionCertificateCount(missionSaveRequestDto.getMissionCertificateCount())
                 .build();
 
+        Double allExpectCo2 = missionSaveRequestDto.getExpectCo2() * missionSaveRequestDto.getMissionCertificateCount().getCount();
+
         Mission mission = Mission.builder()
                 .category(missionSaveRequestDto.getCategory())
                 .subject(missionSaveRequestDto.getSubject())
                 .description(missionSaveRequestDto.getDescription())
                 .dayCategory(missionSaveRequestDto.getDayCategory())
-                .expectCo2(missionSaveRequestDto.getExpectCo2())
+                .expectCo2(allExpectCo2)
                 .pictureUrl(filedUrl)
                 .title(missionSaveRequestDto.getTitle())
                 .missionCertificationMethod(missionCertificationMethod)
