@@ -44,17 +44,36 @@ public class UserService {
 
     @Transactional
     public String saveUser(UserSaveRequestDto requestDto) {
-        if (userRepository.findByEmail(requestDto.getEmail()).isPresent()) {
-            throw new UserException("이미 가입된 메일입니다", ErrorCode.MEMBER_DUPLICATED_EMAIL);
+        if (isPresentEmail(requestDto.getEmail())) {
+            throw new UserException(ErrorCode.MEMBER_DUPLICATED_EMAIL);
         }
 
-        if (userRepository.findByNickname(requestDto.getNickname()).isPresent()) {
-            throw new UserException("이미 가입된 닉네임 입니다.", ErrorCode.MEMBER_DUPLICATED_NICKNAME);
+        if (isPresentNickname(requestDto.getNickname())) {
+            throw new UserException(ErrorCode.MEMBER_DUPLICATED_NICKNAME);
         }
+
         String encodePassword = passwordEncoder.encode(requestDto.getPassword());
         User user = requestDto.toEntity();
         user.changePassword(encodePassword);
         user = userRepository.save(user);
+        return createToken(user);
+    }
+
+    @Transactional
+    public String saveSocialUser(SocialUserSaveRequestDto requestDto) {
+        if (isPresentEmail(requestDto.getEmail())) {
+            throw new UserException(ErrorCode.MEMBER_DUPLICATED_EMAIL);
+        }
+
+        if (isPresentNickname(requestDto.getNickname())) {
+            throw new UserException(ErrorCode.MEMBER_DUPLICATED_NICKNAME);
+        }
+
+        if (isPresentPlatformId(requestDto.getPlatformId())) {
+            throw new UserException(ErrorCode.ALREADY_SIGNUP_PLATFORMID);
+        }
+
+        User user = userRepository.save(requestDto.toEntity());
         return createToken(user);
     }
 
@@ -95,7 +114,7 @@ public class UserService {
     }
 
     public Page<PersonalMissionByUserDto> getPersonalMissionList(Long userId, Pageable pageable) {
-          return personalMissionRepository.findInProgressPersonalMissionsByUserId(userId, pageable)
+          return personalMissionRepository.findAllByUserIdPageable(userId, pageable)
                 .map(PersonalMissionByUserDto::new);
     }
 
@@ -132,16 +151,26 @@ public class UserService {
         return createToken(user);
     }
 
+    public String socialLogin(SocialUserLoginRequestDto socialUserLoginRequestDto) {
+        User user = userRepository.findByPlatformId(socialUserLoginRequestDto.getPlatformId())
+                .orElseThrow(() -> new UserException("등록되지 않은 소셜 유저입니다", ErrorCode.UNSIGNED_SOCIAL));
+        return createToken(user);
+    }
+
     public String refreshToken(Authentication authentication) throws Exception {
         return jwtTokenProvider.makeReToken(authentication);
     }
 
-    public Boolean checkEmail(String email) {
-        return !userRepository.findByEmail(email).isPresent();
+    public Boolean isPresentEmail(String email) {
+        return userRepository.findByEmail(email).isPresent();
     }
 
-    public Boolean checkNickName(String nickname) {
-        return !userRepository.findByNickname(nickname).isPresent();
+    public Boolean isPresentNickname(String nickname) {
+        return userRepository.findByNickname(nickname).isPresent();
+    }
+
+    public Boolean isPresentPlatformId(String platformId) {
+        return userRepository.findByPlatformId(platformId).isPresent();
     }
 
     private String createToken(User user) {

@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class PersonalMissionDetailResponseDto {
 
     private String userNickName;
-    private Long mission_id;
+    private Long missionId;
     private int finishCount;
     private int progress;
     private RemainPeriod remainPeriod;
@@ -26,7 +26,7 @@ public class PersonalMissionDetailResponseDto {
     @Builder
     public PersonalMissionDetailResponseDto(PersonalMission personalMission) {
         this.userNickName = personalMission.getUser().getNickname();
-        this.mission_id =personalMission.getMission().getId();
+        this.missionId =personalMission.getMission().getId();
         this.finishCount = personalMission.getFinishCount();
         this.progress = personalMission.getProgress();
         this.remainPeriod = personalMission.getRemainPeriod();

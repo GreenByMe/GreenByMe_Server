@@ -45,7 +45,7 @@ public class PersonalMissionService {
         Mission mission = missionRepository.findById(missionId)
                 .orElseThrow(() -> new MissionException(ErrorCode.INVALID_MISSION));
 
-        List<PersonalMission> personalMissionByUserIdAndWhereInProgresses = personalMissionRepository.findPersonalMissionByUserIdAndWhereInProgress(userId);
+        List<PersonalMission> personalMissionByUserIdAndWhereInProgresses = personalMissionRepository.findInProgressPersonalMissionsByUserId(userId);
 
         for (PersonalMission personalMissionInProgress : personalMissionByUserIdAndWhereInProgresses) {
             if (personalMissionInProgress.getMission().getId() == mission.getId()) {

@@ -12,14 +12,16 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     private static final String[] EXCLUDE_PATHS = {
             "/api/users/signin",
+            "/api/users/signin/social",
             "/api/users/signup",
+            "/api/users/signup/social",
             "/api/users/images/{fileName}",
             "/api/users/email/**",
             "/api/users/nickname/**",
             "/api/missions/**",
             "/api/categorys/**",
-            "/api/post/images/**",
-            "/api/post/missions/**"
+            "/api/posts/images/{fileName}",
+            "/api/posts/missions/**"
             };
 
     private final long MAX_AGE_SECS = 3600;

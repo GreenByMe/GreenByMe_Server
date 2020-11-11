@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.greenbyme.angelhack.domain.post.Post;
+import org.greenbyme.angelhack.domain.user.PlatformType;
 import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.service.dto.personalmission.PersonalMissionDetailDto;
 import org.greenbyme.angelhack.service.dto.post.PostDetailResponseDto;
@@ -19,6 +20,7 @@ public class UserDetailResponseDto {
     private String email;
     private String nickName;
     private String pictureUrl;
+    private PlatformType platformType;
     private List<PersonalMissionDetailDto> personalMissions;
     private List<PostDetailResponseDto> posts;
 
@@ -26,6 +28,7 @@ public class UserDetailResponseDto {
         this.userId = user.getId();
         this.email = user.getEmail();
         this.nickName = user.getNickname();
+        this.platformType = user.getPlatformType();
         this.personalMissions = user.getPersonalMissionList().stream()
                 .map(PersonalMissionDetailDto::new)
                 .collect(Collectors.toList());

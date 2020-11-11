@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MissionFindAllByCategoryAndDayCategoryResponseDto {
 
-    private Long id;
+    private Long missionId;
     private Category category;
     private DayCategory dayCategory;
     private String title;
@@ -21,11 +21,11 @@ public class MissionFindAllByCategoryAndDayCategoryResponseDto {
     private String description;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private String pictureUrl;
+    private String missionPictureUrl;
     private Long passCandidates;
 
     public MissionFindAllByCategoryAndDayCategoryResponseDto(Mission mission) {
-        this.id = mission.getId();
+        this.missionId = mission.getId();
         this.category = mission.getCategory();
         this.dayCategory = mission.getDayCategory();
         this.title = mission.getTitle();
@@ -33,7 +33,7 @@ public class MissionFindAllByCategoryAndDayCategoryResponseDto {
         this.description = mission.getDescription();
         this.startDate = LocalDateTime.now();
         this.endDate = LocalDateTime.now().plusDays(mission.getDayCategory().getDay());
-        this.pictureUrl= mission.getPictureUrl();
+        this.missionPictureUrl= mission.getPictureUrl();
         this.passCandidates = mission.getPassCandidatesCount();
     }
 }

@@ -22,5 +22,5 @@ public interface PersonalMissionRepository extends JpaRepository<PersonalMission
 
     List<PersonalMission> findPersonalMissionByUserIdAndMissionId(Long userId, Long missionId);
 
-    List<PersonalMission> findByPersonalMissionStatusEquals(PersonalMissionStatus progress);
+    List<PersonalMission> findByPersonalMissionStatusEquals(PersonalMissionStatus inProgress);
 }
