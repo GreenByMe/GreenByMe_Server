@@ -75,7 +75,7 @@ public class UserController {
 
     @ApiOperation(value = "이메일, 패스워드를 받아서 로그인하여 토큰을 반환한다")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "로그인 성공", response = BasicResponseDto.class),
+            @ApiResponse(code = 200, message = "로그인 성공", response = BasicResponseDto.class),
             @ApiResponse(code = 400, message = "1.등록되지 않은 이메일 \t\n 2.틀린 암호", response = ErrorResponse.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ErrorResponse.class)
     })
@@ -88,7 +88,7 @@ public class UserController {
 
     @ApiOperation(value = "소셜 유저 로그인")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "로그인 성공", response = BasicResponseDto.class),
+            @ApiResponse(code = 200, message = "로그인 성공", response = BasicResponseDto.class),
             @ApiResponse(code = 400, message = "등록되지 않은 소셜 유저", response = ErrorResponse.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ErrorResponse.class)
     })
@@ -197,7 +197,7 @@ public class UserController {
 
     @ApiOperation(value = "토큰 Refresh")
     @ApiResponses(value = {
-            @ApiResponse(code = 202, message = "토큰 재발급 성공", response = BasicResponseDto.class),
+            @ApiResponse(code = 201, message = "토큰 재발급 성공", response = BasicResponseDto.class),
             @ApiResponse(code = 401, message = "권한 없음", response = ErrorResponse.class)
     })
     @PostMapping("/refresh")
