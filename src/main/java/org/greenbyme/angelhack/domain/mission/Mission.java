@@ -39,6 +39,9 @@ public class Mission extends BaseTimeEntity {
     private double expectTree;
     private double expectCo2;
 
+    private double cumulativeCo2;
+    private double cumulativeTree;
+
     private Long passCandidatesCount;
     private String pictureUrl;
 
@@ -53,6 +56,8 @@ public class Mission extends BaseTimeEntity {
         this.missionCertificationMethod = missionCertificationMethod;
         this.expectCo2 = expectCo2;
         this.expectTree = expectCo2 / 3.71;
+        this.cumulativeCo2 = 0;
+        this.cumulativeTree = 0;
         this.passCandidatesCount = 0L;
         this.pictureUrl = pictureUrl;
     }
@@ -75,5 +80,10 @@ public class Mission extends BaseTimeEntity {
 
     public void addPassCandidates() {
         this.passCandidatesCount += 1;
+    }
+
+    public void addCumulativeCo2Tree() {
+        this.cumulativeCo2 += expectCo2;
+        this.cumulativeTree = cumulativeCo2 / 3.71;
     }
 }
