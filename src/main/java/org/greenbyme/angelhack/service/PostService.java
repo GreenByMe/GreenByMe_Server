@@ -80,6 +80,7 @@ public class PostService {
         personalMission.addProgress();
         if (personalMission.isEnd()) {
             personalMission.getMission().addPassCandidates();
+            personalMission.getMission().addCumulativeCo2Tree();
         }
         if (requestDto.getTags() != null) {
             List<Tag> tags = requestDto.getTags().stream()
