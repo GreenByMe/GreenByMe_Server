@@ -23,6 +23,8 @@ public class MissionDetailsDto {
     private String description;
     private double expectTree;
     private double expectCo2;
+    private double cumulativeCo2;
+    private double cumulativeTree;
     private String pictureUrl;
     private MissionCertificationMethod missionCertificationMethod;
     private LocalDateTime startDate;
@@ -40,6 +42,8 @@ public class MissionDetailsDto {
         this.description = mission.getDescription();
         this.expectTree = mission.getExpectTree();
         this.expectCo2 = mission.getExpectCo2();
+        this.cumulativeCo2 = mission.getCumulativeCo2();
+        this.cumulativeTree = mission.getCumulativeTree();
         this.missionCertificationMethod = mission.getMissionCertificationMethod();
         this.pictureUrl= mission.getPictureUrl();
         this.startDate = LocalDateTime.now();
