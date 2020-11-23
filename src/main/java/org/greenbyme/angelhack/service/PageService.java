@@ -2,6 +2,7 @@ package org.greenbyme.angelhack.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.greenbyme.angelhack.domain.baseEntity.BaseTimeEntity;
 import org.greenbyme.angelhack.domain.mission.MissionRepository;
 import org.greenbyme.angelhack.domain.personalmission.PersonalMission;
 import org.greenbyme.angelhack.domain.personalmission.PersonalMissionRepository;
@@ -17,6 +18,7 @@ import org.greenbyme.angelhack.service.dto.page.UserHomePageDetailDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,10 +50,21 @@ public class PageService {
             missionProgressRates = (long) (((double) progressCampaign / missionCount) * 100);
         }
         UserHomePageDetailDto userHomePageDetailDto = new UserHomePageDetailDto(user, progressCampaign, missionProgressRates);
+
         List<PersonalMissionByPageDto> personalMissionHomePageDtos = personalMissionList.stream()
+                .filter(pm -> pm.getPersonalMissionStatus().equals(PersonalMissionStatus.IN_PROGRESS))
                 .map(pm -> new PersonalMissionByPageDto(pm, personalMissionRepository.countHowManyPeopleInMission(pm.getMission().getId())))
                 .sorted()
                 .collect(Collectors.toList());
+
+        int resultSize = 5 - personalMissionHomePageDtos.size();
+
+        personalMissionList.stream()
+                .filter(pm -> !pm.getPersonalMissionStatus().equals(PersonalMissionStatus.IN_PROGRESS))
+                .sorted(Comparator.comparing(BaseTimeEntity::getLastModifiedDate).reversed())
+                .limit(resultSize)
+                .forEach(pm ->
+                        personalMissionHomePageDtos.add(new PersonalMissionByPageDto(pm, personalMissionRepository.countHowManyPeopleInMission(pm.getMission().getId()))));
 
         List<PopularMissionHomePageResponseDto> popularMissionDtos = missionRepository.findPopularMission();
 
