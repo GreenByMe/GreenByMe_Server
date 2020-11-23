@@ -59,16 +59,12 @@ public class PageService {
 
         int resultSize = 5 - personalMissionHomePageDtos.size();
 
-        List<PersonalMission> notInProgressPersonalMission = personalMissionList.stream()
+        personalMissionList.stream()
                 .filter(pm -> !pm.getPersonalMissionStatus().equals(PersonalMissionStatus.IN_PROGRESS))
                 .sorted(Comparator.comparing(BaseTimeEntity::getLastModifiedDate).reversed())
                 .limit(resultSize)
-                .collect(Collectors.toList());
-
-        for (int i = 0; i < resultSize; i++) {
-            PersonalMission removed = notInProgressPersonalMission.remove(0);
-            personalMissionHomePageDtos.add(new PersonalMissionByPageDto(removed, personalMissionRepository.countHowManyPeopleInMission(removed.getMission().getId())));
-        }
+                .forEach(pm ->
+                        personalMissionHomePageDtos.add(new PersonalMissionByPageDto(pm, personalMissionRepository.countHowManyPeopleInMission(pm.getMission().getId()))));
 
         List<PopularMissionHomePageResponseDto> popularMissionDtos = missionRepository.findPopularMission();
 
