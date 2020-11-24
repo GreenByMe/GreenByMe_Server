@@ -178,7 +178,7 @@ public class PostController {
             @ApiResponse(code = 200, message = "조회 성공"),
             @ApiResponse(code = 400, message = "1.없는 태그")
     })
-    @GetMapping("/{tagName}")
+    @GetMapping("/tags/{tagName}")
     public ResponseEntity<BasicResponseDto<PostByTagResponseDto>> getPostByTag(@PathVariable("tagName") @NotNull final String tagName) {
         PostByTagResponseDto res = postService.getPostsByTag(tagName);
         return ResponseEntity.ok().body(BasicResponseDto.of(res, HttpStatus.OK.value()));

@@ -43,6 +43,14 @@ public class PersonalMissionByPageDto implements Comparable<PersonalMissionByPag
 
     @Override
     public int compareTo(PersonalMissionByPageDto o) {
-        return -this.startDate.compareTo(o.startDate);
+        if(this.status.compareTo(o.status) > 0){
+            return -1;
+        }
+        if (this.status.compareTo(o.status) == 0) {
+            if (this.personalMissionId > o.personalMissionId) {
+                return -1;
+            }
+        }
+        return 1;
     }
 }
