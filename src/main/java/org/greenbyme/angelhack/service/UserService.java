@@ -40,6 +40,9 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
+    private MailService mailService;
+
+    @Autowired
     private FileUploadDownloadService service;
 
     @Transactional
@@ -56,6 +59,7 @@ public class UserService {
         User user = requestDto.toEntity();
         user.changePassword(encodePassword);
         user = userRepository.save(user);
+        mailService.sendSingUpMail(user);
         return createToken(user);
     }
 
