@@ -17,7 +17,7 @@ public interface PersonalMissionRepository extends JpaRepository<PersonalMission
 
     List<PersonalMission> findAllByUser(User user);
 
-    @Query("select p from PersonalMission p where p.personalMissionStatus = 'IN_PROGRESS'")
+    @Query("select p from PersonalMission p where p.personalMissionStatus = 'IN_PROGRESS' and p.user = ?1")
     Page<PersonalMission> findAllByUser(User user, Pageable pageable);
 
     List<PersonalMission> findPersonalMissionByUserIdAndMissionId(Long userId, Long missionId);
