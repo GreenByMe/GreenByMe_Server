@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
@@ -54,7 +55,7 @@ public class UserController {
             @ApiResponse(code = 500, message = "서버 에러", response = ErrorResponse.class)
     })
     @PostMapping("/signup")
-    public ResponseEntity<BasicResponseDto<String>> saveUser(@Valid @RequestBody final UserSaveRequestDto requestDto) {
+    public ResponseEntity<BasicResponseDto<String>> saveUser(@Valid @RequestBody final UserSaveRequestDto requestDto) throws MessagingException {
         String result = userService.saveUser(requestDto);
         log.info("유저 가입 완료");
         return ResponseEntity.status(HttpStatus.CREATED).body(BasicResponseDto.of(result, HttpStatus.CREATED.value()));
@@ -76,7 +77,7 @@ public class UserController {
     @ApiOperation(value = "이메일, 패스워드를 받아서 로그인하여 토큰을 반환한다")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "로그인 성공", response = BasicResponseDto.class),
-            @ApiResponse(code = 400, message = "1.등록되지 않은 이메일 \t\n 2.틀린 암호", response = ErrorResponse.class),
+            @ApiResponse(code = 400, message = "1.등록되지 않은 이메일 \t\n 2.틀린 암호\t\n3.메일인증필요", response = ErrorResponse.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ErrorResponse.class)
     })
     @PostMapping("/signin")
