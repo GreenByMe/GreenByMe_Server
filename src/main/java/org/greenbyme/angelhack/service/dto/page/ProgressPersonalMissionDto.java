@@ -3,7 +3,7 @@ package org.greenbyme.angelhack.service.dto.page;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.greenbyme.angelhack.domain.Category.Category;
+import org.greenbyme.angelhack.domain.category.Category;
 import org.greenbyme.angelhack.domain.personalmission.PersonalMission;
 
 import java.time.LocalDateTime;

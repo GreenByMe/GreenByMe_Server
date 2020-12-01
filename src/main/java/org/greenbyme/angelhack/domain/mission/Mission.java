@@ -1,8 +1,8 @@
 package org.greenbyme.angelhack.domain.mission;
 
 import lombok.*;
-import org.greenbyme.angelhack.domain.Category.Category;
-import org.greenbyme.angelhack.domain.Category.DayCategory;
+import org.greenbyme.angelhack.domain.category.Category;
+import org.greenbyme.angelhack.domain.category.DayCategory;
 import org.greenbyme.angelhack.domain.DomainListener;
 import org.greenbyme.angelhack.domain.baseEntity.BaseTimeEntity;
 
