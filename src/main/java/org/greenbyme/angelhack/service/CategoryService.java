@@ -1,12 +1,14 @@
 package org.greenbyme.angelhack.service;
 
-import org.greenbyme.angelhack.domain.Category.Category;
-import org.greenbyme.angelhack.domain.Category.DayCategory;
+import org.greenbyme.angelhack.domain.category.Category;
+import org.greenbyme.angelhack.domain.category.DayCategory;
 import org.greenbyme.angelhack.domain.mission.MissionCertificateCount;
 import org.greenbyme.angelhack.service.dto.category.EnumWithSingleValueResDto;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 @Service
 public class CategoryService {

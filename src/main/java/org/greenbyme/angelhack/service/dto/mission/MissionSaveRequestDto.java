@@ -3,8 +3,8 @@ package org.greenbyme.angelhack.service.dto.mission;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.greenbyme.angelhack.domain.Category.Category;
-import org.greenbyme.angelhack.domain.Category.DayCategory;
+import org.greenbyme.angelhack.domain.category.Category;
+import org.greenbyme.angelhack.domain.category.DayCategory;
 import org.greenbyme.angelhack.domain.mission.MissionCertificateCount;
 
 import javax.validation.constraints.NotEmpty;

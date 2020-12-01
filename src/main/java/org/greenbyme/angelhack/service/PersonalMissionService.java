@@ -33,6 +33,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PersonalMissionService {
 
+    private final int maximumPersonalMissions = 5;
+
     private final PersonalMissionRepository personalMissionRepository;
     private final UserRepository userRepository;
     private final MissionRepository missionRepository;
@@ -48,10 +50,13 @@ public class PersonalMissionService {
         List<PersonalMission> personalMissionByUserIdAndWhereInProgresses = personalMissionRepository.findInProgressPersonalMissionsByUserId(userId);
 
         for (PersonalMission personalMissionInProgress : personalMissionByUserIdAndWhereInProgresses) {
-            if (personalMissionInProgress.getMission().getId() == mission.getId()) {
+            if (personalMissionInProgress.getMission().getId().equals(mission.getId())) {
                 throw new PersonalMissionException(ErrorCode.ALREADY_EXISTS_MISSION);
             }
-            if (personalMissionInProgress.getMission().getDayCategory() == mission.getDayCategory()) {
+            int count = (int) personalMissionByUserIdAndWhereInProgresses.stream()
+                    .filter(p -> p.getMission().getDayCategory().equals(mission.getDayCategory()))
+                    .count();
+            if (count >= maximumPersonalMissions) {
                 throw new PersonalMissionException(ErrorCode.ALREADY_EXISTS_SAME_DAY_MISSION);
             }
         }
@@ -67,7 +72,7 @@ public class PersonalMissionService {
     public PersonalMissionDetailResponseDto findPersonalMissionDetails(Long personalMissionId, Long userId) {
         PersonalMission personalMission = personalMissionRepository.findDetailsById(personalMissionId)
                 .orElseThrow(() -> new PersonalMissionException(ErrorCode.INVALID_PERSONAL_MISSION));
-        if (personalMission.getUser().getId() != userId) {
+        if (!personalMission.getUser().getId().equals(userId)) {
             throw new UserException(ErrorCode.INVALID_USER_ACCESS);
         }
         return new PersonalMissionDetailResponseDto(personalMission);
@@ -83,7 +88,7 @@ public class PersonalMissionService {
         List<PersonalMission> personalMissionList = user.getPersonalMissionList();
 
         for (PersonalMission findedPersonalMission : personalMissionList) {
-            if (findedPersonalMission.getId() == personalMissionId) {
+            if (findedPersonalMission.getId().equals(personalMissionId)) {
                 user.getPersonalMissionList().remove(personalMission);
                 break;
             }
