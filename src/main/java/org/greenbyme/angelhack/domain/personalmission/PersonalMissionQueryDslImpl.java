@@ -4,6 +4,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.greenbyme.angelhack.domain.mission.QMission;
+import org.greenbyme.angelhack.domain.post.QPost;
 import org.greenbyme.angelhack.domain.user.QUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,10 +12,12 @@ import org.springframework.data.repository.support.PageableExecutionUtils;
 import org.springframework.util.ObjectUtils;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import static org.greenbyme.angelhack.domain.personalmission.QPersonalMission.personalMission;
+import static org.greenbyme.angelhack.domain.post.QPost.post;
 
 public class PersonalMissionQueryDslImpl implements PersonalMissionQueryDsl {
 
@@ -38,7 +41,7 @@ public class PersonalMissionQueryDslImpl implements PersonalMissionQueryDsl {
                 .selectFrom(personalMission)
                 .where(userIdEq(userId));
 
-        return PageableExecutionUtils.getPage(content, pageable, () -> count.fetchCount());
+        return PageableExecutionUtils.getPage(content, pageable, count::fetchCount);
     }
 
     @Override
@@ -72,7 +75,7 @@ public class PersonalMissionQueryDslImpl implements PersonalMissionQueryDsl {
                 .selectFrom(personalMission)
                 .where(missionIdEq(missionId));
 
-        return PageableExecutionUtils.getPage(content, pageable, () -> countQuery.fetchCount());
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount);
     }
 
     @Override
@@ -102,6 +105,16 @@ public class PersonalMissionQueryDslImpl implements PersonalMissionQueryDsl {
     }
 
     @Override
+    public List<PersonalMission> findInProgressPersonalMissionByUserIdWithCertification(Long userId) {
+        return queryFactory
+                .selectFrom(personalMission)
+                .leftJoin(personalMission.posts, post).fetchJoin()
+                .where(userIdEq(userId), personalMission.personalMissionStatus.eq(PersonalMissionStatus.IN_PROGRESS),
+                        post.createdDate.dayOfYear().eq(LocalDateTime.now().getDayOfYear()))
+                .fetch();
+    }
+
+    @Override
     public Page<PersonalMission> findInProgressPersonalMissionsByUserId(Long userId, Pageable pageable) {
         List<PersonalMission> content = queryFactory
                 .selectFrom(personalMission)
@@ -118,7 +131,7 @@ public class PersonalMissionQueryDslImpl implements PersonalMissionQueryDsl {
                 .selectFrom(personalMission)
                 .where(userIdEq(userId));
 
-        return PageableExecutionUtils.getPage(content, pageable, () -> countQuery.fetchCount());
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount);
     }
 
     private BooleanExpression userIdEq(Long userId) {

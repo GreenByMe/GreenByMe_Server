@@ -30,7 +30,7 @@ public enum ErrorCode {
     //PersonalMission
     INVALID_PERSONAL_MISSION(400, "PM_001", "등록되지 않은 개인 미션 정보 id"),
     ALREADY_EXISTS_MISSION(409, "PM_002", "이미 진행중인 미션입니다"),
-    ALREADY_EXISTS_SAME_DAY_MISSION(409, "PM_003", "이미 동일한 기간의 미션을 진행중 입니다"),
+    ALREADY_EXISTS_SAME_DAY_MISSION(409, "PM_003", "이미 동일한 기간의 미션 5개 진행중 입니다"),
     INVALID_USER_ACCESS(401, "PM_004", "개인 미션에 대한 올바르지 않은 접근입니다"),
 
     //Post

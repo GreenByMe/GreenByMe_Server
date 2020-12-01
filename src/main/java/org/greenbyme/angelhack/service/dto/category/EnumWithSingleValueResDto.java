@@ -3,7 +3,7 @@ package org.greenbyme.angelhack.service.dto.category;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.greenbyme.angelhack.domain.Category.Category;
+import org.greenbyme.angelhack.domain.category.Category;
 
 import java.util.HashMap;
 import java.util.List;

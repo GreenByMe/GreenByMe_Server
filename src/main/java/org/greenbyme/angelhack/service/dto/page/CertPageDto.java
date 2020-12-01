@@ -15,10 +15,8 @@ public class CertPageDto {
     private Long userId;
     private List<ProgressPersonalMissionDto> personalMissions;
 
-    public CertPageDto(Long userId, List<PersonalMission> personalMissions) {
+    public CertPageDto(Long userId, List<ProgressPersonalMissionDto> personalMissions) {
         this.userId = userId;
-        this.personalMissions = personalMissions.stream()
-                .map(ProgressPersonalMissionDto::new)
-                .collect(Collectors.toList());
+        this.personalMissions = personalMissions;
     }
 }

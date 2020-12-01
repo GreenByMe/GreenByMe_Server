@@ -47,8 +47,9 @@ public class PageController {
     @GetMapping("/cert")
     public ResponseEntity<BasicResponseDto<CertPageDto>> getCertPage(@ApiIgnore final Authentication authentication) {
         Long userId = ((User) authentication.getPrincipal()).getId();
+        CertPageDto certPage = pageService.getCertPage(userId);
         log.info("인증 페이지 조회 완료");
-        return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(pageService.getCertPage(userId), HttpStatus.OK.value()));
+        return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(certPage, HttpStatus.OK.value()));
     }
 
     @ApiOperation(value = "개인 페이지 조회")

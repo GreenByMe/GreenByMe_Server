@@ -1,6 +1,6 @@
 package org.greenbyme.angelhack.domain.mission;
 
-import org.greenbyme.angelhack.domain.Category.Category;
+import org.greenbyme.angelhack.domain.category.Category;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

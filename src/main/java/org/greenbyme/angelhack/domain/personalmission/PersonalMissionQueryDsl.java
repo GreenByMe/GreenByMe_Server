@@ -12,6 +12,8 @@ public interface PersonalMissionQueryDsl {
 
     List<PersonalMission> findInProgressPersonalMissionsByUserId(Long userId);
 
+    List<PersonalMission> findInProgressPersonalMissionByUserIdWithCertification(Long userId);
+
     Long findProgressByMissionId(Long missionId);
 
     Optional<PersonalMission> findDetailsById(Long personalMissionId);

@@ -56,7 +56,7 @@ public class PostService {
         }
         List<Post> posts = postRepository.findAllByPersonalMission(personalMission);
         long postCount = posts.stream()
-                .map(p -> p.getLastModifiedDate().getDayOfYear() == LocalDateTime.now().getDayOfYear())
+                .filter(p -> p.getCreatedDate().getDayOfYear() == LocalDateTime.now().getDayOfYear())
                 .count();
         if (postCount > 0) {
             throw new PostException(ErrorCode.OVER_CERIFICATION);
