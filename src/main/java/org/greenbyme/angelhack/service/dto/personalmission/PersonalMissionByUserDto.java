@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PersonalMissionByUserDto {
 
-    private Long personalMission_id;
+    private Long personalMissionId;
     private Long missionId;
     private String missionPictureUrl;
     private PersonalMissionStatus personalMissionStatus;
@@ -25,7 +25,7 @@ public class PersonalMissionByUserDto {
     private LocalDateTime endDate;
 
     public PersonalMissionByUserDto(PersonalMission personalMission) {
-        this.personalMission_id = personalMission.getId();
+        this.personalMissionId = personalMission.getId();
         this.missionId = personalMission.getMission().getId();
         this.missionPictureUrl = personalMission.getMission().getPictureUrl();
         this.personalMissionStatus = personalMission.getPersonalMissionStatus();
