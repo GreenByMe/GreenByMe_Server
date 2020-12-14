@@ -15,6 +15,7 @@ public class PersonalMissionByUserDto {
 
     private Long personalMissionId;
     private Long missionId;
+    private String missionTitle;
     private String missionPictureUrl;
     private PersonalMissionStatus personalMissionStatus;
 
@@ -27,6 +28,7 @@ public class PersonalMissionByUserDto {
     public PersonalMissionByUserDto(PersonalMission personalMission) {
         this.personalMissionId = personalMission.getId();
         this.missionId = personalMission.getMission().getId();
+        this.missionTitle = personalMission.getMission().getTitle();
         this.missionPictureUrl = personalMission.getMission().getPictureUrl();
         this.personalMissionStatus = personalMission.getPersonalMissionStatus();
         this.finishCount = personalMission.getFinishCount();
