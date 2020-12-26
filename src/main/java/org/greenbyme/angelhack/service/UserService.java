@@ -6,6 +6,8 @@ import org.greenbyme.angelhack.domain.personalmission.PersonalMissionRepository;
 import org.greenbyme.angelhack.domain.personalmission.PersonalMissionStatus;
 import org.greenbyme.angelhack.domain.post.Post;
 import org.greenbyme.angelhack.domain.post.PostRepository;
+import org.greenbyme.angelhack.domain.postlike.PostLikeRepository;
+import org.greenbyme.angelhack.domain.posttag.PostTagRepository;
 import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.domain.user.UserRepository;
 import org.greenbyme.angelhack.exception.ErrorCode;
@@ -26,6 +28,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -36,6 +39,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final PersonalMissionRepository personalMissionRepository;
     private final PostRepository postRepository;
+    private final PostTagRepository postTagRepository;
+    private final PostLikeRepository postLikeRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
 
@@ -114,7 +119,7 @@ public class UserService {
     }
 
     public Page<PersonalMissionByUserDto> getPersonalMissionList(Long userId, Pageable pageable) {
-          return personalMissionRepository.findAllByUserIdPageable(userId, pageable)
+        return personalMissionRepository.findAllByUserIdPageable(userId, pageable)
                 .map(PersonalMissionByUserDto::new);
     }
 
@@ -128,7 +133,7 @@ public class UserService {
     public UserResponseDto updateProfile(Long userId, MultipartFile file, UserUpdateNicktDto dto) {
         User user = getUser(userId);
 
-        if(file != null) {
+        if (file != null) {
             String fileName = service.storeFile(file);
             String filedUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
                     .path("/api/users/images/")
@@ -155,6 +160,20 @@ public class UserService {
         User user = userRepository.findByPlatformId(socialUserLoginRequestDto.getPlatformId())
                 .orElseThrow(() -> new UserException("등록되지 않은 소셜 유저입니다", ErrorCode.UNSIGNED_SOCIAL));
         return createToken(user);
+    }
+
+    @Transactional
+    public Boolean deleteUser(Long userId) {
+        User user = getUser(userId);
+        List<Post> posts = postRepository.findAllByUserId(userId);
+        List<Long> postIds = posts.stream().map(Post::getId).collect(Collectors.toList());
+
+        postTagRepository.deleteByPostIds(postIds);
+        postLikeRepository.deleteByPostIds(postIds);
+        postRepository.deleteByUserId(userId);
+        //personalMissionRepository.deleteByUserId(userId);
+        userRepository.delete(user);
+        return true;
     }
 
     public String refreshToken(Authentication authentication) throws Exception {

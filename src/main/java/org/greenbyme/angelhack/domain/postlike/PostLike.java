@@ -1,6 +1,5 @@
 package org.greenbyme.angelhack.domain.postlike;
 
-import io.swagger.annotations.Api;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -31,6 +31,14 @@ public class PostQueryDslImpl implements PostQueryDsl {
     }
 
     @Override
+    public void deleteByUserId(Long userId) {
+        queryFactory
+                .delete(post)
+                .where(userIdEq(userId))
+                .execute();
+    }
+
+    @Override
     public Optional<Post> findByIdWithFetch(Long postId) {
         return Optional.ofNullable(queryFactory
                 .selectFrom(post)
@@ -63,10 +71,14 @@ public class PostQueryDslImpl implements PostQueryDsl {
     }
 
     private BooleanExpression personMissionIdEq(Long personalMissionId) {
-        return personalMissionId != null ? post.personalMission.id.eq(personalMissionId)  : null;
+        return personalMissionId != null ? post.personalMission.id.eq(personalMissionId) : null;
     }
 
     private BooleanExpression postIdEq(Long postId) {
         return postId != null ? post.id.eq(postId) : null;
+    }
+
+    private BooleanExpression userIdEq(Long userId) {
+        return userId != null ? post.user.id.eq(userId) : null;
     }
 }

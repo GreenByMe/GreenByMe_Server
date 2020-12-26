@@ -60,6 +60,14 @@ public class PersonalMissionQueryDslImpl implements PersonalMissionQueryDsl {
     }
 
     @Override
+    public void deleteByUserId(Long userId) {
+        queryFactory
+                .delete(personalMission)
+                .where(userIdEq(userId))
+                .execute();
+    }
+
+    @Override
     public Page<PersonalMission> findAllByMissionId(Long missionId, Pageable pageable) {
         List<PersonalMission> content = queryFactory
                 .selectFrom(personalMission)

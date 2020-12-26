@@ -188,8 +188,8 @@ public class UserController {
     })
     @PutMapping
     public ResponseEntity<BasicResponseDto<UserResponseDto>> updateUserProfile(@ApiIgnore final Authentication authentication,
-                                                                              @Valid final UserUpdateNicktDto dto,
-                                                                              @RequestParam(value = "file", required = false) final MultipartFile file) {
+                                                                               @Valid final UserUpdateNicktDto dto,
+                                                                               @RequestParam(value = "file", required = false) final MultipartFile file) {
         Long userId = ((User) authentication.getPrincipal()).getId();
         log.info("유저 프로필 수정 완료");
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(BasicResponseDto.of(userService.updateProfile(userId, file, dto), HttpStatus.ACCEPTED.value()));
@@ -226,5 +226,12 @@ public class UserController {
     public ResponseEntity<BasicResponseDto<Boolean>> isPresentNickname(@PathVariable("nickname") @NotEmpty String nickname) {
         log.info("닉네임 중복 체크 완료");
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(userService.isPresentNickname(nickname), HttpStatus.OK.value()));
+    }
+
+    @DeleteMapping
+    public ResponseEntity<BasicResponseDto<Boolean>> deleteUser(@ApiIgnore final Authentication authentication) throws Exception {
+        Long userId = ((User) authentication.getPrincipal()).getId();
+        boolean isDelete = userService.deleteUser(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(isDelete, HttpStatus.OK.value()));
     }
 }
