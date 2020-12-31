@@ -21,7 +21,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
             "/api/missions/**",
             "/api/categorys/**",
             "/api/posts/images/{fileName}",
-            "/api/posts/missions/**"
+            "/api/posts/missions/**",
+            "/api/mail/**"
             };
 
     private final long MAX_AGE_SECS = 3600;

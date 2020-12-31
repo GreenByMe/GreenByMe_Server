@@ -36,6 +36,7 @@ public class User extends BaseEntity implements UserDetails {
     private double expectTree;
     private double expectCo2;
     private String platformId;
+    private boolean certificated;
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
@@ -50,7 +51,7 @@ public class User extends BaseEntity implements UserDetails {
     private List<PostLike> postLikes = new ArrayList<>();
 
     @Builder
-    public User(String name, String email, String password, String nickname, String photo, List<String> roles, PlatformType platformType, String platformId) {
+    public User(String name, String email, String password, String nickname, String photo, List<String> roles, PlatformType platformType, String platformId, boolean certificated) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -61,6 +62,7 @@ public class User extends BaseEntity implements UserDetails {
         this.expectTree = 0;
         this.platformType = checkPlatformType(platformType);
         this.platformId = platformId;
+        this.certificated = certificated;
     }
 
     private PlatformType checkPlatformType(PlatformType platformType) {
@@ -142,5 +144,9 @@ public class User extends BaseEntity implements UserDetails {
         this.name = name;
         this.photo = picture;
         return this;
+    }
+
+    public void certified() {
+        this.certificated = true;
     }
 }
