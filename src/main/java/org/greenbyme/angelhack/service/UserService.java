@@ -147,6 +147,7 @@ public class UserService {
 
     public String login(UserLoginRequestDto dto) {
         User user = getUser(dto.getEmail());
+        validateLeftUser(user);
         String encodePassword = user.getPassword();
         String rawPassword = dto.getPassword();
         if (!passwordEncoder.matches(rawPassword, encodePassword)) {
@@ -158,6 +159,7 @@ public class UserService {
     public String socialLogin(SocialUserLoginRequestDto socialUserLoginRequestDto) {
         User user = userRepository.findByPlatformId(socialUserLoginRequestDto.getPlatformId())
                 .orElseThrow(() -> new UserException("등록되지 않은 소셜 유저입니다", ErrorCode.UNSIGNED_SOCIAL));
+        validateLeftUser(user);
         return createToken(user);
     }
 
@@ -182,6 +184,12 @@ public class UserService {
 
     public Boolean isPresentPlatformId(String platformId) {
         return userRepository.findByPlatformId(platformId).isPresent();
+    }
+
+    private void validateLeftUser(User user) {
+        if (user.isLeft() == true) {
+            throw new UserException(ErrorCode.LEFT_USER);
+        }
     }
 
     private String createToken(User user) {
