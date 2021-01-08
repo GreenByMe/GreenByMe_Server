@@ -28,7 +28,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -163,16 +162,9 @@ public class UserService {
     }
 
     @Transactional
-    public Boolean deleteUser(Long userId) {
+    public Boolean makeDisableUser(Long userId) throws Exception {
         User user = getUser(userId);
-        List<Post> posts = postRepository.findAllByUserId(userId);
-        List<Long> postIds = posts.stream().map(Post::getId).collect(Collectors.toList());
-
-        postTagRepository.deleteByPostIds(postIds);
-        postLikeRepository.deleteByPostIds(postIds);
-        postRepository.deleteByUserId(userId);
-        //personalMissionRepository.deleteByUserId(userId);
-        userRepository.delete(user);
+        user.makeDisable();
         return true;
     }
 

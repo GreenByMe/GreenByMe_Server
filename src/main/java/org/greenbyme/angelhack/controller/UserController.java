@@ -1,6 +1,9 @@
 package org.greenbyme.angelhack.controller;
 
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.greenbyme.angelhack.domain.user.User;
@@ -228,10 +231,15 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(userService.isPresentNickname(nickname), HttpStatus.OK.value()));
     }
 
-    @DeleteMapping
-    public ResponseEntity<BasicResponseDto<Boolean>> deleteUser(@ApiIgnore final Authentication authentication) throws Exception {
+    @ApiOperation(value = "유저 탈퇴")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "탈퇴 성공", response = BasicResponseDto.class),
+            @ApiResponse(code = 500, message = "서버 에", response = ErrorResponse.class)
+    })
+    @PutMapping("/disable")
+    public ResponseEntity<BasicResponseDto<Boolean>> makeDisableUser(@ApiIgnore final Authentication authentication) throws Exception {
         Long userId = ((User) authentication.getPrincipal()).getId();
-        boolean isDelete = userService.deleteUser(userId);
-        return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(isDelete, HttpStatus.OK.value()));
+        boolean isDisable = userService.makeDisableUser(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(isDisable, HttpStatus.OK.value()));
     }
 }
