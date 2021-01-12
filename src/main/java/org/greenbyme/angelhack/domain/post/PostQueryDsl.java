@@ -12,4 +12,6 @@ public interface PostQueryDsl {
     Optional<Post> findByIdWithFetch(Long postId);
 
     List<Post> findAllByPersonalMissionId(Long personalMissionId);
+
+    void deleteByUserId(Long userId);
 }

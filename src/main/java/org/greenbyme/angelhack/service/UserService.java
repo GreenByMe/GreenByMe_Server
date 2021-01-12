@@ -6,6 +6,8 @@ import org.greenbyme.angelhack.domain.personalmission.PersonalMissionRepository;
 import org.greenbyme.angelhack.domain.personalmission.PersonalMissionStatus;
 import org.greenbyme.angelhack.domain.post.Post;
 import org.greenbyme.angelhack.domain.post.PostRepository;
+import org.greenbyme.angelhack.domain.postlike.PostLikeRepository;
+import org.greenbyme.angelhack.domain.posttag.PostTagRepository;
 import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.domain.user.UserRepository;
 import org.greenbyme.angelhack.exception.ErrorCode;
@@ -43,6 +45,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final PersonalMissionRepository personalMissionRepository;
     private final PostRepository postRepository;
+    private final PostTagRepository postTagRepository;
+    private final PostLikeRepository postLikeRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
     @Autowired
@@ -162,6 +166,7 @@ public class UserService {
 
     public String login(UserLoginRequestDto dto) {
         User user = getUser(dto.getEmail());
+        validateLeftUser(user);
         String encodePassword = user.getPassword();
         String rawPassword = dto.getPassword();
         if (!passwordEncoder.matches(rawPassword, encodePassword)) {
@@ -176,7 +181,15 @@ public class UserService {
     public String socialLogin(SocialUserLoginRequestDto socialUserLoginRequestDto) {
         User user = userRepository.findByPlatformId(socialUserLoginRequestDto.getPlatformId())
                 .orElseThrow(() -> new UserException("등록되지 않은 소셜 유저입니다", ErrorCode.UNSIGNED_SOCIAL));
+        validateLeftUser(user);
         return createToken(user);
+    }
+
+    @Transactional
+    public Boolean makeDisableUser(Long userId) throws Exception {
+        User user = getUser(userId);
+        user.makeDisable();
+        return true;
     }
 
     public String refreshToken(Authentication authentication) throws Exception {
@@ -193,6 +206,12 @@ public class UserService {
 
     public Boolean isPresentPlatformId(String platformId) {
         return userRepository.findByPlatformId(platformId).isPresent();
+    }
+
+    private void validateLeftUser(User user) {
+        if (user.isLeft() == true) {
+            throw new UserException(ErrorCode.LEFT_USER);
+        }
     }
 
     private String createToken(User user) {

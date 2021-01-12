@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface PersonalMissionQueryDsl {
 
-    Page<PersonalMission> findInProgressPersonalMissionsByUserId(Long userId , Pageable pageable);
+    Page<PersonalMission> findInProgressPersonalMissionsByUserId(Long userId, Pageable pageable);
 
     List<PersonalMission> findInProgressPersonalMissionsByUserId(Long userId);
 
@@ -23,4 +23,6 @@ public interface PersonalMissionQueryDsl {
     Page<PersonalMission> findAllByUserIdPageable(Long userId, Pageable pageable);
 
     Long countHowManyPeopleInMission(Long missionId);
+
+    void deleteByUserId(Long userId);
 }

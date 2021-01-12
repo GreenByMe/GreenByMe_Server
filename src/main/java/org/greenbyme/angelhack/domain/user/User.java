@@ -20,8 +20,10 @@ import java.util.stream.Collectors;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EntityListeners(DomainListener.class)
-@ToString(of = {"id", "email","nickname"})
+@ToString(of = {"id", "email", "nickname"})
 public class User extends BaseEntity implements UserDetails {
+
+    private static final String LEFT = "탈퇴한 회웝입니다.";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +38,7 @@ public class User extends BaseEntity implements UserDetails {
     private double expectTree;
     private double expectCo2;
     private String platformId;
+    private boolean isLeft;
     private boolean certificated;
 
     @ElementCollection(fetch = FetchType.EAGER)
@@ -62,6 +65,7 @@ public class User extends BaseEntity implements UserDetails {
         this.expectTree = 0;
         this.platformType = checkPlatformType(platformType);
         this.platformId = platformId;
+        this.isLeft = false;
         this.certificated = certificated;
     }
 
@@ -107,7 +111,7 @@ public class User extends BaseEntity implements UserDetails {
         return true;
     }
 
-    public void changeName(String name){
+    public void changeName(String name) {
         this.name = name;
     }
 
@@ -115,9 +119,9 @@ public class User extends BaseEntity implements UserDetails {
         this.password = password;
     }
 
-    public void addExpectCo2(double expectCo2){
+    public void addExpectCo2(double expectCo2) {
         this.expectCo2 += expectCo2;
-        this.expectTree += expectCo2/3.17;
+        this.expectTree += expectCo2 / 3.17;
     }
 
     public boolean checkPassword(String password) {
@@ -146,6 +150,12 @@ public class User extends BaseEntity implements UserDetails {
         return this;
     }
 
+    public void makeDisable() {
+        this.name = LEFT;
+        this.nickname = LEFT;
+        this.isLeft = true;
+    }
+  
     public void certified() {
         this.certificated = true;
     }

@@ -1,7 +1,6 @@
 package org.greenbyme.angelhack.domain.postlike;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.greenbyme.angelhack.domain.post.Post;
 import org.greenbyme.angelhack.domain.post.QPost;
 import org.greenbyme.angelhack.domain.user.QUser;
 
@@ -28,5 +27,11 @@ public class PostLikeQueryDslImpl implements PostLikeQueryDsl {
                 .fetch();
     }
 
-
+    @Override
+    public void deleteByPostIds(List<Long> postIds) {
+        queryFactory
+                .delete(postLike)
+                .where(postLike.post.id.in(postIds))
+                .execute();
+    }
 }

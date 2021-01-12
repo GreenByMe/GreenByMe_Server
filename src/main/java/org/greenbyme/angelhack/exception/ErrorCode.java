@@ -20,6 +20,7 @@ public enum ErrorCode {
     INVALID_ACCESS(401, "U_006", "권한이 없습니다"),
     UNSIGNED_SOCIAL(400, "U_007", "등록되지 않은 소셜 유저"),
     ALREADY_SIGNUP_PLATFORMID(400, "U_008", "이미 등록된 PlatformId 입니다."),
+    LEFT_USER(400, "U_009", "탈퇴한 회원입니다."),
     MAIL_CERTIFICATION(400, "U_009", "메일 인증을 해주세요."),
 
     //Mission

@@ -1,6 +1,9 @@
 package org.greenbyme.angelhack.controller;
 
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.greenbyme.angelhack.domain.user.User;
@@ -77,7 +80,7 @@ public class UserController {
     @ApiOperation(value = "이메일, 패스워드를 받아서 로그인하여 토큰을 반환한다")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "로그인 성공", response = BasicResponseDto.class),
-            @ApiResponse(code = 400, message = "1.등록되지 않은 이메일 \t\n 2.틀린 암호\t\n3.메일인증필요", response = ErrorResponse.class),
+            @ApiResponse(code = 400, message = "1.등록되지 않은 이메일 \t\n 2.틀린 암호 \t\n 3.메일인증필요 \t\n 4.탈퇴한 회웝", response = ErrorResponse.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ErrorResponse.class)
     })
     @PostMapping("/signin")
@@ -90,7 +93,7 @@ public class UserController {
     @ApiOperation(value = "소셜 유저 로그인")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "로그인 성공", response = BasicResponseDto.class),
-            @ApiResponse(code = 400, message = "등록되지 않은 소셜 유저", response = ErrorResponse.class),
+            @ApiResponse(code = 400, message = "1.등록되지 않은 소셜 유저 \t\n 2.탈퇴한 회원", response = ErrorResponse.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ErrorResponse.class)
     })
     @PostMapping("/signin/social")
@@ -189,8 +192,8 @@ public class UserController {
     })
     @PutMapping
     public ResponseEntity<BasicResponseDto<UserResponseDto>> updateUserProfile(@ApiIgnore final Authentication authentication,
-                                                                              @Valid final UserUpdateNicktDto dto,
-                                                                              @RequestParam(value = "file", required = false) final MultipartFile file) {
+                                                                               @Valid final UserUpdateNicktDto dto,
+                                                                               @RequestParam(value = "file", required = false) final MultipartFile file) {
         Long userId = ((User) authentication.getPrincipal()).getId();
         log.info("유저 프로필 수정 완료");
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(BasicResponseDto.of(userService.updateProfile(userId, file, dto), HttpStatus.ACCEPTED.value()));
@@ -227,5 +230,17 @@ public class UserController {
     public ResponseEntity<BasicResponseDto<Boolean>> isPresentNickname(@PathVariable("nickname") @NotEmpty String nickname) {
         log.info("닉네임 중복 체크 완료");
         return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(userService.isPresentNickname(nickname), HttpStatus.OK.value()));
+    }
+
+    @ApiOperation(value = "유저 탈퇴")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "탈퇴 성공", response = BasicResponseDto.class),
+            @ApiResponse(code = 500, message = "서버 에", response = ErrorResponse.class)
+    })
+    @PutMapping("/disable")
+    public ResponseEntity<BasicResponseDto<Boolean>> makeDisableUser(@ApiIgnore final Authentication authentication) throws Exception {
+        Long userId = ((User) authentication.getPrincipal()).getId();
+        boolean isDisable = userService.makeDisableUser(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(isDisable, HttpStatus.OK.value()));
     }
 }
