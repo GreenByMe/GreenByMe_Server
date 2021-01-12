@@ -19,6 +19,9 @@ import org.greenbyme.angelhack.util.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,8 +29,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.mail.MessagingException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -42,12 +49,15 @@ public class UserService {
     private final PostLikeRepository postLikeRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
-
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+    @Autowired
+    private MailService mailService;
     @Autowired
     private FileUploadDownloadService service;
 
     @Transactional
-    public String saveUser(UserSaveRequestDto requestDto) {
+    public String saveUser(UserSaveRequestDto requestDto) throws MessagingException {
         if (isPresentEmail(requestDto.getEmail())) {
             throw new UserException(ErrorCode.MEMBER_DUPLICATED_EMAIL);
         }
@@ -60,7 +70,16 @@ public class UserService {
         User user = requestDto.toEntity();
         user.changePassword(encodePassword);
         user = userRepository.save(user);
-        return createToken(user);
+        String key = UUID.randomUUID().toString();
+        saveCertificateToken(key, user);
+        mailService.sendSingUpMail(user, key);
+        return "OK";
+    }
+
+    @Async
+    public void saveCertificateToken(String key, User user) {
+        ValueOperations<String, Object> token = redisTemplate.opsForValue();
+        token.set(key, user.getId(), 1, TimeUnit.HOURS);
     }
 
     @Transactional
@@ -153,6 +172,9 @@ public class UserService {
         if (!passwordEncoder.matches(rawPassword, encodePassword)) {
             throw new UserException("잘못된 비밀번호입니다.", ErrorCode.WRONG_PASSWORD);
         }
+        if (!user.isCertificated()) {
+            throw new UserException("이메일 인증을 해주세요.", ErrorCode.MAIL_CERTIFICATION);
+        }
         return createToken(user);
     }
 
@@ -194,5 +216,14 @@ public class UserService {
 
     private String createToken(User user) {
         return jwtTokenProvider.createToken(user.getId(), user.getRoles());
+    }
+
+    @Transactional
+    public String certifiacte(String token) {
+        int userId = (int) redisTemplate.opsForValue().get(token);
+        User user = getUser((long) userId);
+//        user.certified();
+        redisTemplate.delete(token);
+        return "OK";
     }
 }
