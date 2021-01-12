@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: local, mail
+    active: dev, mail
 
 ---
 spring:
@@ -32,9 +32,6 @@ spring:
   flyway:
     enabled: true
     baseline-on-migrate: true
-    url: jdbc:mariadb://localhost:13306/greenbyme
-    user: root
-    password: sa
   redis:
     lettuce:
       pool:
