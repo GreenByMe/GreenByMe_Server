@@ -18,6 +18,7 @@ import org.greenbyme.angelhack.service.dto.page.UserHomePageDetailDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -73,7 +74,18 @@ public class PageService {
 
     public CertPageDto getCertPage(Long userId) {
         List<PersonalMission> personalMissions = personalMissionRepository.findInProgressPersonalMissionsByUserId(userId);
-        return new CertPageDto(userId, personalMissions);
+        List<PersonalMission> personalMissionByUserIdWithCertification = personalMissionRepository.findInProgressPersonalMissionByUserIdWithCertification(userId);
+        List<Long> personalMissionIds = personalMissionByUserIdWithCertification.stream()
+                .map(PersonalMission::getId)
+                .collect(Collectors.toList());
+        List<ProgressPersonalMissionDto> progressPersonalMissionDtos = personalMissions.stream()
+                .map(p -> new ProgressPersonalMissionDto(p, isAbleToCertificate(p.getId(), personalMissionIds)))
+                .collect(Collectors.toList());
+        return new CertPageDto(userId, progressPersonalMissionDtos);
+    }
+
+    private boolean isAbleToCertificate(Long id, List<Long> ids) {
+        return !ids.contains(id);
     }
 
     public MyPageDto getMyPage(Long userId) {

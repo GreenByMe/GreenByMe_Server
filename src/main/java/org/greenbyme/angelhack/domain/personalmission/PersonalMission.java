@@ -12,6 +12,8 @@ import org.greenbyme.angelhack.exception.MissionException;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -41,6 +43,9 @@ public class PersonalMission extends BaseTimeEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mission_id")
     private Mission mission;
+
+    @OneToMany(mappedBy = "personalMission", cascade = CascadeType.ALL)
+    private List<Post> posts = new ArrayList<>();
 
     @Builder
     public PersonalMission(User user, Mission mission){
