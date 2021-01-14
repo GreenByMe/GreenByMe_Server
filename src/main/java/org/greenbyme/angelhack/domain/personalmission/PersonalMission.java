@@ -19,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EntityListeners(DomainListener.class)
-@ToString(of={"id", "finishCount","progress", "remainPeriod"})
+@ToString(of = {"id", "finishCount", "progress", "remainPeriod"})
 public class PersonalMission extends BaseTimeEntity {
 
     @Id
@@ -48,21 +48,21 @@ public class PersonalMission extends BaseTimeEntity {
     private List<Post> posts = new ArrayList<>();
 
     @Builder
-    public PersonalMission(User user, Mission mission){
+    public PersonalMission(User user, Mission mission) {
         setUser(user);
         this.mission = mission;
-        this.finishCount =mission.getMissionCertificationMethod().getMissionCertificateCount().getCount();
-        this.remainPeriod = new RemainPeriod((long)mission.getDayCategory().getDay(),0L, 0L);
+        this.finishCount = mission.getMissionCertificationMethod().getMissionCertificateCount().getCount();
+        this.remainPeriod = new RemainPeriod((long) mission.getDayCategory().getDay(), 0L, 0L);
         this.progress = 0;
         this.personalMissionStatus = PersonalMissionStatus.IN_PROGRESS;
     }
 
-    public void changeRemainPeriod(){
+    public void changeRemainPeriod() {
         remainPeriod.setRemainDay(LocalDateTime.now().until(getCreatedDate().plusDays(getMission().getDayCategory().getDay()), ChronoUnit.DAYS));
-        remainPeriod.setRemainHour(LocalDateTime.now().until(getCreatedDate().plusDays(getMission().getDayCategory().getDay()), ChronoUnit.HOURS)%24);
-        remainPeriod.setRemainMin(LocalDateTime.now().until(getCreatedDate().plusDays(getMission().getDayCategory().getDay()), ChronoUnit.MINUTES)%60);
+        remainPeriod.setRemainHour(LocalDateTime.now().until(getCreatedDate().plusDays(getMission().getDayCategory().getDay()), ChronoUnit.HOURS) % 24);
+        remainPeriod.setRemainMin(LocalDateTime.now().until(getCreatedDate().plusDays(getMission().getDayCategory().getDay()), ChronoUnit.MINUTES) % 60);
 
-        if(remainPeriod.getRemainDay()<=0){
+        if (remainPeriod.getRemainDay() <= 0) {
             changeToFailStatus();
 
             remainPeriod.setRemainHour(0L);
@@ -70,13 +70,15 @@ public class PersonalMission extends BaseTimeEntity {
         }
     }
 
-    private void changeToFinishStatus(){
+    private void changeToFinishStatus() {
         this.personalMissionStatus = PersonalMissionStatus.FINISH;
     }
 
-    private void changeToFailStatus() {this.personalMissionStatus = PersonalMissionStatus.FAIL;}
+    private void changeToFailStatus() {
+        this.personalMissionStatus = PersonalMissionStatus.FAIL;
+    }
 
-    public void addProgress(){
+    public void addProgress() {
         if (this.progress >= finishCount || this.personalMissionStatus.equals(PersonalMissionStatus.FINISH)) {
             throw new MissionException(ErrorCode.OVER_PROGRESS);
         }
@@ -84,6 +86,10 @@ public class PersonalMission extends BaseTimeEntity {
             changeToFinishStatus();
         }
         this.progress += 1;
+    }
+
+    public void reduceProgress() {
+        this.progress -= 1;
     }
 
     private void setUser(User user) {
