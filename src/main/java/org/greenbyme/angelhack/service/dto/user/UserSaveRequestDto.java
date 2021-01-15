@@ -3,6 +3,7 @@ package org.greenbyme.angelhack.service.dto.user;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.greenbyme.angelhack.domain.user.Password;
 import org.greenbyme.angelhack.domain.user.User;
 
 import javax.validation.constraints.Email;
@@ -16,7 +17,7 @@ public class UserSaveRequestDto {
     private String name;
     @NotEmpty @Email
     private String email;
-    @NotEmpty
+    @Password
     private String password;
     @NotEmpty
     private String nickname;

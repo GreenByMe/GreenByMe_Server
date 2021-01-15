@@ -217,19 +217,33 @@ public class UserController {
     })
     @GetMapping("/email/{email}")
     public ResponseEntity<BasicResponseDto<Boolean>> isPresentEmail(@PathVariable("email") @Email String email) {
+        Boolean isPresentEmail = userService.isPresentEmail(email);
         log.info("이메일 중복 체크 완료");
-        return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(userService.isPresentEmail(email), HttpStatus.OK.value()));
+        return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(isPresentEmail, HttpStatus.OK.value()));
     }
 
-    @ApiOperation(value = "닉네임 중복 체크", response = Boolean.class)
+    @ApiOperation(value = "닉네임 중복 체크")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "체크 성공", response = BasicResponseDto.class),
             @ApiResponse(code = 500, message = "서버 에러", response = ErrorResponse.class)
     })
     @GetMapping("/nickname/{nickname}")
     public ResponseEntity<BasicResponseDto<Boolean>> isPresentNickname(@PathVariable("nickname") @NotEmpty String nickname) {
+        Boolean isPresentEmail = userService.isPresentNickname(nickname);
         log.info("닉네임 중복 체크 완료");
-        return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(userService.isPresentNickname(nickname), HttpStatus.OK.value()));
+        return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(isPresentEmail, HttpStatus.OK.value()));
+    }
+
+    @ApiOperation(value = "패스워드 유효성 검사")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "유효성 검사 성공", response = BasicResponseDto.class),
+            @ApiResponse(code = 500, message = "서버 에러", response = BasicResponseDto.class)
+    })
+    @GetMapping("/password")
+    public ResponseEntity<BasicResponseDto<Boolean>> isValidPassword(@Valid final PasswordValidRequestDto passwordValidRequestDto) {
+        boolean isValidPassword = userService.isValidPassword(passwordValidRequestDto);
+        log.info("패스워드 유효성 검사 완료");
+        return ResponseEntity.status(HttpStatus.OK).body(BasicResponseDto.of(isValidPassword, HttpStatus.OK.value()));
     }
 
     @ApiOperation(value = "유저 탈퇴")
