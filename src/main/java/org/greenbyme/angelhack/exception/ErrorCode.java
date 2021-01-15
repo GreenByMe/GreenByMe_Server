@@ -42,7 +42,9 @@ public enum ErrorCode {
     INVALID_POST_ACCESS(401, "P_004", "게시글에 대한 올바르지 않은 접근입니다"),
 
     //Tag
-    INVALID_TAG(400, "T_001", "존재하지 않는 태그");
+    INVALID_TAG(400, "T_001", "존재하지 않는 태그"),
+    INVALID_TAG_NAME(400, "T_002", "태그에는 스페이스 값을 넣을 수 없습니다"),
+    EMPTY_TAG_NAME(400, "T_003", "태그는 공백일 수 없습니다");
 
     private final Integer status;
     private final String code;

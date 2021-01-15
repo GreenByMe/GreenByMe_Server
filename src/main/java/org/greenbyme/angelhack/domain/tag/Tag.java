@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.greenbyme.angelhack.domain.DomainListener;
 import org.greenbyme.angelhack.domain.posttag.PostTag;
+import org.greenbyme.angelhack.exception.ErrorCode;
+import org.greenbyme.angelhack.exception.TagException;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -17,6 +19,8 @@ import java.util.List;
 @EntityListeners(DomainListener.class)
 @ToString(of = {"id", "tagName"})
 public class Tag {
+
+    private static final String SPACE = " ";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,5 +34,15 @@ public class Tag {
 
     public Tag(String tagName) {
         this.tagName = tagName;
+        validateTagName();
+    }
+
+    private void validateTagName() {
+        if (this.tagName.contains(SPACE)) {
+            throw new TagException(ErrorCode.INVALID_TAG_NAME);
+        }
+        if (this.tagName.isEmpty()) {
+            throw new TagException(ErrorCode.EMPTY_TAG_NAME);
+        }
     }
 }

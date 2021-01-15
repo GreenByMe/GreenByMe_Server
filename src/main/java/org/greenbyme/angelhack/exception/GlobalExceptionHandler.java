@@ -142,4 +142,12 @@ public class GlobalExceptionHandler {
         final ErrorResponse response = ErrorResponse.of(errorCode);
         return new ResponseEntity<>(response, HttpStatus.valueOf(errorCode.getStatus()));
     }
+
+    @ExceptionHandler(TagException.class)
+    protected ResponseEntity<ErrorResponse> handleTagException(final TagException e) {
+        log.error("handlePersonalMissionException", e);
+        final ErrorCode errorCode = e.getErrorCode();
+        final ErrorResponse response = ErrorResponse.of(errorCode);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(errorCode.getStatus()));
+    }
 }
