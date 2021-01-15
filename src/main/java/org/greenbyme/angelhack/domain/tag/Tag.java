@@ -34,14 +34,14 @@ public class Tag {
 
     public Tag(String tagName) {
         this.tagName = tagName;
-        validateTagName(tagName);
+        validateTagName();
     }
 
-    private void validateTagName(String tagName) {
-        if (tagName.contains(SPACE)) {
+    private void validateTagName() {
+        if (this.tagName.contains(SPACE)) {
             throw new TagException(ErrorCode.INVALID_TAG_NAME);
         }
-        if (tagName.isEmpty()) {
+        if (this.tagName.isEmpty()) {
             throw new TagException(ErrorCode.EMPTY_TAG_NAME);
         }
     }
