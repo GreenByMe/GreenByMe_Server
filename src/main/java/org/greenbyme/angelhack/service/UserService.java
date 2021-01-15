@@ -6,8 +6,6 @@ import org.greenbyme.angelhack.domain.personalmission.PersonalMissionRepository;
 import org.greenbyme.angelhack.domain.personalmission.PersonalMissionStatus;
 import org.greenbyme.angelhack.domain.post.Post;
 import org.greenbyme.angelhack.domain.post.PostRepository;
-import org.greenbyme.angelhack.domain.postlike.PostLikeRepository;
-import org.greenbyme.angelhack.domain.posttag.PostTagRepository;
 import org.greenbyme.angelhack.domain.user.User;
 import org.greenbyme.angelhack.domain.user.UserRepository;
 import org.greenbyme.angelhack.exception.ErrorCode;
@@ -16,6 +14,7 @@ import org.greenbyme.angelhack.service.dto.personalmission.PersonalMissionByUser
 import org.greenbyme.angelhack.service.dto.post.PostDetailResponseDto;
 import org.greenbyme.angelhack.service.dto.user.*;
 import org.greenbyme.angelhack.util.JwtTokenProvider;
+import org.greenbyme.angelhack.util.PasswordValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,7 +31,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.mail.MessagingException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -45,10 +43,10 @@ public class UserService {
     private final UserRepository userRepository;
     private final PersonalMissionRepository personalMissionRepository;
     private final PostRepository postRepository;
-    private final PostTagRepository postTagRepository;
-    private final PostLikeRepository postLikeRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
+    private final PasswordValidator passwordValidator;
+
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
     @Autowired
@@ -212,6 +210,11 @@ public class UserService {
         if (user.isLeft() == true) {
             throw new UserException(ErrorCode.LEFT_USER);
         }
+    }
+
+    public Boolean isValidPassword(PasswordValidRequestDto passwordValidRequestDto) {
+        String password = passwordValidRequestDto.getPassword();
+        return passwordValidator.isValid(password);
     }
 
     private String createToken(User user) {

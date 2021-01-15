@@ -1,11 +1,13 @@
 package org.greenbyme.angelhack.util;
 
 import org.greenbyme.angelhack.domain.user.Password;
+import org.springframework.stereotype.Component;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.text.MessageFormat;
 
+@Component
 public class PasswordValidator implements ConstraintValidator<Password, String> {
 
     private static final int MIN_SIZE = 8;
@@ -26,6 +28,11 @@ public class PasswordValidator implements ConstraintValidator<Password, String> 
                     MessageFormat.format("{0}자 이상의 {1}자 이하의 숫자, 영문자, 특수문자를 포함한 비밀번호를 입력해주세요", MIN_SIZE, MAX_SIZE))
                     .addConstraintViolation();
         }
+        return isValidPassword;
+    }
+
+    public boolean isValid(String password) {
+        boolean isValidPassword = password.matches(regexPassword);
         return isValidPassword;
     }
 }
