@@ -32,7 +32,6 @@ public class PasswordValidator implements ConstraintValidator<Password, String> 
     }
 
     public boolean isValid(String password) {
-        boolean isValidPassword = password.matches(regexPassword);
-        return isValidPassword;
+        return password.matches(regexPassword);
     }
 }
