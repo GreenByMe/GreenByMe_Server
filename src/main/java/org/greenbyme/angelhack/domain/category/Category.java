@@ -1,4 +1,4 @@
-package org.greenbyme.angelhack.domain.Category;
+package org.greenbyme.angelhack.domain.category;
 
 public enum Category {
 

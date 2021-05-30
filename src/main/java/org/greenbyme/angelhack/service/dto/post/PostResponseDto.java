@@ -24,6 +24,9 @@ public class PostResponseDto {
     }
 
     public PostResponseDto(Post post) {
+        if (post == null) {
+            return;
+        }
         this.postId = post.getId();
         this.nickName = post.getUser().getNickname();
         this.picture = post.getPicture();
