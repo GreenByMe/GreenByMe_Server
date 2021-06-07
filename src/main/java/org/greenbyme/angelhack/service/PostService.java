@@ -20,6 +20,7 @@ import org.greenbyme.angelhack.exception.*;
 import org.greenbyme.angelhack.service.dto.post.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +29,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -100,9 +102,13 @@ public class PostService {
     public Page<PostResponseDto> getPostsByMission(Long missionId, Pageable pageable) {
         Mission mission = missionRepository.findById(missionId)
                 .orElseThrow(() -> new MissionException(ErrorCode.INVALID_MISSION));
-        return personalMissionRepository.findAllByMissionId(mission.getId(), pageable)
+        List<PostResponseDto> res = personalMissionRepository.findAllByMissionId(mission.getId(), pageable)
                 .map(p -> postRepository.findByPersonalMissionId(p.getId()))
-                .map(post -> new PostResponseDto(post.getId(), post.getUser().getNickname(), post.getPicture(), post.getPostLikes().size()));
+                .stream()
+                .filter(Objects::nonNull)
+                .map(PostResponseDto::new)
+                .collect(Collectors.toList());
+        return new PageImpl<>(res, pageable, res.size());
     }
 
     public PostDetailResponseDto getPostDetail(Long postId, Long userId) {
